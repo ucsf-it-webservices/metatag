@@ -2,6 +2,8 @@ Metatag 7.x-1.x-dev, xxxx-xx-xx
 -------------------------------
 #3137241 by tmin: metatag_metatags_form() breaks entire page/panel in some
   extreme cases.
+#3113325 by VladimirAus, DamienMcKenna: Make hreflang tags available even if
+  only one language enabled.
 
 
 Metatag 7.x-1.27, 2020-02-10
