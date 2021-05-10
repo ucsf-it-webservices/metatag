@@ -4,6 +4,8 @@ Metatag 7.x-1.x-dev, xxxx-xx-xx
   extreme cases.
 #3113325 by VladimirAus, DamienMcKenna: Make hreflang tags available even if
   only one language enabled.
+#3181898 by andyg5000, DamienMcKenna, geoffray, thejimbirch: Add Facebook
+  verification meta header.
 
 
 Metatag 7.x-1.27, 2020-02-10

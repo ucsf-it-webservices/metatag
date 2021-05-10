@@ -27,6 +27,7 @@ class MetatagVerificationTagsTest extends MetatagTagsTestBase {
    */
   public $tags = array(
     'baidu-site-verification',
+    'facebook-domain-verification',
     'google-site-verification',
     'msvalidate.01',
     'norton-safeweb-site-verification',
