@@ -24,6 +24,11 @@ files[] = metatag.migrate.inc
 ; Search API integration.
 files[] = metatag.search_api.inc
 
+; Views integration.
+files[] = views/metatag_handler_field_entity.inc
+files[] = views/metatag_handler_field_serialized.inc
+files[] = views/metatag_handler_field_serialized_list.inc
+
 
 ; Tests.
 ; Devel is a dependency for all tests as it's used to automatically trim meta

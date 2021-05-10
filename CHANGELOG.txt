@@ -6,6 +6,8 @@ Metatag 7.x-1.x-dev, xxxx-xx-xx
   only one language enabled.
 #3181898 by andyg5000, DamienMcKenna, geoffray, thejimbirch: Add Facebook
   verification meta header.
+#1906578 by DamienMcKenna, andyg5000, Leo Pitt, arpas, nikita_tt, kmajzlik,
+  ericwenger, mgerbault, ciss, philsward: Expose meta tag data as a Views field.
 
 
 Metatag 7.x-1.27, 2020-02-10

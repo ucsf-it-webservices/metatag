@@ -2622,3 +2622,10 @@ function metatag_update_7114() {
 function metatag_update_7115() {
   cache_clear_all('output:', 'cache_metatag', TRUE);
 }
+
+/**
+ * Trigger a cache clear so the Views integration can be loaded.
+ */
+function metatag_update_7116() {
+  // Nothing to see here.
+}
