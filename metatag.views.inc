@@ -30,8 +30,10 @@ function metatag_views_data() {
       'left_field' => $info['entity keys'][$support_revisions ? 'revision' : 'id'],
       'extra' => array(
         array('field' => 'entity_type', 'value' => $entity_type),
-        // @todo Replace with real language support
-        # array('field' => 'language', 'value' => LANGUAGE_NONE)
+        // @todo Replace with real language support.
+        // @code
+        // array('field' => 'language', 'value' => LANGUAGE_NONE),
+        // @endcode
       ),
     );
   }
@@ -44,7 +46,7 @@ function metatag_views_data() {
 
   // Assign a field handler based on the tag class.
   $handlers = array(
-    'DrupalListMetaTag' => 'metatag_handler_field_serialized_list'
+    'DrupalListMetaTag' => 'metatag_handler_field_serialized_list',
   );
 
   // Add a field for each known meta tag.
@@ -61,7 +63,7 @@ function metatag_views_data() {
 
     $field['field'] = array(
       'real field' => 'data',
-      'path' => array($name, 'value')
+      'path' => array($name, 'value'),
     );
     $field['field']['handler'] = isset($handlers[$options['class']]) ? $handlers[$options['class']] : $handler_default;
     $field['field']['metatag'] = $name;
@@ -70,7 +72,7 @@ function metatag_views_data() {
     // @todo Might have to check leading characters.
     $safe_name = preg_replace('/[^a-z0-9_]/', '_', $name);
     if (!isset($blacklist[$safe_name])) {
-      // Name not yet used, add to blacklist with a count of 1
+      // Name not yet used, add to blacklist with a count of 1.
       $blacklist[$safe_name] = 1;
     }
     else {

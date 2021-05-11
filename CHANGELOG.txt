@@ -8,6 +8,7 @@ Metatag 7.x-1.x-dev, xxxx-xx-xx
   verification meta header.
 #1906578 by DamienMcKenna, andyg5000, Leo Pitt, arpas, nikita_tt, kmajzlik,
   ericwenger, mgerbault, ciss, philsward: Expose meta tag data as a Views field.
+#3213283 by DamienMcKenna: Coding standards improvements.
 
 
 Metatag 7.x-1.27, 2020-02-10

@@ -34,13 +34,13 @@ class MetatagVerificationTagsTest extends MetatagTagsTestBase {
     'p:domain_verify',
     'pocket-site-verification',
     'yandex-verification',
-    'zoom-domain-verification'
+    'zoom-domain-verification',
   );
 
   /**
    * {@inheritdoc}
    */
-  function setUp(array $modules = array()) {
+  public function setUp(array $modules = array()) {
     $modules[] = 'metatag_verification';
     parent::setUp($modules);
   }

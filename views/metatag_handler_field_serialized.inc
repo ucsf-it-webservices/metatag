@@ -1,12 +1,31 @@
 <?php
 
+/**
+ * @file
+ *
+ */
+
+/**
+ *
+ */
 class metatag_handler_field_serialized extends metatag_handler_field_entity {
 
-  var $bundle_field;
-  var $uses_default;
-  var $raw_value;
+  /**
+   * @var bool
+   */
+  public $uses_default;
 
-  function option_definition() {
+  /**
+   * The raw value for this field.
+   *
+   * @var string
+   */
+  public $raw_value;
+
+  /**
+   * {@inheritdoc}
+   */
+  public function option_definition() {
     $options = parent::option_definition();
     $options['metatag'] = array(
       'contains' => array(
@@ -17,7 +36,10 @@ class metatag_handler_field_serialized extends metatag_handler_field_entity {
     return $options;
   }
 
-  function options_form(&$form, &$form_state) {
+  /**
+   * {@inheritdoc}
+   */
+  public function options_form(&$form, &$form_state) {
     parent::options_form($form, $form_state);
     $form['metatag'] = array(
       '#type' => 'fieldset',
@@ -28,18 +50,21 @@ class metatag_handler_field_serialized extends metatag_handler_field_entity {
       '#type' => 'checkbox',
       '#title' => 'Use default metatag value',
       '#description' => 'Display default value if no value has been defined on entity.',
-      '#default_value' => $this->options['metatag']['use_default']
+      '#default_value' => $this->options['metatag']['use_default'],
     );
 
     $form['metatag']['replace_tokens'] = array(
       '#type' => 'checkbox',
       '#title' => 'Replace tokens',
       '#description' => 'Attempt to replace all tokens with their (entity) values. Note: Tokens in metatags will be replaced before Views tokens.',
-      '#default_value' => $this->options['metatag']['replace_tokens']
+      '#default_value' => $this->options['metatag']['replace_tokens'],
     );
   }
 
-  function get_value($values, $field = NULL) {
+  /**
+   * {@inheritdoc}
+   */
+  public function get_value($values, $field = NULL) {
     $value = parent::get_value($values);
     if (!is_null($value)) {
       $value = @unserialize($value);
@@ -54,7 +79,10 @@ class metatag_handler_field_serialized extends metatag_handler_field_entity {
     return $value;
   }
 
-  function get_default_value($values) {
+  /**
+   * {@inheritdoc}
+   */
+  public function get_default_value($values) {
     $entity_type = $this->get_entity_type($values);
     $instance = $entity_type;
     $entity = $this->get_entity($values);
@@ -66,7 +94,10 @@ class metatag_handler_field_serialized extends metatag_handler_field_entity {
     return $this->get_nested_value($defaults, $this->definition['path']);
   }
 
-  function replace_tokens($value, $values) {
+  /**
+   * {@inheritdoc}
+   */
+  public function replace_tokens($value, $values) {
     $entity_type = $this->get_entity_type($values);
     $entity = $this->get_entity($values);
     // Reload the entity object from cache as it may have been altered.
@@ -80,8 +111,16 @@ class metatag_handler_field_serialized extends metatag_handler_field_entity {
 
   /**
    * Retrieves a nested value from an array.
+   *
+   * @param array $value
+   *   An array of meta tag values.
+   * @param string $path
+   *   The path to search for.
+   *
+   * @return string|null
+   *   The matching string, otherwise NULL.
    */
-  function get_nested_value($value, $path) {
+  public function get_nested_value(array $value, $path) {
     foreach ($path as $index) {
       if (!isset($value[$index])) {
         return NULL;
@@ -91,7 +130,10 @@ class metatag_handler_field_serialized extends metatag_handler_field_entity {
     return $value;
   }
 
-  function render($values) {
+  /**
+   * {@inheritdoc}
+   */
+  public function render($values) {
     $value = (string) $this->get_value($values);
     if (strlen($value) && !empty($this->options['metatag']['replace_tokens'])) {
       $value = $this->replace_tokens($value, $values);
