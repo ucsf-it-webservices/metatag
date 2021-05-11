@@ -12,7 +12,9 @@ function metatag_opengraph_products_metatag_info() {
   // Open Graph products.
   $info['groups']['open-graph-products'] = array(
     'label' => t('Open Graph - Products'),
-    'description' => t("These Open Graph meta tags for describing products."),
+    'description' => t('These Open Graph meta tags for describing products.<br /><br />The Facebook <a href="@debugger">Sharing Debugger</a> lets you preview how your content will look when it is shared to Facebook and debug any issues with your Open Graph tags.', array(
+      '@debugger' => 'https://developers.facebook.com/tools/debug/',
+    )),
     'form' => array(
       '#weight' => 51,
     ),

@@ -9,6 +9,8 @@ Metatag 7.x-1.x-dev, xxxx-xx-xx
 #1906578 by DamienMcKenna, andyg5000, Leo Pitt, arpas, nikita_tt, kmajzlik,
   ericwenger, mgerbault, ciss, philsward: Expose meta tag data as a Views field.
 #3213283 by DamienMcKenna: Coding standards improvements.
+#3182561 by thejimbirch, DamienMcKenna, volkswagenchick: Provide link to
+  Facebook Open Graph debugger.
 
 
 Metatag 7.x-1.27, 2020-02-10
