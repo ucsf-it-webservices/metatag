@@ -1,5 +1,5 @@
-Metatag 7.x-1.x-dev, xxxx-xx-xx
--------------------------------
+Metatag 7.x-1.28, 2021-07-12
+----------------------------
 #3137241 by tmin: metatag_metatags_form() breaks entire page/panel in some
   extreme cases.
 #3113325 by VladimirAus, DamienMcKenna: Make hreflang tags available even if
