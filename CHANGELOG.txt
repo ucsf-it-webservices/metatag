@@ -13,6 +13,8 @@ Metatag 7.x-1.x-dev, xxxx-xx-xx
   Facebook Open Graph debugger.
 #3165571 by Eugene Bocharov, DamienMcKenna: MetatagSearchTestSearchApiService
   ::search() should return 'result count' to avoid Notice in php7.4.
+#3114121 by DamienMcKenna, felribeiro: Recommend "description" tag be less than
+  ~160 characters.
 
 
 Metatag 7.x-1.27, 2020-02-10
