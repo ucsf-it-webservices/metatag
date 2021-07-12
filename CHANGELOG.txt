@@ -11,6 +11,8 @@ Metatag 7.x-1.x-dev, xxxx-xx-xx
 #3213283 by DamienMcKenna: Coding standards improvements.
 #3182561 by thejimbirch, DamienMcKenna, volkswagenchick: Provide link to
   Facebook Open Graph debugger.
+#3165571 by Eugene Bocharov, DamienMcKenna: MetatagSearchTestSearchApiService
+  ::search() should return 'result count' to avoid Notice in php7.4.
 
 
 Metatag 7.x-1.27, 2020-02-10
