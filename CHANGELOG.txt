@@ -15,6 +15,8 @@ Metatag 7.x-1.x-dev, xxxx-xx-xx
   ::search() should return 'result count' to avoid Notice in php7.4.
 #3114121 by DamienMcKenna, felribeiro: Recommend "description" tag be less than
   ~160 characters.
+#3116138 by DamienMcKenna, danharper: Facebook/OG product tag
+  product:retailer_item_id, and description updates.
 
 
 Metatag 7.x-1.27, 2020-02-10
