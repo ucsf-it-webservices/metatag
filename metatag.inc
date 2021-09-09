@@ -178,7 +178,7 @@ class DrupalDefaultMetaTag implements DrupalMetaTagInterface {
 
         // Some meta tags must be output as secure URLs.
         if (!empty($this->info['secure'])) {
-          $value = str_replace('http://', 'https://', $value);
+          $value = str_replace('https://', 'https://', $value);
         }
 
         // Combine the base configuration for this meta tag with the value.
