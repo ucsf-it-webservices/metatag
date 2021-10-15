@@ -405,7 +405,7 @@ function metatag_metatag_info() {
 
   $info['tags']['geo.position'] = array(
     'label' => t('Geo position'),
-    'description' => t('Geo-spatial information in "latitude;longitude" format, e.g. "50.167958;-97.133185"; <a href="https://en.wikipedia.org/wiki/Geotagging#HTML_pages">see Wikipedia for details</a>.'),
+    'description' => t('Geo-spatial information in "latitude; longitude" format, e.g. "50.167958; -97.133185"; <a href="https://en.wikipedia.org/wiki/Geographic_coordinate_system" aria-label="see Wikipedia for details on the geographic coordinate system">see Wikipedia for details</a>.'),
     'class' => 'DrupalTextMetaTag',
     'group' => 'advanced',
     'weight' => ++$weight,
@@ -429,7 +429,7 @@ function metatag_metatag_info() {
 
   $info['tags']['icbm'] = array(
     'label' => t('ICBM'),
-    'description' => t('Geo-spatial information in "latitude, longitude" format, e.g. "50.167958, -97.133185"; <a href="https://en.wikipedia.org/wiki/ICBM_address">see Wikipedia for details</a>.'),
+    'description' => t('Geo-spatial information in "latitude, longitude" format, e.g. "50.167958, -97.133185"; <a href="https://en.wikipedia.org/wiki/ICBM_address" aria-label="see Wikipedia for details on ICBM addresses">see Wikipedia for details</a>.'),
     'class' => 'DrupalTextMetaTag',
     'group' => 'advanced',
     'weight' => ++$weight,

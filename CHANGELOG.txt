@@ -3,6 +3,8 @@ Metatag 7.x-1.x-dev, xxxx-xx-xx
 #3224758 by DamienMcKenna, jrealsteed, mnico: Update to 1.28 caused panels to
   break if metatags enable for the panel.
 #3106872 by DamienMcKenna: Change uses of http:// to https://.
+#3243694 by DamienMcKenna, Kasey_MK: Avoid similar-sounding links with different
+  purposes.
 
 
 Metatag 7.x-1.28, 2021-07-12
