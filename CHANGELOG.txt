@@ -5,7 +5,6 @@ Metatag 7.x-1.x-dev, xxxx-xx-xx
 #3106872 by DamienMcKenna: Change uses of http:// to https://.
 #3243694 by DamienMcKenna, Kasey_MK: Avoid similar-sounding links with different
   purposes.
-#3271006 by DamienMcKenna: Add the Date module as a test dependency.
 
 
 Metatag 7.x-1.28, 2021-07-12

@@ -31,13 +31,6 @@ files[] = views/metatag_handler_field_serialized_list.inc
 
 
 ; Tests.
-; The Token module causes tests to fail when the Date module is not available,
-; resulting in the following error:
-;   exception: [User warning] Line 912 of token/token.tokens.inc:
-;   Attempting to perform token replacement for token type date without required
-;   data.
-test_dependencies[] = date:date
-
 ; Devel is a dependency for all tests as it's used to automatically trim meta
 ; tags to a certain length.
 test_dependencies[] = devel:devel
