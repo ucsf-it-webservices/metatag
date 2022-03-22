@@ -6,6 +6,9 @@ Metatag 7.x-1.x-dev, xxxx-xx-xx
 #3243694 by DamienMcKenna, Kasey_MK: Avoid similar-sounding links with different
   purposes.
 #3270984 by DamienMcKenna: Test meta tags don't work.
+#3271006 by DamienMcKenna, FeyP: Fix tests in 7.x-1.x branch.
+#3271006 by DamienMcKenna, FeyP: Tests break due to change in core's default
+  file field path settings.
 
 
 Metatag 7.x-1.28, 2021-07-12
