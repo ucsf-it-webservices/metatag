@@ -9,6 +9,8 @@ Metatag 7.x-1.x-dev, xxxx-xx-xx
 #3271006 by DamienMcKenna, FeyP: Fix tests in 7.x-1.x branch.
 #3271006 by DamienMcKenna, FeyP: Tests break due to change in core's default
   file field path settings.
+#3293480 by Darren Oh, kellyimagined, DamienMcKenna: Fix incorrect
+  entity_load() call in _metatag_remove_dupes().
 
 
 Metatag 7.x-1.28, 2021-07-12

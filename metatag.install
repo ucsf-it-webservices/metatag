@@ -1435,7 +1435,7 @@ function _metatag_remove_dupes($entity_type) {
       // More than one record, work out which one to keep.
       elseif (count($langs) > 1) {
         // Work out the entity's language.
-        $entity = entity_load($entity_type, $entity_id);
+        $entity = entity_load($entity_type, array($entity_id));
         $entity_language = entity_language($entity_type, $entity);
         if (empty($language)) {
           $entity_language = LANGUAGE_NONE;
