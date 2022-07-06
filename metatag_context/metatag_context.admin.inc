@@ -14,7 +14,7 @@ function metatag_context_context_overview() {
   $header = array(t('Name'), t('Paths'), t('Weight'), t('Operations'));
   $rows = array();
 
-  $caption = t('Values assigned here inherit from the <a href="@url" title="Edit the global default meta tags.">global defaults</a>. Use the weight to specify the order the context meta tags run.', array('@url' => url('admin/config/search/metatags/config/global')));
+  $caption = t('Values assigned here inherit from the <a href="@url" aria-label="Edit the global default meta tags.">global defaults</a>. Use the weight to specify the order the context meta tags run.', array('@url' => url('admin/config/search/metatags/config/global')));
 
   foreach ($contexts as $name => $context) {
     // Only show context items that are specifically selected to be "Shown on
@@ -155,7 +155,7 @@ function metatag_context_config_edit_form($form, &$form_state, $context) {
 
   $form['help'] = array(
     '#prefix' => '<hr /><p><em>',
-    '#markup' => t('Values assigned here inherit from the <a href="@url" title="Edit the global default meta tags.">global defaults</a>.', array('@url' => url('admin/config/search/metatags/config/global'))),
+    '#markup' => t('Values assigned here inherit from the <a href="@url" aria-label="Edit the global default meta tags.">global defaults</a>.', array('@url' => url('admin/config/search/metatags/config/global'))),
     '#suffix' => '</em></p>',
     '#weight' => -99,
   );

@@ -11,6 +11,8 @@ Metatag 7.x-1.x-dev, xxxx-xx-xx
   file field path settings.
 #3293480 by Darren Oh, kellyimagined, DamienMcKenna: Fix incorrect
   entity_load() call in _metatag_remove_dupes().
+#3243775 by mohit.bansal623, DamienMcKenna: Replace all title= attributes with
+  aria-label=.
 
 
 Metatag 7.x-1.28, 2021-07-12
