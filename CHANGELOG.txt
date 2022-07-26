@@ -14,6 +14,7 @@ Metatag 7.x-1.x-dev, xxxx-xx-xx
 #3243775 by mohit.bansal623, DamienMcKenna: Replace all title= attributes with
   aria-label=.
 #3028344 by pramodga, DamienMcKenna, chakkche: Coding standards improvements.
+#3265196 by Dimiter, DamienMcKenna: Expand referrer-policy dropdown.
 
 
 Metatag 7.x-1.28, 2021-07-12
