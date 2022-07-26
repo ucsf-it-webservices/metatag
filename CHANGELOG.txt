@@ -1,5 +1,5 @@
-Metatag 7.x-1.x-dev, xxxx-xx-xx
--------------------------------
+Metatag 7.x-1.29, 2022-07-26
+----------------------------
 #3224758 by DamienMcKenna, jrealsteed, mnico: Update to 1.28 caused panels to
   break if metatags enable for the panel.
 #3106872 by DamienMcKenna: Change uses of http:// to https://.
