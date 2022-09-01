@@ -1,3 +1,7 @@
+Metatag 7.x-1.xx, 2022-xx-xx
+----------------------------
+
+
 Metatag 7.x-1.30, 2022-07-27
 ----------------------------
 #3300076 by DamienMcKenna, ttkaminski: HTTPS secure URL replacement typo.
