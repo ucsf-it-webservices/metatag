@@ -1,5 +1,7 @@
 Metatag 7.x-1.xx, 2022-xx-xx
 ----------------------------
+#2217549 by DamienMcKenna, Alan D., Kuldeep K, Antares89: Integration with the
+  Diff module.
 
 
 Metatag 7.x-1.30, 2022-07-27
