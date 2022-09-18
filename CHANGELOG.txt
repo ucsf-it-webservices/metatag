@@ -2,6 +2,9 @@ Metatag 7.x-1.xx, 2022-xx-xx
 ----------------------------
 #2217549 by DamienMcKenna, Alan D., Kuldeep K, Antares89: Integration with the
   Diff module.
+#3309125 by DamienMcKenna, ravi.joshi53, Borodada: Argument 1 passed to
+  metatag_config_save() must be an instance of object, instance of stdClass
+  given, called in metatag/metatag.admin.inc.
 
 
 Metatag 7.x-1.30, 2022-07-27

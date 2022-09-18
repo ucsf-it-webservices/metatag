@@ -521,7 +521,7 @@ function metatag_config_get_replacements() {
 /**
  * Save a metatag configuration record to the database.
  */
-function metatag_config_save(object $config) {
+function metatag_config_save(\stdClass $config) {
   $config->is_new = empty($config->cid);
 
   // Allow modules to alter the configuration before it is saved using
