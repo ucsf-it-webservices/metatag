@@ -141,6 +141,9 @@ The primary features include:
 * If the Media module (v2) is installed, the Media WYSIWYG submodule will be
   used to automatically filter out Media's embed codes.
 
+* If the Language Hierarchy module is installed, it will be used to identify
+  which language will be used when loading meta tags for a given entity.
+
 
 Configuration
 --------------------------------------------------------------------------------

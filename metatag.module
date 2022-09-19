@@ -2737,9 +2737,20 @@ function metatag_ctools_render_alter(&$info, $page, $context) {
           // Verify this is an appropriate entity.
           $entity_info = entity_get_info($entity_type);
           if (!empty($entity_info) && _metatag_entity_is_page($entity_type, $entity)) {
-            // Load the meta tags for this entity.
             global $language;
-            metatag_entity_view($entity, $entity_type, 'full', $language->language, TRUE);
+            $langcode = $language->language;
+
+            // If entity_translation_hierarchy is being used then use the
+            // relevant fallback language for generating metatags if there is
+            // one. This means that it'll match the language of the content
+            // that's being displayed rather than falling back to the default
+            // language.
+            if (module_exists('entity_translation_hierarchy')) {
+              $langcode = entity_translation_hierarchy_get_candidate($entity, $entity_type, $langcode);
+            }
+
+            // Load the meta tags for this entity.
+            metatag_entity_view($entity, $entity_type, 'full', $langcode, TRUE);
 
             // Don't bother looping over any more contexts, an entity has been
             // found.

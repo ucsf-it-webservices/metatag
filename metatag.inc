@@ -526,6 +526,14 @@ class DrupalTextMetaTag extends DrupalDefaultMetaTag {
       return '';
     }
 
+    // If entity_translation_hierarchy is being used then ensure tokens and
+    // strings are generated using the current language rather than the
+    // fallback.
+    if (module_exists('entity_translation_hierarchy')) {
+      global $language;
+      $options['language'] = $language;
+    }
+
     $value = $this->data['value'];
 
     if (empty($options['raw'])) {
