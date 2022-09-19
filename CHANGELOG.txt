@@ -7,6 +7,9 @@ Metatag 7.x-1.xx, 2022-xx-xx
   given, called in metatag/metatag.admin.inc.
 #3274588 by Dmitrii_Zadorozhnyi, DamienMcKenna, loon: PHP warnings during static
   code analysis using Phan.
+#3037874 by Ronino, DamienMcKenna: Build meta tags for panels much later like
+  metatag and metatag_views do so they can be altered after page data has been
+  processed.
 
 
 Metatag 7.x-1.30, 2022-07-27
