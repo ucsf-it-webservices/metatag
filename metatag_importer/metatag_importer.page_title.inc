@@ -67,11 +67,6 @@ function metatag_importer_for_page_title() {
     // Load any possible existing meta tags for this object.
     $data = metatag_metatags_load($entity_type, $entity_id);
 
-    // Drop back one level because the results will be keyed by revision_id.
-    if (!empty($data)) {
-      $data = reset($data);
-    }
-
     switch ($entity_type) {
       case 'node':
         $metatag_config_node_type = metatag_config_load('node:' . $entity->type);
