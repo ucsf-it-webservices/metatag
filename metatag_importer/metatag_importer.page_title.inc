@@ -83,7 +83,7 @@ function metatag_importer_for_page_title() {
           $title_setting = $metatag_config_node->config['title']['value'];
         }
         else {
-          $title_setting = $metatag_config_global->config['title']['value'];
+          $title_setting = isset($metatag_config_global->config['title']['value']) ? $metatag_config_global->config['title']['value'] : '';
         }
         $metatag_title = str_replace('[current-page:title]', trim($pt_data->page_title), $title_setting);
         $metatag_title = str_replace('[node:title]', trim($pt_data->page_title), $metatag_title);
@@ -99,7 +99,7 @@ function metatag_importer_for_page_title() {
           $title_setting = $metatag_config_taxonomy_term->config['title']['value'];
         }
         else {
-          $title_setting = $metatag_config_global->config['title']['value'];
+          $title_setting = isset($metatag_config_global->config['title']['value']) ? $metatag_config_global->config['title']['value'] : '';
         }
         $metatag_title = str_replace('[current-page:title]', trim($pt_data->page_title), $title_setting);
         $metatag_title = str_replace('[term:name]', trim($pt_data->page_title), $metatag_title);
@@ -110,7 +110,7 @@ function metatag_importer_for_page_title() {
           $title_setting = $metatag_config_user->config['title']['value'];
         }
         else {
-          $title_setting = $metatag_config_global->config['title']['value'];
+          $title_setting = isset($metatag_config_global->config['title']['value']) ? $metatag_config_global->config['title']['value'] : '';
         }
         $metatag_title = str_replace('[current-page:title]', trim($pt_data->page_title), $title_setting);
         $metatag_title = str_replace('[user:name]', trim($pt_data->page_title), $metatag_title);

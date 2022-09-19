@@ -5,6 +5,8 @@ Metatag 7.x-1.xx, 2022-xx-xx
 #3309125 by DamienMcKenna, ravi.joshi53, Borodada: Argument 1 passed to
   metatag_config_save() must be an instance of object, instance of stdClass
   given, called in metatag/metatag.admin.inc.
+#3274588 by Dmitrii_Zadorozhnyi, DamienMcKenna, loon: PHP warnings during static
+  code analysis using Phan.
 
 
 Metatag 7.x-1.30, 2022-07-27

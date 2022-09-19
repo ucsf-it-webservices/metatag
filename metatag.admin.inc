@@ -416,12 +416,17 @@ function metatag_config_delete_form($form, &$form_state, $config) {
  */
 function metatag_config_delete_form_submit($form, &$form_state) {
   $config = metatag_config_load($form_state['values']['instance']);
-  metatag_config_delete($config);
+  if (is_object($config)) {
+    metatag_config_delete($config);
 
-  $label = metatag_config_instance_label($config->instance);
-  $delete = metatag_config_access('delete', $config);
-  $title = $delete ? t('The meta tag defaults for @label have been deleted.', array('@label' => $label)) : t('The meta tag defaults for @label have been reverted.', array('@label' => $label));
-  drupal_set_message($title);
+    $label = metatag_config_instance_label($config->instance);
+    $delete = metatag_config_access('delete', $config);
+    $title = $delete ? t('The meta tag defaults for @label have been deleted.', array('@label' => $label)) : t('The meta tag defaults for @label have been reverted.', array('@label' => $label));
+    drupal_set_message($title);
+  }
+  else {
+    drupal_set_message(t('Configuration record could not be found.'), 'warning');
+  }
 
   $form_state['redirect'] = 'admin/config/search/metatags';
 }
