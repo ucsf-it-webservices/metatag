@@ -632,6 +632,99 @@ class DrupalTextMetaTag extends DrupalDefaultMetaTag {
 }
 
 /**
+ * Robots meta tag controller.
+ */
+class DrupalRobotsMetaTag extends DrupalDefaultMetaTag {
+
+  /**
+   * {@inheritdoc}
+   */
+  function __construct(array $info, array $data = NULL) {
+    // Ensure that the $data['value] argument is an array.
+    if (empty($data['value'])) {
+      $data['value'] = array();
+    }
+    $data['value'] = (array) $data['value'];
+
+    parent::__construct($info, $data);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getForm(array $options = array()) {
+    $form['value'] = isset($this->info['form']) ? $this->info['form'] : array();
+
+    $form['value'] += array(
+      '#type' => 'checkboxes',
+      '#title' => $this->info['label'],
+      '#description' => !empty($this->info['description']) ? $this->info['description'] : '',
+      '#default_value' => isset($this->data['value']) ? $this->data['value'] : array(),
+    );
+
+    if (!empty($this->info['google_directives'])) {
+      foreach ($this->info['google_directives'] as $serving_directive_name => $serving_directive) {
+        switch ($serving_directive['type']) {
+          case 'textfield':
+            $form[$serving_directive_name] = array(
+              '#type' => 'textfield',
+              '#title' => $serving_directive['label'],
+              '#description' => !empty($serving_directive['description']) ? $serving_directive['description'] : '',
+              '#default_value' => isset($this->data[$serving_directive_name]) ? $this->data[$serving_directive_name] : '',
+              '#element_validate' => array('token_element_validate'),
+              '#token_types' => $options['token types'],
+              '#maxlength' => 1024,
+            );
+            break;
+          case 'select':
+            $form[$serving_directive_name] = array(
+              '#type' => 'select',
+              '#title' => $serving_directive['label'],
+              '#options' => $serving_directive['options'],
+              '#empty_option' => t('- Select -'),
+              '#description' => !empty($serving_directive['description']) ? $serving_directive['description'] : '',
+              '#default_value' => isset($this->data[$serving_directive_name]) ? $this->data[$serving_directive_name] : '',
+            );
+            break;
+          default:
+            break;
+        }
+      }
+    }
+
+    return $form;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getValue(array $options = array()) {
+    $values = array_keys(array_filter($this->data['value']));
+    if (!empty($this->info['google_directives'])) {
+      foreach ($this->info['google_directives'] as $serving_directive_name => $serving_directive) {
+        if (isset($this->data[$serving_directive_name])
+          && $this->data[$serving_directive_name] != '') {
+          // Add an additional value into content of the meta tag.
+          $values[] = $serving_directive_name . ':' . $this->data[$serving_directive_name];
+        }
+      }
+    }
+    sort($values);
+    $value = implode(', ', $values);
+
+    $value = $this->tidyValue($value);
+
+    // Translate the final output string prior to output. Use the
+    // 'output' i18n_string object type, and pass along the meta tag's
+    // options as the context so it can be handled appropriately.
+    $value = metatag_translate_metatag($value, $this->info['name'], $options, NULL, TRUE);
+
+    return $value;
+  }
+
+}
+
+/**
  * Link type meta tag controller.
  */
 class DrupalLinkMetaTag extends DrupalTextMetaTag {
