@@ -3336,7 +3336,7 @@ function metatag_views_api() {
 function metatag_entity_diff_options($entity_type) {
   if (metatag_entity_supports_metatags($entity_type)) {
     $options = array(
-      'metatag' => t('Metatags'),
+      'metatag' => t('Meta tags'),
     );
     return $options;
   }
