@@ -13,6 +13,8 @@ Metatag 7.x-1.xx, 2022-xx-xx
 #3164895 by Eugene Bocharov, DamienMcKenna: Loss of existing meta tags after
   importing Page Title or Metatags Quick data.
 #3106692 by sergey.semchuk, DamienMcKenna: Add Google's new robots tags.
+#3311543 by DamienMcKenna, lostcarpark, lucassc: Add new Metatag logo files,
+  update tests to use them.
 
 
 Metatag 7.x-1.30, 2022-07-27
