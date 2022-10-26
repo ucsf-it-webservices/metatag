@@ -15,6 +15,8 @@ Metatag 7.x-1.xx, 2022-xx-xx
 #3106692 by sergey.semchuk, DamienMcKenna: Add Google's new robots tags.
 #3311543 by DamienMcKenna, lostcarpark, lucassc: Add new Metatag logo files,
   update tests to use them.
+#3210889 by immaculatexavier, Pracheth, DamienMcKenna, dineshreddymathuku:
+  Convert the README.txt to a markdown file.
 
 
 Metatag 7.x-1.30, 2022-07-27
