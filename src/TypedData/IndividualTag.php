@@ -13,6 +13,10 @@ use Drupal\Core\DependencyInjection\DependencySerializationTrait;
  * Required settings (below the definition's 'settings' key) are:
  *  - tag_name: The tag to be processed.
  *    Examples: "title", "description".
+ *
+ * @deprecated in metatag:8.x-1.23 and is removed from metatag:2.0.0. A replacement will be provided separately.
+ *
+ * @see https://www.drupal.org/node/3326104
  */
 class IndividualTag extends TypedData {
 

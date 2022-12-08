@@ -172,6 +172,11 @@ To add meta tags to the Search API:
 * Click "Save changes" at the bottom of the Fields admin page.
 * Reindex the content with the new settings.
 
+### Deprecated
+
+Note that this specific Search API integration has been deprecated in release
+8.x-1.23 and a replacement will be added separately to a future release.
+
 
 ## Alternative option to simplify the content administration experience
 
