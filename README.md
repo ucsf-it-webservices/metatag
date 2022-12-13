@@ -135,49 +135,6 @@ Metatag field entirely, then use tokens for those fields in the defaults
 display, or just left hidden.
 
 
-## Indexing meta tags with Search API
-
-The Search API integration allows indexing the meta tag values from a meta tag
-field on an entity bundle.
-
-### Limitations
-
-* Each meta tag must be specified individually, there isn't (currently) a way to
-  add all of them at once.
-* This may not work with values stored in Schema.org data structures from the
-  Schema.org Metatag module.
-* Changing the global Metatag defaults will not trigger a reindex of the content
-  so this will need to be done separately.
-* By default meta tags will be added as "string" fields, which will not include
-  them in the keyword search index; their "Type" selection must be specifically
-  set to "Fulltext" in order for the meta tags to be included in the keyword
-  search index, otherwise they will only be useful for doing facets or filters.
-
-### Setup
-
-To add meta tags to the Search API:
-
-* Make sure that a Metatag field is present on the entity bundle(s) that are
-  being indexed.
-* In the index configuration, modify the Fields section.
-* Click the "Add fields" button.
-* In the "Add fields to index [indexname]" popup, scroll down to find the
-  Metatag field; it will have the name defined in the field's settings.
-* Click the plus `(+)` button beside the field to see which meta tags are
-  available.
-* Click the "Add" button for the meta tags that are needed.
-* Click "Done" when all of the meta tags are added.
-* Look for the meta tag fields added to the index, change their "type" selector
-  to "Fulltext"; adjust the "Boost" value if desired.
-* Click "Save changes" at the bottom of the Fields admin page.
-* Reindex the content with the new settings.
-
-### Deprecated
-
-Note that this specific Search API integration has been deprecated in release
-8.x-1.23 and a replacement will be added separately to a future release.
-
-
 ## Alternative option to simplify the content administration experience
 
 On the settings page (/admin/config/search/metatag/settings) are options to
