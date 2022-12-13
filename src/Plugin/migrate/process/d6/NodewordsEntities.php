@@ -108,7 +108,6 @@ class NodewordsEntities extends ProcessPluginBase {
       'icbm' => 'icbm',
       'image_src' => 'image_src',
       'keywords' => 'keywords',
-      'news_keywords' => 'news_keywords',
       'next' => 'next',
       'original-source' => 'original_source',
       'page_title' => 'title',
@@ -122,7 +121,6 @@ class NodewordsEntities extends ProcessPluginBase {
       'robots' => 'robots',
       'set_cookie' => 'set_cookie',
       'shortlink' => 'shortlink',
-      'standout' => 'standout',
       'syndication-source' => 'original_source',
       'title' => 'title',
 

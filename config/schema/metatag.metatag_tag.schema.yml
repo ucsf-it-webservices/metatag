@@ -29,9 +29,6 @@ metatag.metatag_tag.image_src:
 metatag.metatag_tag.keywords:
   type: text
   label: 'Keywords'
-metatag.metatag_tag.news_keywords:
-  type: label
-  label: 'Google News Keywords'
 metatag.metatag_tag.next:
   type: label
   label: 'Next page URL'
@@ -65,9 +62,6 @@ metatag.metatag_tag.robots:
 metatag.metatag_tag.shortlink:
   type: label
   label: 'Shortlink'
-metatag.metatag_tag.standout:
-  type: label
-  label: 'Standout'
 metatag.metatag_tag.title:
   type: text
   label: 'Page title'

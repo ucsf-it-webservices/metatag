@@ -5,6 +5,8 @@ Metatag 2.0.x-dev, 2022-xx-xx
 #3272768 by DamienMcKenna, SandeepSingh199: Convert to JSON data storage.
 #3326103 by DamienMcKenna, harshitthakore: Remove the old TypedData plugin for
   Search API integration.
+#2973351 by DamienMcKenna, Simon Georges, thejimbirch: Remove News Keywords and
+  Standout meta tags.
 
 
 Metatag 8.x-1.x-dev, 2022-xx-xx

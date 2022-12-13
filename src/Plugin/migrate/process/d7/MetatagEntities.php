@@ -99,7 +99,6 @@ class MetatagEntities extends ProcessPluginBase {
       'icbm' => 'icbm',
       'image_src' => 'image_src',
       'keywords' => 'keywords',
-      'news_keywords' => 'news_keywords',
       'next' => 'next',
       'original-source' => 'original_source',
       'pragma' => 'pragma',
@@ -112,7 +111,6 @@ class MetatagEntities extends ProcessPluginBase {
       'robots' => 'robots',
       'set_cookie' => 'set_cookie',
       'shortlink' => 'shortlink',
-      'standout' => 'standout',
       'title' => 'title',
 
       // From metatag_app_links.metatag.inc:

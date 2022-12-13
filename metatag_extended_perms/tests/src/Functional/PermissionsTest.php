@@ -61,7 +61,6 @@ class PermissionsTest extends BrowserTestBase {
       'google' => 'Google',
       'icbm' => 'ICBM',
       'image_src' => 'Image',
-      'news_keywords' => 'News Keywords',
       'next' => 'Next page URL',
       'original_source' => 'Original source',
       'pragma' => 'Pragma',
@@ -77,7 +76,6 @@ class PermissionsTest extends BrowserTestBase {
       // @endcode
       'set_cookie' => 'Set cookie',
       'shortlink' => 'Shortlink URL',
-      'standout' => 'Standout',
     ],
   ];
 
