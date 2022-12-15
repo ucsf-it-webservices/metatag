@@ -18,6 +18,8 @@ Metatag 8.x-1.x-dev, 2022-xx-xx
 #3323467 by DamienMcKenna: Wrong source module for Nodewords migrations.
 #3326102 by DamienMcKenna: Deprecate TypedData plugin (for Search API
   integration).
+#3327418 by Steven Jones, DamienMcKenna: Trivial typo in description of
+  metatag_routes module.
 
 
 Metatag 8.x-1.22, 2022-09-29
