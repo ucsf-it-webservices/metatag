@@ -10,6 +10,7 @@ Metatag 8.x-1.x-dev, 2022-xx-xx
 #3327418 by Steven Jones, DamienMcKenna: Trivial typo in description of
   metatag_routes module.
 #3329070 by DamienMcKenna: Remove remaining Console references.
+#3329071 by DamienMcKenna: Deprecate some Twitter Card plugins.
 
 
 Metatag 8.x-1.22, 2022-09-29
