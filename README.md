@@ -16,7 +16,7 @@ is always recommended to keep Drupal core installations up to date.
 
 ## Requirements
 
-Metatag for Drupal 9 requires the following:
+Metatag for Drupal 9 & 10 requires the following:
 
 * [Token](https://www.drupal.org/project/token): Provides a popup browser to
   see the available tokens for use in meta tag fields.

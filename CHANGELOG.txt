@@ -7,6 +7,7 @@ Metatag 2.0.x-dev, 2022-xx-xx
   Search API integration.
 #2973351 by DamienMcKenna, Simon Georges, thejimbirch: Remove News Keywords and
   Standout meta tags.
+#3328352 by DamienMcKenna: Bump core requirements to 9.4.0.
 
 
 Metatag 8.x-1.x-dev, 2022-xx-xx
