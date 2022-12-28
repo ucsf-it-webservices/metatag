@@ -111,7 +111,7 @@ class MetatagCoreStringHandlingTest extends MetatagTestBase {
       ->fetchAssoc();
 
     // Unserialize the configuration.
-    $config = unserialize($result['config']);
+    $config = metatag_data_decode($result['config']);
 
     // Make sure the title tag is stored correctly.
     $this->assertEqual($title_original, $config['title']['value'], 'The title tag was stored in its original format.');

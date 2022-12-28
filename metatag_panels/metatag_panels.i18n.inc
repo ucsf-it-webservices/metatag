@@ -112,7 +112,7 @@ function metatag_panels_i18n_list_panels() {
     foreach ($handlers as $name => $handler) {
       if (!empty($handler)) {
         if (is_string($handler->conf)) {
-          $handler->conf = unserialize($handler->conf);
+          $handler->conf = metatag_data_decode($handler->conf);
         }
         if (!empty($handler->conf['metatag_panels']['enabled']) && !empty($handler->conf['metatag_panels']['metatags'])) {
           $all_objects[$name] = $handler;
@@ -129,7 +129,7 @@ function metatag_panels_i18n_list_panels() {
       if (!empty($page) && !empty($page->default_handlers)) {
         foreach ($page->default_handlers as $name => $handler) {
           if (is_string($handler->conf)) {
-            $handler->conf = unserialize($handler->conf);
+            $handler->conf = metatag_data_decode($handler->conf);
           }
           if (!empty($handler->conf['metatag_panels']['enabled']) && !empty($handler->conf['metatag_panels']['metatags'])) {
             $all_objects[$name] = $handler;

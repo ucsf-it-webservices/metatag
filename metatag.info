@@ -39,6 +39,9 @@ files[] = tests/MetatagTestBase.test
 ; Basic configuration handling.
 files[] = tests/MetatagCoreUnitTest.test
 
+; Update script tests for v2.
+files[] = tests/MetatagV2Updates.test
+
 ; Basic tag testing.
 files[] = tests/MetatagTagsTestBase.test
 files[] = tests/MetatagTagsTest.test

@@ -794,4 +794,54 @@ abstract class MetatagTestBase extends DrupalWebTestCase {
     return strtolower($this->randomName($length));
   }
 
+  /**
+   * Get the raw data for an entity record.
+   *
+   * @param string $entity_type
+   *   The entity type to query, e.g. "node".
+   * @param int $entity_id
+   *   The ID of the entity to load.
+   * @param int $revision_id
+   *   The revision ID of the entity to load.
+   * @param string $language
+   *   The langcode of the record to load.
+   *
+   * @return string
+   *   The raw, unprocessed string from the {metatag} table.
+   */
+  function getRawEntityData($entity_type, $entity_id, $revision_id, $language) {
+    $data = db_query("SELECT data
+        FROM {metatag}
+        WHERE (entity_type = :type)
+        AND (entity_id = :id)
+        AND (revision_id = :revision)
+        AND (language = :language)",
+      array(
+        ':type' => $entity_type,
+        ':id' => $entity_id,
+        ':revision' => $revision_id,
+        ':language' => $language,
+      ))->fetchCol();
+    return reset($data);
+  }
+
+  /**
+   * Get the raw data for an entity record.
+   *
+   * @param string $instance
+   *   The entity type to query, e.g. "node".
+   *
+   * @return string
+   *   The raw, unprocessed string from the {metatag_config} table.
+   */
+  function getRawConfig($instance) {
+    $data = db_query("SELECT config
+        FROM {metatag_config}
+        WHERE (instance = :instance)",
+      array(
+        ':instance' => $instance,
+      ))->fetchCol();
+    return reset($data);
+  }
+
 }

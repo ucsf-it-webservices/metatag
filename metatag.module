@@ -528,18 +528,30 @@ function metatag_config_save(\stdClass $config) {
   // hook_metatag_config_presave().
   module_invoke_all('metatag_config_presave', $config);
 
+  // Save the configuration as a JSON encoded string.
+  $config->config = json_encode($config->config);
+
+  // Save the database record.
   if ($config->is_new) {
     drupal_write_record('metatag_config', $config);
-
-    // Allow modules to act upon the record insertion using
-    // hook_metatag_config_insert().
-    module_invoke_all('metatag_config_insert', $config);
   }
   else {
     drupal_write_record('metatag_config', $config, array('cid'));
+  }
 
-    // Allow modules to act upon the record update using
-    // hook_metatag_config_insert().
+  // After saving the record decode the config object so that APIs are not
+  // affected.
+  $config->config = json_decode($config->config, TRUE);
+
+  // Trigger the appropriate hook.
+  if ($config->is_new) {
+    // Triggers hook_metatag_config_insert().
+    // Allow modules to act upon the record creation.
+    module_invoke_all('metatag_config_insert', $config);
+  }
+  else {
+    // Triggers hook_metatag_config_insert().
+    // Allow modules to act upon the record update.
     module_invoke_all('metatag_config_update', $config);
   }
 
@@ -688,7 +700,7 @@ function metatag_metatags_load_multiple($entity_type, array $entity_ids, array $
   // translations keyed by language code.
   $metatags = array();
   while ($record = $result->fetchObject()) {
-    $data = unserialize($record->data);
+    $data = metatag_data_decode($record->data);
 
     // "Fix" any records that might be using old values. Ideally these will be
     // permanently fixed by being re-saved or re-exported.
@@ -814,7 +826,7 @@ function metatag_metatags_save($entity_type, $entity_id, $revision_id, array $me
           'revision_id' => $revision_id,
         ))
         ->fields(array(
-          'data' => serialize($new_metatags),
+          'data' => json_encode($new_metatags),
         ))
         ->execute();
     }
@@ -3217,7 +3229,7 @@ function metatag_translate_metatags(array &$metatags, $context = NULL, $langcode
 /**
  * Update the translated definitions of meta tags.
  *
- * @param mixed $metatags
+ * @param array $metatags
  *   List of meta tags to have their translations updated.
  * @param string $context
  *   The string that will be used to group strings in the translation UI.
@@ -3301,6 +3313,12 @@ function metatag_translations_delete(array $metatags, $context) {
  */
 function i18n_string_metatag_config_insert(\stdClass $config) {
   // Implements hook_metatag_config_insert() on behalf of i18n_string.
+
+  // Make sure the configuration is decoded before proceeding.
+  if (is_string($config->config)) {
+    $config->config = metatag_data_decode($config->config);
+  }
+
   $context = 'metatag_config:' . $config->instance;
   metatag_translations_update($config->config, $context);
 }
@@ -3310,6 +3328,7 @@ function i18n_string_metatag_config_insert(\stdClass $config) {
  */
 function i18n_string_metatag_config_update(\stdClass $config) {
   // Implements hook_metatag_config_update() on behalf of i18n_string.
+
   // Defer to the 'insert' function.
   i18n_string_metatag_config_insert($config);
 }
@@ -3319,6 +3338,12 @@ function i18n_string_metatag_config_update(\stdClass $config) {
  */
 function i18n_string_metatag_config_delete(\stdClass $config) {
   // Implements hook_metatag_config_delete() on behalf of i18n_string.
+
+  // Make sure the configuration is decoded before proceeding.
+  if (is_string($config->config)) {
+    $config->config = metatag_data_decode($config->config);
+  }
+
   $context = 'metatag_config:' . $config->instance;
   metatag_translations_delete($config->config, $context);
 }
@@ -3377,4 +3402,53 @@ function metatag_entity_diff($old_entity, $new_entity, $context) {
     }
   }
   return $result;
+}
+
+/**
+ * Decode the different versions of encoded values supported by Metatag.
+ *
+ * Metatag v1 stored data in serialized arrays. Metatag v2 stores data in
+ * JSON-encoded strings.
+ *
+ * @param string $string
+ *   The string to decode.
+ *
+ * @return array
+ *   A Metatag values array.
+ */
+function metatag_data_decode($string) {
+  $data = array();
+
+  // Serialized arrays from Metatag v1.
+  if (substr($string, 0, 2) === 'a:') {
+    $data = @unserialize($string, ['allowed_classes' => FALSE]);
+  }
+
+  // Encoded JSON from Metatag v2.
+  elseif (substr($string, 0, 2) === '{"') {
+    // @todo Handle non-array responses.
+    $data = json_decode($string, TRUE);
+  }
+
+  // This is expected to be an array, so if it isn't then convert it to one.
+  if (!is_array($data)) {
+    $data = array();
+  }
+
+  return $data;
+}
+
+/**
+ * CTools API callback.
+ *
+ * @see metatag_schema()
+ */
+function metatag_ctools_decode_config(&$configs) {
+  // Drupal's schema system doesn't automatically decode JSON fields, so that
+  // conversion needs to be done.
+  foreach ($configs as &$config) {
+    if (is_string($config->config)) {
+      $config->config = metatag_data_decode($config->config);
+    }
+  }
 }

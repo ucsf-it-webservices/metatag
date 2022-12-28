@@ -261,6 +261,9 @@ function metatag_schema() {
       ),
       'cache defaults' => TRUE,
       'default cache bin' => 'cache_metatag',
+      // Decode the configuration, because the data is stored as encoded JSON
+      // and needs to be decoded before it can be used.
+      'subrecords callback' => 'metatag_ctools_decode_config',
     ),
     'fields' => array(
       'cid' => array(
@@ -281,7 +284,6 @@ function metatag_schema() {
         'type' => 'blob',
         'size' => 'big',
         'not null' => TRUE,
-        'serialize' => TRUE,
         'description' => 'Serialized data containing the meta tag configuration.',
         'translatable' => TRUE,
       ),
@@ -326,7 +328,7 @@ function metatag_schema() {
         'type' => 'blob',
         'size' => 'big',
         'not null' => TRUE,
-        'serialize' => TRUE,
+        'serialize' => FALSE,
       ),
     ),
     'indexes' => array(
@@ -585,6 +587,7 @@ function metatag_update_replace_entity_tag(array &$sandbox, $old_tag, $new_tag) 
     // run into an infinite loop. Stop immediately if we processed all records.
     if ($sandbox['progress'] >= $sandbox['max']) {
       $sandbox['#finished'] = TRUE;
+      return t('Converted the "@old_tag" meta tag for @count entity records to "@new_tag" meta tag.', array('@old_tag' => $old_tag, '@new_tag' => $new_tag, '@count' => $sandbox['progress']));
     }
     else {
       $sandbox['#finished'] = $sandbox['progress'] / $sandbox['max'];
@@ -2578,7 +2581,6 @@ function metatag_update_7108(array &$sandbox) {
  * Rename the 'icon_any' meta tag to 'mask-icon' in the entity records.
  */
 function metatag_update_7109(array &$sandbox) {
-  module_load_include('install', 'metatag');
   $old_tag = 'icon_any';
   $new_tag = 'mask-icon';
   return metatag_update_replace_entity_tag($sandbox, $old_tag, $new_tag);
@@ -2588,7 +2590,6 @@ function metatag_update_7109(array &$sandbox) {
  * Rename the 'icon_any' meta tag to 'mask-icon' in the configs.
  */
 function metatag_update_7110() {
-  module_load_include('install', 'metatag');
   $old_tag = 'icon_any';
   $new_tag = 'mask-icon';
   return metatag_update_replace_config_tag($old_tag, $new_tag);
@@ -2640,4 +2641,109 @@ function metatag_update_7115() {
  */
 function metatag_update_7116() {
   // Nothing to see here.
+}
+
+/**
+ * Update the per-entity records for v2.
+ */
+function metatag_update_7200(array &$sandbox) {
+  if (!isset($sandbox['progress'])) {
+    // Count of all {metatag} records that contained an entry for the old meta
+    // tag.
+    $records_count = db_select('metatag', 'm')
+      ->condition('m.data', 'a:%', 'LIKE')
+      ->countQuery()
+      ->execute()
+      ->fetchField();
+
+    if (empty($records_count)) {
+      return t('No Metatag entity records are in the old format.');
+    }
+
+    $sandbox['max'] = $records_count;
+    $sandbox['progress'] = 0;
+  }
+
+  // Count of rows that will be processed per iteration.
+  $limit = 100;
+
+  // Fetches a part of records.
+  $records = db_select('metatag', 'm')
+    ->fields('m', array())
+    ->condition('m.data', 'a:%', 'LIKE')
+    ->range(0, $limit)
+    ->execute();
+
+  $count = 0;
+  $keys = array('entity_type', 'entity_id', 'revision_id', 'language');
+
+  // Loop over the values and update the data.
+  foreach ($records as $record) {
+    // Skip invalid data.
+    $old_data = @unserialize($record->data);
+    if (is_array($old_data)) {
+      $record->data = json_encode($old_data);
+      drupal_write_record('metatag', $record, $keys);
+
+      // Clear the cache for the entity this belongs to.
+      entity_get_controller($record->entity_type)->resetCache(array($record->entity_id));
+    }
+    else {
+      watchdog('metatag_update_7200', 'Problems extracting the {metatag} record for :entity_type/:entity_id/:revision_id/:language.', $keys);
+    }
+
+    $count++;
+  }
+
+  if (!empty($count)) {
+    $sandbox['progress'] += $count;
+    // In some cases the query yields results that cannot be fixed and we would
+    // run into an infinite loop. Stop immediately if we processed all records.
+    if ($sandbox['progress'] >= $sandbox['max']) {
+      $sandbox['#finished'] = TRUE;
+      return t('Converted @count entity records.', array('@count' => $sandbox['progress']));
+    }
+    else {
+      $sandbox['#finished'] = $sandbox['progress'] / $sandbox['max'];
+    }
+  }
+  else {
+    $sandbox['#finished'] = TRUE;
+    return t('Converted @count entity records.', array('@count' => $sandbox['progress']));
+  }
+}
+
+/**
+ * Clear the Metatag caches so the new APIs can be used.
+ */
+function metatag_update_7201() {
+  metatag_config_cache_clear();
+}
+
+/**
+ * Update the default config records that are stored in the database for v2.
+ */
+function metatag_update_7202() {
+  ctools_include('export');
+  $configs = ctools_export_crud_load_all('metatag_config');
+
+  $count = 0;
+  foreach ($configs as $config) {
+    // Only upate configurations stored in the database.
+    if ($config->export_type !== EXPORT_IN_CODE) {
+      $config->config = json_encode($config->config);
+      drupal_write_record('metatag_config', $config, array('cid'));
+      $count++;
+    }
+  }
+
+  // Clear the Metatag cache again to ensure the changes above are fully loaded.
+  metatag_config_cache_clear();
+
+  if ($count === 0) {
+    return t("No configuration records needed to be updated.");
+  }
+  else {
+    return t("%count configuration record(s) were updated.", array("%count" => $count));
+  }
 }
