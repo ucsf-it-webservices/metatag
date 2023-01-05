@@ -16,18 +16,23 @@ class TestV2Updates extends UpdatePathTestBase {
   /**
    * {@inheritdoc}
    */
-  // protected function setUp(): void {
-  //   parent::setUp();
-  // }
-
-  /**
-   * {@inheritdoc}
-   */
   protected function setDatabaseDumpFiles() {
-    $this->databaseDumpFiles = [
-      static::getDrupalRoot() . '/core/modules/system/tests/fixtures/update/drupal-9.4.0.bare.standard.php.gz',
-      __DIR__ . '/../../../fixtures/d8_metatag_v1.php',
-    ];
+    // Drupal 9.5+ uses the 9.4.0 data dump, 9.4 uses the 9.3.0 data dump.
+    $core93 = static::getDrupalRoot() . '/core/modules/system/tests/fixtures/update/drupal-9.3.0.bare.standard.php.gz';
+    $core94 = static::getDrupalRoot() . '/core/modules/system/tests/fixtures/update/drupal-9.4.0.bare.standard.php.gz';
+    if (file_exists($core94)) {
+      $this->databaseDumpFiles = [
+        $core94,
+      ];
+    }
+    else {
+      $this->databaseDumpFiles = [
+        $core93,
+      ];
+    }
+
+    // Load the Metatag v1 data dump on top of the core data dump.
+    $this->databaseDumpFiles[] = __DIR__ . '/../../../fixtures/d8_metatag_v1.php';
   }
 
   /**
