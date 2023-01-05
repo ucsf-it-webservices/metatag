@@ -8,6 +8,7 @@ Metatag 2.0.x-dev, 2022-xx-xx
 #2973351 by DamienMcKenna, Simon Georges, thejimbirch: Remove News Keywords and
   Standout meta tags.
 #3328352 by DamienMcKenna: Bump core requirements to 9.4.0.
+#3329071 by DamienMcKenna: Removed a file that was accidentally added again.
 
 
 Metatag 8.x-1.x-dev, 2022-xx-xx
