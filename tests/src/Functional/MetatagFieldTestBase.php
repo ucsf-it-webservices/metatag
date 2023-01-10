@@ -429,6 +429,11 @@ abstract class MetatagFieldTestBase extends BrowserTestBase {
     }
 
     // @todo Confirm the values output correctly.
+
+    // Check the output.
+    // @todo Test this.
+    $all_tags = metatag_generate_entity_all_tags($entity);
+    $overrides = metatag_generate_entity_overrides($entity);
   }
 
   /**

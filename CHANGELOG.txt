@@ -14,6 +14,8 @@ Metatag 8.x-1.x-dev, 2022-xx-xx
 #3329362 by Project Update Bot, DamienMcKenna: Minor improvement to
   metatag.api.php.
 #3323961 by ressa, DamienMcKenna: Update README.md with new standard format.
+#3332348 by DamienMcKenna: Add function for getting list of overridden meta tags
+  for a given entity.
 
 
 Metatag 8.x-1.22, 2022-09-29
