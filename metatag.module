@@ -599,15 +599,57 @@ function metatag_entity_base_field_info(EntityTypeInterface $entity_type) {
 /**
  * Turn the meta tags for an entity into a human readable structure.
  *
- * @param object $entity
+ * @param \Drupal\Core\Entity\ContentEntityInterface $entity
+ *   The entity object.
+ *
+ * @return array
+ *   All of the meta tags in a nested structure.
+ *
+ * @deprecated in metatag:8.x-1.23 and is removed from metatag:2.0.0. Use metatag_generate_entity_all_tags() instead.
+ *
+ * @see https://www.drupal.org/node/
+ */
+function metatag_generate_entity_metatags($entity) {
+  return metatag_generate_entity_all_tags($entity);
+}
+
+/**
+ * Turn the meta tags for an entity into a human readable structure.
+ *
+ * @param \Drupal\Core\Entity\ContentEntityInterface $entity
  *   The entity object.
  *
  * @return array
  *   All of the meta tags in a nested structure.
  */
-function metatag_generate_entity_metatags($entity) {
+function metatag_generate_entity_all_tags(ContentEntityInterface $entity): array {
   $values = [];
   $raw = metatag_get_tags_from_route($entity);
+  if (!empty($raw['#attached']['html_head'])) {
+    foreach ($raw['#attached']['html_head'] as $tag) {
+      $values[$tag[1]] = $tag[0];
+    }
+  }
+  return $values;
+}
+
+/**
+ * Turn the meta tags for an entity into a human readable structure.
+ *
+ * @param \Drupal\Core\Entity\ContentEntityInterface $entity
+ *   The entity object.
+ *
+ * @return array
+ *   The meta tags overridden on this entity in a nested structure.
+ */
+function metatag_generate_entity_overrides(ContentEntityInterface $entity): array {
+  $values = [];
+  $metatag_manager = \Drupal::service('metatag.manager');
+  $metatags = [];
+  foreach ($metatag_manager->tagsFromEntity($entity) as $tag => $data) {
+    $metatags[$tag] = $data;
+  }
+  $raw = $metatag_manager->generateElements($metatags, $entity);
   if (!empty($raw['#attached']['html_head'])) {
     foreach ($raw['#attached']['html_head'] as $tag) {
       $values[$tag[1]] = $tag[0];

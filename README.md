@@ -213,7 +213,7 @@ necessary to copy each value to the new record.
 For developers needing to access the rendered meta tags for a given entity, a
 function is provided to make this easy to do:
 
-    $metatags = metatag_generate_entity_metatags($entity);
+    $metatags = metatag_generate_entity_all_tags($entity);
 
 This will return an array with the following structure:
 
@@ -254,6 +254,13 @@ meta tag is then provided as arguments suitable for use in a render array with
 the type "html_tag". Extracting the value of the meta tag will depend upon the
 type of meta tag, e.g. the generator meta tag uses the "content" attribute while
 the link tag uses the "href" attribute.
+
+Another function exists for viewing only the meta tags that are overridden for
+an entity, i.e. global defaults are not included.
+
+    $metatags = metatag_generate_entity_overrides($entity);
+
+This returns output in the same format as the function above.
 
 
 ## Migration / upgrade from Drupal 6 or 7
