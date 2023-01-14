@@ -35,7 +35,7 @@ class Robots extends MetaNameBase {
   public function setValue($value) {
     if (is_array($value)) {
       $value = array_filter($value);
-      $value = implode(', ', array_keys($value));
+      $value = implode($this->getSeparator() . ' ', array_keys($value));
     }
     $this->value = $value;
   }
@@ -47,7 +47,7 @@ class Robots extends MetaNameBase {
     // Prepare the default value as it is stored as a string.
     $default_value = [];
     if (!empty($this->value)) {
-      $default_value = explode(', ', $this->value);
+      $default_value = explode($this->getSeparator() . ' ', $this->value);
     }
 
     $form = [

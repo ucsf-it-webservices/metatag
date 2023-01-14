@@ -10,6 +10,9 @@ Metatag 2.0.x-dev, 2022-xx-xx
 #3328352 by DamienMcKenna: Bump core requirements to 9.4.0.
 #3329071 by DamienMcKenna: Removed a file that was accidentally added again.
 #3325139 by DamienMcKenna: Update TestV2Updates to be compatible with 9.4.x.
+#3067803 by DamienMcKenna, KarenS, aludescher, jonathan_hunt, basvredeling,
+  owenbush, osopolar, peter3bweb, brunodbo, robertshell22, thejimbirch: Use
+  custom delimiter instead of commas for multiple values.
 
 
 Metatag 8.x-1.x-dev, 2022-xx-xx
@@ -28,6 +31,7 @@ Metatag 8.x-1.x-dev, 2022-xx-xx
 #3329362 by Project Update Bot, DamienMcKenna: Minor improvement to
   metatag.api.php.
 #3323961 by ressa, DamienMcKenna: Update README.md with new standard format.
+
 
 Metatag 8.x-1.22, 2022-09-29
 ----------------------------

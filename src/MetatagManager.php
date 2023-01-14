@@ -3,6 +3,7 @@
 namespace Drupal\metatag;
 
 use Drupal\Component\Render\PlainTextOutput;
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Language\LanguageInterface;
@@ -23,6 +24,7 @@ use Drupal\Core\Language\LanguageManagerInterface;
 class MetatagManager implements MetatagManagerInterface {
 
   use StringTranslationTrait;
+  use MetatagSeparator;
 
   /**
    * The group plugin manager.
@@ -51,6 +53,13 @@ class MetatagManager implements MetatagManagerInterface {
    * @var \Drupal\metatag\MetatagToken
    */
   protected $tokenService;
+
+  /**
+   * Config factory.
+   *
+   * @var Drupal\Core\Config\ConfigFactoryInterface
+   */
+  protected $configFactory;
 
   /**
    * The Metatag logging channel.
@@ -115,6 +124,8 @@ class MetatagManager implements MetatagManagerInterface {
    *   The request stack.
    * @param \Drupal\Core\Language\LanguageManagerInterface $languageManager
    *   The language manager.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   The Config Factory.
    */
   public function __construct(MetatagGroupPluginManager $groupPluginManager,
     MetatagTagPluginManager $tagPluginManager,
@@ -124,7 +135,8 @@ class MetatagManager implements MetatagManagerInterface {
     PathMatcherInterface $pathMatcher,
     RouteMatchInterface $routeMatch,
     RequestStack $requestStack,
-    LanguageManagerInterface $languageManager
+    LanguageManagerInterface $languageManager,
+    ConfigFactoryInterface $config_factory
   ) {
     $this->groupPluginManager = $groupPluginManager;
     $this->tagPluginManager = $tagPluginManager;
@@ -135,6 +147,7 @@ class MetatagManager implements MetatagManagerInterface {
     $this->routeMatch = $routeMatch;
     $this->requestStack = $requestStack;
     $this->languageManager = $languageManager;
+    $this->configFactory = $config_factory;
   }
 
   /**
@@ -697,7 +710,7 @@ class MetatagManager implements MetatagManagerInterface {
             }
           }
           $processed_value = $this->processTagValue($tag, $value, $token_replacements, TRUE);
-          $this->processedTokenCache[$entity_identifier][$tag_name] = $tag->multiple() ? explode(',', $processed_value) : $processed_value;
+          $this->processedTokenCache[$entity_identifier][$tag_name] = $tag->multiple() ? explode($tag->getSeparator(), $processed_value) : $processed_value;
         }
       }
     }
@@ -762,13 +775,20 @@ class MetatagManager implements MetatagManagerInterface {
         ->getId();
     }
 
+    // Create options for handling token replacements, setting the current
+    // language and a custom delimiter for multiple value fields in tokens.
+    $options = [
+      'langcode' => $langcode,
+      'join' => $tag->getSeparator(),
+    ];
+
     // Loop over each item in the array.
     foreach ($value as $key => $value_item) {
       // Process the tokens in this value and decode any HTML characters that
       // might be found.
       if (!empty($value_item) && is_string($value_item)) {
         if (strpos($value_item, '[') !== FALSE) {
-          $value[$key] = $this->tokenService->replace($value_item, $token_replacements, ['langcode' => $langcode]);
+          $value[$key] = htmlspecialchars_decode($this->tokenService->replace($value_item, $token_replacements, $options));
         }
         $value[$key] = htmlspecialchars_decode($value[$key]);
       }

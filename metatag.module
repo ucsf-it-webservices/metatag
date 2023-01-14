@@ -146,6 +146,9 @@ function metatag_page_attachments(array &$attachments) {
       $attachments['#attached']['html_head'] = [];
     }
 
+    // Work out what separator should be used in the string processing.
+    $separator = \Drupal::service('metatag.manager')->getSeparator();
+
     foreach ($metatag_attachments['#attached']['html_head'] as $item) {
       // Do not attach a title meta tag as this unnecessarily duplicates the
       // title tag.
@@ -154,6 +157,11 @@ function metatag_page_attachments(array &$attachments) {
         continue;
       }
 
+      // Replace multiple value delimiter with commas if the delimiter hasn't
+      // already been replaced by some other module.
+      if (isset($item['#attributes']['content']) && is_string($item['#attributes']['content'])) {
+        $item['#attributes']['content'] = str_replace($separator, ', ', $item['#attributes']['content']);
+      }
       $attachments['#attached']['html_head'][] = $item;
     }
   }

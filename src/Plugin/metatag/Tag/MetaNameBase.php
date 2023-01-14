@@ -4,15 +4,20 @@ namespace Drupal\metatag\Plugin\metatag\Tag;
 
 use Drupal\Component\Plugin\PluginBase;
 use Drupal\Component\Render\PlainTextOutput;
-use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Component\Utility\Random;
+use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\metatag\MetatagSeparator;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Each meta tag will extend this base.
  */
-abstract class MetaNameBase extends PluginBase {
+abstract class MetaNameBase extends PluginBase implements ContainerFactoryPluginInterface {
 
+  use MetatagSeparator;
   use StringTranslationTrait;
 
   /**
@@ -129,6 +134,13 @@ abstract class MetaNameBase extends PluginBase {
   protected $nameAttribute = 'name';
 
   /**
+   * Config factory.
+   *
+   * @var Drupal\Core\Config\ConfigFactoryInterface
+   */
+  protected $configFactory;
+
+  /**
    * The string this tag uses for the tag itself.
    *
    * @var string
@@ -170,6 +182,29 @@ abstract class MetaNameBase extends PluginBase {
     $this->long = !empty($plugin_definition['long']);
     $this->absoluteUrl = !empty($plugin_definition['absolute_url']);
     $this->request = \Drupal::request();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
+    $instance = new static(
+      $configuration,
+      $plugin_id,
+      $plugin_definition
+    );
+    $instance->setConfigFactory($container->get('config.factory'));
+    return $instance;
+  }
+
+  /**
+   * Sets ConfigFactoryInterface service.
+   *
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $configFactory
+   *   The Config Factory service.
+   */
+  public function setConfigFactory(ConfigFactoryInterface $configFactory) {
+    $this->configFactory = $configFactory;
   }
 
   /**
@@ -375,8 +410,9 @@ abstract class MetaNameBase extends PluginBase {
     ];
 
     // Optional handling for items that allow multiple values.
+    $separator = $this->getSeparator();
     if (!empty($this->multiple)) {
-      $form['#description'] .= ' ' . $this->t('Multiple values may be used, separated by a comma. Note: Tokens that return multiple values will be handled automatically.');
+      $form['#description'] .= ' ' . $this->t('Multiple values may be used, separated by `:delimiter`. Note: Tokens that return multiple values will be handled automatically.', [':delimiter' => $separator]);
     }
 
     // Optional handling for images.
@@ -447,6 +483,9 @@ abstract class MetaNameBase extends PluginBase {
       return $this->multiple() ? [] : '';
     }
 
+    // Get configuration.
+    $separator = $this->getSeparator();
+
     // If this contains embedded image tags, extract the image URLs.
     if ($this->type() === 'image') {
       $value = $this->parseImageUrl($this->value);
@@ -455,7 +494,7 @@ abstract class MetaNameBase extends PluginBase {
       $value = PlainTextOutput::renderFromHtml($this->value);
     }
 
-    $values = $this->multiple() ? explode(',', $value) : [$value];
+    $values = $this->multiple() ? explode($this->getSeparator(), $value) : [$value];
     $elements = [];
     foreach ($values as $value) {
       $value = $this->tidy($value);
@@ -527,7 +566,7 @@ abstract class MetaNameBase extends PluginBase {
         $values = array_filter($matches[2] ?? []);
       }
       else {
-        $values = array_filter(explode(',', $value));
+        $values = array_filter(explode($this->getSeparator(), $value));
       }
     }
     else {
@@ -551,9 +590,8 @@ abstract class MetaNameBase extends PluginBase {
     // Make sure there aren't any blank items in the array.
     $values = array_filter($values);
 
-    // Convert the array back into a comma-delimited string before sending it
-    // back.
-    return implode(',', $values);
+    // Convert the array back into a delimited string before sending it back.
+    return implode($this->getSeparator(), $values);
   }
 
   /**

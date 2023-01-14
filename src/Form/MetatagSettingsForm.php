@@ -4,12 +4,15 @@ namespace Drupal\metatag\Form;
 
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\metatag\MetatagSeparator;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Defines the configuration export form.
  */
 class MetatagSettingsForm extends ConfigFormBase {
+
+  use MetatagSeparator;
 
   /**
    * The metatag.manager service.
@@ -76,7 +79,24 @@ class MetatagSettingsForm extends ConfigFormBase {
     if ($this->state->get('system.maintenance_mode')) {
       $this->messenger()->addMessage($this->t('Please note that while the site is in maintenance mode none of the usual meta tags will be output.'));
     }
-    $entitySettings = $this->config('metatag.settings')->get('entity_type_groups');
+    $settings = $this->config('metatag.settings');
+    $entity_type_groups = $settings->get('entity_type_groups');
+
+    $separator = trim($settings->get('separator') ?? '');
+    if ($separator === '') {
+      $separator = $this::$default_separator;
+    }
+    $form['separator'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Separator used with multiple values'),
+      '#description' => $this->t('Controls the separator used when a meta tag allows multiple values. Multiple characters can be used together, it does not have to be one single character long. Defaults to ":default".', [
+        ':default' => $this::$default_separator,
+      ]),
+      '#size' => 10,
+      '#default_value' => $separator,
+      '#required' => TRUE,
+    ];
+
     $form['entity_type_groups'] = [
       '#type' => 'details',
       '#open' => TRUE,
@@ -103,7 +123,7 @@ class MetatagSettingsForm extends ConfigFormBase {
         $form['entity_type_groups'][$entity_type][$bundle_id][] = [
           '#type' => 'checkboxes',
           '#options' => $options,
-          '#default_value' => isset($entitySettings[$entity_type]) && isset($entitySettings[$entity_type][$bundle_id]) ? $entitySettings[$entity_type][$bundle_id] : [],
+          '#default_value' => isset($entity_type_groups[$entity_type]) && isset($entity_type_groups[$entity_type][$bundle_id]) ? $entity_type_groups[$entity_type][$bundle_id] : [],
         ];
       }
     }
@@ -189,6 +209,8 @@ class MetatagSettingsForm extends ConfigFormBase {
       }
     }
     $settings->set('entity_type_groups', $entityTypeGroupsValues);
+
+    $settings->set('separator', trim($form_state->getValue('separator')));
 
     // tag_trim handling:
     $trimmingMethod = $form_state->getValue(['tag_trim', 'tag_trim_method']);
