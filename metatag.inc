@@ -168,7 +168,7 @@ class DrupalDefaultMetaTag implements DrupalMetaTagInterface {
 
     // Multiple items.
     else {
-      $values = array_filter(explode(',', $value));
+      $values = array_values(array_filter(explode(variable_get('metatag_separator', ','), $value)));
     }
 
     // Loop over each item.
@@ -583,7 +583,7 @@ class DrupalTextMetaTag extends DrupalDefaultMetaTag {
     if (!empty($this->info['image']) || !empty($this->info['url'])) {
       // Support multiple items, whether it's needed or not. Also remove the
       // empty values and reindex the array.
-      $values = array_values(array_filter(explode(',', $value)));
+      $values = array_values(array_filter(explode(variable_get('metatag_separator', ','), $value)));
 
       // If this meta tag does *not* allow multiple items, only keep the first
       // one.

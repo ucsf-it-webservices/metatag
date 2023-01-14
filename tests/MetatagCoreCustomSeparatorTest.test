@@ -1,0 +1,132 @@
+<?php
+
+/**
+ * @file
+ * Tests for Metatag's custom separator.
+ */
+
+/**
+ * Tests for Metatag's custom separator.
+ */
+class MetatagCoreCustomSeparatorTest extends MetatagTestBase {
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function getInfo() {
+    return array(
+      'name' => 'Metatag core tests for custom separators',
+      'description' => "Tests Metatag's handling of custom separators.",
+      'group' => 'Metatag',
+      'dependencies' => array('ctools', 'devel', 'token'),
+    );
+  }
+
+  /**
+   * Test the custom separator functionality.
+   */
+  public function testCustomSeparator() {
+    // To start with, make sure that the site is using the default separator.
+    variable_del('metatag_separator');
+
+    // Create a node with a multi-value tag that uses the default separator.
+    $node1 = $this->drupalCreateNode(array(
+      'title' => $this->randomName() . ' ' . $this->randomName(),
+      'metatags' => array(
+        LANGUAGE_NONE => array(
+          'test:multifoo' => array('value' => 'foo, bar'),
+        ),
+      ),
+    ));
+
+    // Create a node with the multi-character separator.
+    $node2 = $this->drupalCreateNode(array(
+      'title' => $this->randomName() . ' ' . $this->randomName(),
+      'metatags' => array(
+        LANGUAGE_NONE => array(
+          'test:multifoo' => array('value' => 'foo!bar'),
+        ),
+      ),
+    ));
+
+    // Create a node with the multi-character separator.
+    $node3 = $this->drupalCreateNode(array(
+      'title' => $this->randomName() . ' ' . $this->randomName(),
+      'metatags' => array(
+        LANGUAGE_NONE => array(
+          'test:multifoo' => array('value' => 'foo::bar'),
+        ),
+      ),
+    ));
+
+    // Verify that node 1 has two tokens but nodes 2 and 3 only have one each.
+    $this->assertNodeHasTwoTags($node1);
+    $this->assertNodeHasOneTag($node2, 'foo!bar');
+    $this->assertNodeHasOneTag($node3, 'foo::bar');
+
+    // Now hardcode the separator to a single comma.
+    variable_set('metatag_separator', ',');
+
+    // Clear the caches.
+    drupal_flush_all_caches();
+
+    // Node 1 still has two tokens, and nodes 2 and 3 still have one each.
+    $this->assertNodeHasTwoTags($node1);
+    $this->assertNodeHasOneTag($node2, 'foo!bar');
+    $this->assertNodeHasOneTag($node3, 'foo::bar');
+
+    // Hardcode the separator to a different string.
+    variable_set('metatag_separator', '!');
+
+    // Clear the caches.
+    drupal_flush_all_caches();
+
+    // Verify that nodes 1 and 3 have one tag, but node 2 has two.
+    $this->assertNodeHasOneTag($node1, 'foo, bar');
+    $this->assertNodeHasTwoTags($node2);
+    $this->assertNodeHasOneTag($node3, 'foo::bar');
+
+    // Try a two-character separator.
+    variable_set('metatag_separator', '::');
+
+    // Clear the caches.
+    drupal_flush_all_caches();
+
+    // Verify that nodes 1 and 3 have one tag, but node 2 has two.
+    $this->assertNodeHasOneTag($node1, 'foo, bar');
+    $this->assertNodeHasOneTag($node2, 'foo!bar');
+    $this->assertNodeHasTwoTags($node3);
+  }
+
+  /**
+   * Verify that a specified node has one meta tag.
+   *
+   * @param object $node
+   *   The node to examine.
+   * @param string $string
+   *   The string that the token is expected to have.
+   */
+  function assertNodeHasOneTag($node, $string) {
+    $this->drupalGet('node/' . $node->nid);
+    $this->assertResponse(200);
+    $xpath = $this->xpath("//meta[@name='test:multifoo']");
+    $this->assertEqual(count($xpath), 1);
+    $this->assertEqual($xpath[0]['content'], $string);
+  }
+
+  /**
+   * Verify that a specified node has one meta tag.
+   *
+   * @param object $node
+   *   The node to examine.
+   */
+  function assertNodeHasTwoTags($node) {
+    $this->drupalGet('node/' . $node->nid);
+    $this->assertResponse(200);
+    $xpath = $this->xpath("//meta[@name='test:multifoo']");
+    $this->assertEqual(count($xpath), 2);
+    $this->assertEqual($xpath[0]['content'], "foo");
+    $this->assertEqual($xpath[1]['content'], "bar");
+  }
+
+}

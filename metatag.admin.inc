@@ -804,6 +804,13 @@ function metatag_admin_settings_form() {
     '#default_value' => variable_get('metatag_load_all_pages', TRUE),
   );
 
+  $form['advanced']['metatag_separator'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Separator used with multiple values'),
+    '#description' => t('Controls the separator used when a meta tag allows multiple values. Multiple characters can be used together, it does not have to be one single character long. Defaults to ",".'),
+    '#default_value' => variable_get('metatag_separator', ','),
+  );
+
   $form['advanced']['metatag_tag_admin_pages'] = array(
     '#type' => 'checkbox',
     '#title' => t('Output meta tags on admin pages'),
@@ -921,6 +928,11 @@ function metatag_admin_settings_form_submit($form, &$form_state) {
   // Make sure the metatag_summary_length value is a number.
   if (!empty($form_state['values']['metatag_summary_length'])) {
     $form_state['values']['metatag_summary_length'] = intval($form_state['values']['metatag_summary_length']);
+  }
+
+  // Trim the separator value.
+  if (isset($form_state['values']['metatag_separator'])) {
+    $form_state['values']['metatag_separator'] = trim($form_state['values']['metatag_separator']);
   }
 
   // Clear the Metatag caches so any settings changes will be available.

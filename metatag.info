@@ -60,6 +60,7 @@ files[] = tests/MetatagBulkRevertTest.test
 ; String handling.
 files[] = tests/MetatagCoreStringHandlingTest.test
 files[] = tests/MetatagCoreStringHandlingWithI18nTest.test
+files[] = tests/MetatagCoreCustomSeparatorTest.test
 
 ; XSS testing.
 files[] = tests/MetatagCoreXSSTest.test

@@ -493,6 +493,9 @@ function metatag_uninstall() {
   // Sanitize token replacement output.
   variable_del('metatag_token_sanitize');
 
+  // Optionally change the multiple item delimiter.
+  variable_del('metatag_separator');
+
   // Remove all possible 'enable' variables.
   foreach (entity_get_info() as $entity_type => $entity_info) {
     variable_del('metatag_enable_' . $entity_type);
