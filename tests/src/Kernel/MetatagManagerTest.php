@@ -198,6 +198,17 @@ class MetatagManagerTest extends KernelTestBase {
     $this->assertEquals($expected, $tags);
   }
 
+  /**
+   * Tests the default settings to make sure they load as expected.
+   */
+  public function testDefaultSettings() {
+    $config = $this->configFactory->get('metatag.settings');
+    $this->assertEquals($config->get('entity_type_groups'), []);
+    $this->assertEquals($config->get('separator'), '');
+    $this->assertEquals($config->get('tag_trim_method'), 'beforeValue');
+    $this->assertEquals($config->get('tag_trim_maxlength'), []);
+    $this->assertEquals($config->get('tag_scroll_max_height'), '');
+  }
 
   /**
    * Tests separator configuration and handling of multiple values.

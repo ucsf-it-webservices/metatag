@@ -81,7 +81,7 @@ abstract class TagsTestBase extends BrowserTestBase {
     $tag_manager = \Drupal::service('plugin.manager.metatag.tag');
     $all_tags = [];
     foreach ($tag_manager->getDefinitions() as $tag_name => $tag_spec) {
-      $all_tags[$tag_name] = new $tag_spec['class']([], $tag_name, $tag_spec);
+      $all_tags[$tag_name] = $tag_spec['class']::create($this->container, [], $tag_name, $tag_spec);
     }
     if ($this->debugMode) {
       dump(array_keys($all_tags));

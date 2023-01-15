@@ -82,18 +82,18 @@ class MetatagSettingsForm extends ConfigFormBase {
     $settings = $this->config('metatag.settings');
     $entity_type_groups = $settings->get('entity_type_groups');
 
-    $separator = trim($settings->get('separator') ?? '');
-    if ($separator === '') {
-      $separator = $this::$default_separator;
+    $separator = $settings->get('separator');
+    if (is_null($separator) || $separator == '') {
+      $separator = $this::$defaultSeparator;
     }
     $form['separator'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Separator used with multiple values'),
       '#description' => $this->t('Controls the separator used when a meta tag allows multiple values. Multiple characters can be used together, it does not have to be one single character long. Defaults to ":default".', [
-        ':default' => $this::$default_separator,
+        ':default' => $this::$defaultSeparator,
       ]),
       '#size' => 10,
-      '#default_value' => $separator,
+      '#default_value' => trim($separator),
       '#required' => TRUE,
     ];
 

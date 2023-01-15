@@ -7,7 +7,7 @@ use Drupal\Component\Render\PlainTextOutput;
 use Drupal\Component\Utility\Random;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+// use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\metatag\MetatagSeparator;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -15,7 +15,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 /**
  * Each meta tag will extend this base.
  */
-abstract class MetaNameBase extends PluginBase implements ContainerFactoryPluginInterface {
+abstract class MetaNameBase extends PluginBase {//implements ContainerFactoryPluginInterface {
 
   use MetatagSeparator;
   use StringTranslationTrait;
@@ -136,7 +136,7 @@ abstract class MetaNameBase extends PluginBase implements ContainerFactoryPlugin
   /**
    * Config factory.
    *
-   * @var Drupal\Core\Config\ConfigFactoryInterface
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
    */
   protected $configFactory;
 
@@ -182,6 +182,9 @@ abstract class MetaNameBase extends PluginBase implements ContainerFactoryPlugin
     $this->long = !empty($plugin_definition['long']);
     $this->absoluteUrl = !empty($plugin_definition['absolute_url']);
     $this->request = \Drupal::request();
+
+    // @todo Is there a DI-friendly way of doing this?
+    $this->configFactory = \Drupal::service('config.factory');
   }
 
   /**
@@ -494,7 +497,7 @@ abstract class MetaNameBase extends PluginBase implements ContainerFactoryPlugin
       $value = PlainTextOutput::renderFromHtml($this->value);
     }
 
-    $values = $this->multiple() ? explode($this->getSeparator(), $value) : [$value];
+    $values = $this->multiple() ? explode($separator, $value) : [$value];
     $elements = [];
     foreach ($values as $value) {
       $value = $this->tidy($value);

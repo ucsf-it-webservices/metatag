@@ -12,7 +12,7 @@ trait MetatagSeparator {
    *
    * @var string
    */
-  public static $default_separator = ',';
+  public static $defaultSeparator = ',';
 
   /**
    * Returns the multiple value separator for this site.
@@ -24,11 +24,22 @@ trait MetatagSeparator {
    *   The correct separator.
    */
   public function getSeparator() {
+    $separator = '';
+
+    // Load the separator saved in configuration.
     $config = $this->configFactory->get('metatag.settings');
-    $separator = trim($config->get('separator') ?? '');
-    if ($separator === '') {
-      $separator = $this::$default_separator;
+
+    // @todo This extra check shouldn't be needed.
+    if (!empty($config)) {
+      $separator = $config->get('separator');
     }
+
+    // By default the separator setting has a blank value, so use the default
+    // value defined above.
+    if (is_null($separator) || $separator == '') {
+      $separator = $this::$defaultSeparator;
+    }
+
     return $separator;
   }
 
