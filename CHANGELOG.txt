@@ -18,7 +18,7 @@ Metatag 8.x-1.x-dev, 2022-xx-xx
   for a given entity.
 #3314204 by DamienMcKenna, joshua.boltz: Handling of single vs multiple-value
   metatags with Search API integration.
-#3299222 by DamienMcKenna: Mobile tags are not overwriting core'\''s tags as
+#3299222 by DamienMcKenna: Mobile tags are not overwriting core's tags as
   expected.
 
 
