@@ -24,6 +24,8 @@ class IndividualTag extends TypedData {
 
   /**
    * Cached processed value.
+   *
+   * @var string
    */
   protected $value;
 

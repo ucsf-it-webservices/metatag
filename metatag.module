@@ -627,7 +627,7 @@ function metatag_entity_base_field_info(EntityTypeInterface $entity_type) {
  *
  * @deprecated in metatag:8.x-1.23 and is removed from metatag:2.0.0. Use metatag_generate_entity_all_tags() instead.
  *
- * @see https://www.drupal.org/node/
+ * @see https://www.drupal.org/node/3332350
  */
 function metatag_generate_entity_metatags($entity) {
   return metatag_generate_entity_all_tags($entity);

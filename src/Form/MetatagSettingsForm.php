@@ -197,7 +197,10 @@ class MetatagSettingsForm extends ConfigFormBase {
     $settings->set('tag_trim_maxlength', $trimmingValues);
 
     // Widget settings.
-    $scrollheightvalue = $form_state->getValue(['firehose_widget', 'tag_scroll_max_height']);
+    $scrollheightvalue = $form_state->getValue([
+      'firehose_widget',
+      'tag_scroll_max_height',
+    ]);
     $settings->set('tag_scroll_max_height', $scrollheightvalue);
 
     $settings->save();

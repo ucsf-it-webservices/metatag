@@ -20,6 +20,8 @@ Metatag 8.x-1.x-dev, 2022-xx-xx
   metatags with Search API integration.
 #3299222 by DamienMcKenna: Mobile tags are not overwriting core's tags as
   expected.
+#3329792 by DamienMcKenna, sahil.goyal, amanshukla6158: Drupal Coding Standards
+  Issues.
 
 
 Metatag 8.x-1.22, 2022-09-29
