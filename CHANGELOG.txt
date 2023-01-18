@@ -22,6 +22,7 @@ Metatag 8.x-1.x-dev, 2022-xx-xx
   expected.
 #3329792 by DamienMcKenna, sahil.goyal, amanshukla6158: Drupal Coding Standards
   Issues.
+#3334601 by DamienMcKenna: Backport fixture file from 2.0.x.
 
 
 Metatag 8.x-1.22, 2022-09-29
