@@ -337,9 +337,9 @@ function metatag_post_update_change_fields_to_json(&$sandbox) {
 }
 
 /**
- * GooglePlus removal: Remove the Publisher and Name tags from entity values.
+ * Remove meta tags entity values that were removed in v2.
  */
-function metatag_post_update_remove_googleplus1(array &$sandbox) {
+function metatag_post_update_v2_remove_entity_values(array &$sandbox) {
   // This whole top section only needs to be done the first time.
   if (!isset($sandbox['records_processed'])) {
     $sandbox['records_processed'] = 0;
@@ -492,9 +492,9 @@ function metatag_post_update_remove_googleplus1(array &$sandbox) {
 }
 
 /**
- * GooglePlus removal: Remove the Publisher and Name tags from defaults.
+ * Remove meta tags from default configurations that were removed in v2.
  */
-function metatag_post_update_remove_googleplus2() {
+function metatag_post_update_v2_remove_config_values() {
   $defaults = \Drupal::entityTypeManager()
     ->getStorage('metatag_defaults')
     ->loadMultiple();
@@ -520,9 +520,9 @@ function metatag_post_update_remove_googleplus2() {
 }
 
 /**
- * GooglePlus removal: Uninstall the module.
+ * Uninstall submodule(s) deprecated in v2: GooglePlus.
  */
-function metatag_post_update_remove_googleplus3() {
+function metatag_post_update_v2_uninstall_modules() {
   $moduleHandler = \Drupal::moduleHandler();
 
   if (!$moduleHandler->moduleExists('metatag_google_plus')) {

@@ -48,9 +48,9 @@ class TestV2Updates extends UpdatePathTestBase {
     $this->assertSession()->responseContains('Convert all fields to use JSON storage.');
 
     // Verify that the GooglePlus-removal post-update scripts are present.
-    $this->assertSession()->responseContains('GooglePlus removal: Remove the Publisher and Name tags from defaults.');
-    $this->assertSession()->responseContains('GooglePlus removal: Remove the Publisher and Name tags from entity values.');
-    $this->assertSession()->responseContains('GooglePlus removal: Uninstall the module.');
+    $this->assertSession()->responseContains('Remove meta tags entity values that were removed in v2.');
+    $this->assertSession()->responseContains('Remove meta tags from default configurations that were removed in v2.');
+    $this->assertSession()->responseContains('Uninstall submodule(s) deprecated in v2: GooglePlus.');
   }
 
   /**
@@ -72,13 +72,13 @@ class TestV2Updates extends UpdatePathTestBase {
     $this->assertTrue(isset($data['description']));
     $this->assertTrue($data['description'] === $expected_value);
 
-    // For metatag_post_update_remove_googleplus1().
+    // For metatag_post_update_v2_remove_entity_values().
     $this->assertTrue(isset($data['publisher']));
     $this->assertEquals($data['publisher'], 'Publisher tag test for #3065441');
     $this->assertTrue(isset($data['name']));
     $this->assertEquals($data['name'], 'Name tag test for #3065441');
 
-    // For metatag_post_update_remove_googleplus2().
+    // For metatag_post_update_v2_remove_config_values().
     $config = $this->config('metatag.metatag_defaults.global');
     $tags = $config->get('tags');
     // Set some specific values to test with.
@@ -108,11 +108,11 @@ class TestV2Updates extends UpdatePathTestBase {
     $this->assertTrue(isset($data['description']));
     $this->assertTrue($data['description'] === $expected_value);
 
-    // For metatag_post_update_remove_googleplus1().
+    // For metatag_post_update_v2_remove_entity_values().
     $this->assertTrue(!isset($data['publisher']));
     $this->assertTrue(!isset($data['name']));
 
-    // For metatag_post_update_remove_googleplus2().
+    // For metatag_post_update_v2_remove_config_values().
     $config = $this->config('metatag.metatag_defaults.global');
     $tags = $config->get('tags');
     $this->assertTrue(!isset($tags['publisher']));
