@@ -14,6 +14,8 @@ Metatag 2.0.x-dev, 2022-xx-xx
   owenbush, osopolar, peter3bweb, brunodbo, robertshell22, thejimbirch: Use
   custom delimiter instead of commas for multiple values.
 #3333595 by DamienMcKenna: Tidy codebase after custom separator logic was added.
+#3065441 by DamienMcKenna, eelkeblok, solideogloria: Disable, uninstall
+  Metatag: Google Plus.
 
 
 Metatag 8.x-1.x-dev, 2022-xx-xx

@@ -4,10 +4,13 @@ namespace Drupal\Tests\metatag\Functional\Update;
 
 use Drupal\Component\Serialization\Json;
 use Drupal\FunctionalTests\Update\UpdatePathTestBase;
-use Drupal\node\Entity\Node;
 
 /**
  * Tests all of the v2 updates.
+ *
+ * This is a complicated task as the update script needs to accommodate both
+ * field changes from serialized arrays to JSON encoded arrays, and deletion of
+ * various meta tag plugins and submodule(s).
  *
  * @group metatag
  */
@@ -41,17 +44,19 @@ class TestV2Updates extends UpdatePathTestBase {
   protected function doSelectionTest() {
     parent::doSelectionTest();
 
-    // Verify that the expected post-update script(s) are available.
+    // Verify that the v2 post post-update script is present.
     $this->assertSession()->responseContains('Convert all fields to use JSON storage.');
+
+    // Verify that the GooglePlus-removal post-update scripts are present.
+    $this->assertSession()->responseContains('GooglePlus removal: Remove the Publisher and Name tags from defaults.');
+    $this->assertSession()->responseContains('GooglePlus removal: Remove the Publisher and Name tags from entity values.');
+    $this->assertSession()->responseContains('GooglePlus removal: Uninstall the module.');
   }
 
-
   /**
-   * Tests whether search_api_db_update_8102() works correctly.
-   *
-   * @see https://www.drupal.org/node/2884451
+   * Tests whether the post-update scripts works correctly.
    */
-  public function testPostUpdate() {
+  public function testPostUpdates() {
     $expected_value = 'This is a Metatag v1 meta tag.';
 
     // Confirm the data started as a serialized array.
@@ -62,7 +67,31 @@ class TestV2Updates extends UpdatePathTestBase {
     $this->assertTrue(count($records) === 1);
     $this->assertTrue(strpos($records[0]->field_meta_tags_value, 'a:') === 0);
     $data = unserialize($records[0]->field_meta_tags_value, ['allowed_classes' => FALSE]);
+
+    // For metatag_post_update_change_fields_to_json().
+    $this->assertTrue(isset($data['description']));
     $this->assertTrue($data['description'] === $expected_value);
+
+    // For metatag_post_update_remove_googleplus1().
+    $this->assertTrue(isset($data['publisher']));
+    $this->assertEquals($data['publisher'], 'Publisher tag test for #3065441');
+    $this->assertTrue(isset($data['name']));
+    $this->assertEquals($data['name'], 'Name tag test for #3065441');
+
+    // For metatag_post_update_remove_googleplus2().
+    $config = $this->config('metatag.metatag_defaults.global');
+    $tags = $config->get('tags');
+    // Set some specific values to test with.
+    $tags['publisher'] = "Global Publisher test value for #3065441.";
+    $tags['name'] = "Global Name test value for #3065441.";
+    $config->set('tags', $tags);
+
+    $config = $this->config('metatag.metatag_defaults.global');
+    $tags = $config->get('tags');
+    $this->assertTrue(isset($tags['publisher']));
+    $this->assertEquals($tags['publisher'], 'Global Publisher test value for #3065441.');
+    $this->assertTrue(isset($tags['name']));
+    $this->assertEquals($tags['name'], 'Global Name test value for #3065441.');
 
     $this->runUpdates();
 
@@ -74,7 +103,20 @@ class TestV2Updates extends UpdatePathTestBase {
     $this->assertTrue(count($records) === 1);
     $this->assertTrue(strpos($records[0]->field_meta_tags_value, '{"') === 0);
     $data = Json::decode($records[0]->field_meta_tags_value);
+
+    // For metatag_post_update_change_fields_to_json().
+    $this->assertTrue(isset($data['description']));
     $this->assertTrue($data['description'] === $expected_value);
+
+    // For metatag_post_update_remove_googleplus1().
+    $this->assertTrue(!isset($data['publisher']));
+    $this->assertTrue(!isset($data['name']));
+
+    // For metatag_post_update_remove_googleplus2().
+    $config = $this->config('metatag.metatag_defaults.global');
+    $tags = $config->get('tags');
+    $this->assertTrue(!isset($tags['publisher']));
+    $this->assertTrue(!isset($tags['name']));
   }
 
 }
