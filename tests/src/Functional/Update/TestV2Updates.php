@@ -62,11 +62,15 @@ class TestV2Updates extends UpdatePathTestBase {
     // The meta tags to test.
     $entity_tags = [
       // For #3065441.
-      'google_plus_name' => "GooglePlus Name tag test value for #3065441.",
-      'google_plus_publisher' => "GooglePlus Publisher tag test value for #3065441.",
+      'google_plus_author' => 'GooglePlus Author tag test value for #3065441.',
+      'google_plus_description' => 'GooglePlus Description tag test value for #3065441.',
+      'google_plus_name' => 'GooglePlus Name tag test value for #3065441.',
+      'google_plus_publisher' => 'GooglePlus Publisher tag test value for #3065441.',
+
       // For #2973351.
-      'news_keywords' => "News Keywords tag test value for #2973351.",
-      'standout' => "Standout tag test value for #2973351.",
+      'news_keywords' => 'News Keywords tag test value for #2973351.',
+      'standout' => 'Standout tag test value for #2973351.',
+
       // For #3132065.
       'twitter_cards_data1' => 'Data1 tag test for #3132065.',
       'twitter_cards_data2' => 'Data2 tag test for #3132065.',
@@ -85,11 +89,15 @@ class TestV2Updates extends UpdatePathTestBase {
     ];
     $global_tags = [
       // For #3065441.
-      'google_plus_name' => "Global GooglePlus Name test value for #3065441.",
-      'google_plus_publisher' => "Global GooglePlus Publisher test value for #3065441.",
+      'google_plus_author' => 'Global GooglePlus Author tag test value for #3065441.',
+      'google_plus_description' => 'Global GooglePlus Author tag test value for #3065441.',
+      'google_plus_name' => 'Global GooglePlus Name test value for #3065441.',
+      'google_plus_publisher' => 'Global GooglePlus Publisher test value for #3065441.',
+
       // For #2973351.
-      'news_keywords' => "Global News Keywords test value for #2973351.",
-      'standout' => "Global Standout test value for #2973351.",
+      'news_keywords' => 'Global News Keywords test value for #2973351.',
+      'standout' => 'Global Standout test value for #2973351.',
+
       // For #3132065.
       'twitter_cards_data1' => 'Global Data1 tag test for #3132065.',
       'twitter_cards_data2' => 'Global Data2 tag test for #3132065.',

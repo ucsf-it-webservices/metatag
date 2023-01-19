@@ -342,6 +342,8 @@ function metatag_post_update_v2_01_change_fields_to_json(&$sandbox) {
 function metatag_post_update_v2_02_remove_entity_values(array &$sandbox) {
   $metatags_to_remove = [
     // For #3065441.
+    'google_plus_author',
+    'google_plus_description',
     'google_plus_name',
     'google_plus_publisher',
 
@@ -524,6 +526,8 @@ function metatag_post_update_v2_02_remove_entity_values(array &$sandbox) {
 function metatag_post_update_v2_03_remove_config_values() {
   $metatags_to_remove = [
     // For #3065441.
+    'google_plus_author',
+    'google_plus_description',
     'google_plus_name',
     'google_plus_publisher',
 
