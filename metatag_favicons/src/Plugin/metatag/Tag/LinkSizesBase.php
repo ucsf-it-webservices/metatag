@@ -37,20 +37,6 @@ abstract class LinkSizesBase extends LinkRelBase {
   }
 
   /**
-   * The dimensions supported by this icon.
-   *
-   * @return string
-   *   A string in the format "XxY" for a given width and height.
-   *
-   * @deprecated in 8.x-1.22 and is removed from 2.0.0. Use iconSize() instead.
-   *
-   * @see https://www.drupal.org/node/3300522
-   */
-  protected function sizes() {
-    return $this->iconSize();
-  }
-
-  /**
    * {@inheritdoc}
    */
   public function getTestOutputExistsXpath(): array {

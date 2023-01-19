@@ -123,17 +123,6 @@ abstract class MetaNameBase extends PluginBase {//implements ContainerFactoryPlu
   protected $weight;
 
   /**
-   * The attribute this tag uses for the name.
-   *
-   * @var string
-   *
-   * @deprecated in metatag:8.x-1.20 and is removed from metatag:2.0.0. Use $this->htmlTagNameAttribute instead.
-   *
-   * @see https://www.drupal.org/node/123
-   */
-  protected $nameAttribute = 'name';
-
-  /**
    * Config factory.
    *
    * @var \Drupal\Core\Config\ConfigFactoryInterface

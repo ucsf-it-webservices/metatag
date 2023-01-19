@@ -24,6 +24,7 @@ Metatag 2.0.x-dev, 2022-xx-xx
   order.
 #3217263 by DamienMcKenna, peduardo, thejimbirch, dtfabio, Liam Morland,
   murilohp: Remove deprecated obsolete meta http-equiv="content-language".
+#3305566 by DamienMcKenna, kenyoOwen: Remove APIs deprecated in Metatag 8.x-1.x.
 
 
 Metatag 8.x-1.x-dev, 2022-xx-xx

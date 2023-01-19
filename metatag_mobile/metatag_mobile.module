@@ -25,24 +25,6 @@ function metatag_mobile_help($route_name, RouteMatchInterface $route_match) {
 }
 
 /**
- * Implements hook_theme().
- *
- * @deprecated in metatag:8.x-1.22 and is removed from metatag:2.0.0. No replacement is provided.
- *
- * @see https://www.drupal.org/project/metatag/issues/3303424
- */
-function metatag_mobile_theme() {
-  $info['metatag_mobile_android_app'] = [
-    'render element' => 'element',
-  ];
-  $info['metatag_mobile_ios_app'] = [
-    'render element' => 'element',
-  ];
-
-  return $info;
-}
-
-/**
  * Implements hook_page_attachments_alter().
  */
 function metatag_mobile_page_attachments_alter(array &$attachments) {

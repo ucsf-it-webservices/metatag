@@ -604,23 +604,6 @@ function metatag_entity_base_field_info(EntityTypeInterface $entity_type) {
  *
  * @return array
  *   All of the meta tags in a nested structure.
- *
- * @deprecated in metatag:8.x-1.23 and is removed from metatag:2.0.0. Use metatag_generate_entity_all_tags() instead.
- *
- * @see https://www.drupal.org/node/3332350
- */
-function metatag_generate_entity_metatags($entity) {
-  return metatag_generate_entity_all_tags($entity);
-}
-
-/**
- * Turn the meta tags for an entity into a human readable structure.
- *
- * @param \Drupal\Core\Entity\ContentEntityInterface $entity
- *   The entity object.
- *
- * @return array
- *   All of the meta tags in a nested structure.
  */
 function metatag_generate_entity_all_tags(ContentEntityInterface $entity): array {
   $values = [];
