@@ -17,7 +17,7 @@ Metatag 2.0.x-dev, 2022-xx-xx
 #3065441 by DamienMcKenna, eelkeblok, solideogloria: Disable, uninstall
   Metatag: Google Plus.
 #3065441 by DamienMcKenna: Follow-up to make post-update scripts names generic
-  and more usable.
+#2973351 by DamienMcKenna: Updated fixtures file.
 
 
 Metatag 8.x-1.x-dev, 2022-xx-xx
