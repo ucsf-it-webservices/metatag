@@ -17,7 +17,6 @@ Metatag 2.0.x-dev, 2022-xx-xx
 #3065441 by DamienMcKenna, eelkeblok, solideogloria: Disable, uninstall
   Metatag: Google Plus.
 #3065441 by DamienMcKenna: Follow-up to make post-update scripts names generic
-#2973351 by DamienMcKenna: Updated fixtures file.
 #2973351 by DamienMcKenna: Test coverage for removal of News Keywords, Standout
   meta tags.
 
@@ -47,6 +46,7 @@ Metatag 8.x-1.x-dev, 2022-xx-xx
 #3329792 by DamienMcKenna, sahil.goyal, amanshukla6158: Drupal coding standards
   issues.
 #3334601 by DamienMcKenna: Backport fixture file from 2.0.x.
+#2973351 by DamienMcKenna: Updated fixtures file.
 
 
 Metatag 8.x-1.22, 2022-09-29
