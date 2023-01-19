@@ -20,6 +20,8 @@ Metatag 2.0.x-dev, 2022-xx-xx
 #2973351 by DamienMcKenna: Test coverage for removal of News Keywords, Standout
   meta tags.
 #3132065 by DamienMcKenna: Remove deprecated Twitter Card plugins.
+#3334901 by DamienMcKenna: Rename v2 post-update scripts to control execution
+  order.
 
 
 Metatag 8.x-1.x-dev, 2022-xx-xx

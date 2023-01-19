@@ -190,7 +190,7 @@ function metatag_post_update_convert_author_data(&$sandbox) {
 /**
  * Convert all fields to use JSON storage.
  */
-function metatag_post_update_change_fields_to_json(&$sandbox) {
+function metatag_post_update_v2_01_change_fields_to_json(&$sandbox) {
   // This whole top section only needs to be done the first time.
   if (!isset($sandbox['records_processed'])) {
     $sandbox['records_processed'] = 0;
@@ -339,7 +339,7 @@ function metatag_post_update_change_fields_to_json(&$sandbox) {
 /**
  * Remove meta tags entity values that were removed in v2.
  */
-function metatag_post_update_v2_remove_entity_values(array &$sandbox) {
+function metatag_post_update_v2_02_remove_entity_values(array &$sandbox) {
   $metatags_to_remove = [
     // For #3065441.
     'google_plus_name',
@@ -518,7 +518,7 @@ function metatag_post_update_v2_remove_entity_values(array &$sandbox) {
 /**
  * Remove meta tags from default configurations that were removed in v2.
  */
-function metatag_post_update_v2_remove_config_values() {
+function metatag_post_update_v2_03_remove_config_values() {
   $metatags_to_remove = [
     // For #3065441.
     'google_plus_name',
@@ -568,7 +568,7 @@ function metatag_post_update_v2_remove_config_values() {
 /**
  * Uninstall submodule(s) deprecated in v2: GooglePlus.
  */
-function metatag_post_update_v2_uninstall_modules() {
+function metatag_post_update_v2_04_uninstall_modules() {
   $moduleHandler = \Drupal::moduleHandler();
 
   if (!$moduleHandler->moduleExists('metatag_google_plus')) {

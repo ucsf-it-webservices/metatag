@@ -112,17 +112,17 @@ class TestV2Updates extends UpdatePathTestBase {
     $this->assertTrue(strpos($records[0]->field_meta_tags_value, 'a:') === 0);
     $data = unserialize($records[0]->field_meta_tags_value, ['allowed_classes' => FALSE]);
 
-    // For metatag_post_update_change_fields_to_json().
+    // For metatag_post_update_v2_01_change_fields_to_json().
     $this->assertTrue(isset($data['description']));
     $this->assertTrue($data['description'] === $expected_value);
 
-    // For metatag_post_update_v2_remove_entity_values().
+    // For metatag_post_update_v2_02_remove_entity_values().
     foreach ($entity_tags as $tag_name => $tag_value) {
       $this->assertTrue(isset($data[$tag_name]));
       $this->assertEquals($data[$tag_name], $tag_value);
     }
 
-    // For metatag_post_update_v2_remove_config_values().
+    // For metatag_post_update_v2_03_remove_config_values().
     $config = $this->config('metatag.metatag_defaults.global');
     $tags = $config->get('tags');
 
@@ -152,16 +152,16 @@ class TestV2Updates extends UpdatePathTestBase {
     $this->assertTrue(strpos($records[0]->field_meta_tags_value, '{"') === 0);
     $data = Json::decode($records[0]->field_meta_tags_value);
 
-    // For metatag_post_update_change_fields_to_json().
+    // For metatag_post_update_v2_01_change_fields_to_json().
     $this->assertTrue(isset($data['description']));
     $this->assertTrue($data['description'] === $expected_value);
 
-    // For metatag_post_update_v2_remove_entity_values().
+    // For metatag_post_update_v2_02_remove_entity_values().
     foreach ($entity_tags as $tag_name => $tag_value) {
       $this->assertTrue(!isset($data[$tag_name]));
     }
 
-    // For metatag_post_update_v2_remove_config_values().
+    // For metatag_post_update_v2_03_remove_config_values().
     $config = $this->config('metatag.metatag_defaults.global');
     $tags = $config->get('tags');
 
