@@ -340,6 +340,30 @@ function metatag_post_update_change_fields_to_json(&$sandbox) {
  * Remove meta tags entity values that were removed in v2.
  */
 function metatag_post_update_v2_remove_entity_values(array &$sandbox) {
+  $metatags_to_remove = [
+    // For #3065441.
+    'google_plus_name',
+    'google_plus_publisher',
+
+    // For #2973351.
+    'news_keywords',
+    'standout',
+
+    // For #3132065.
+    'twitter_cards_data1',
+    'twitter_cards_data2',
+    'twitter_cards_dnt',
+    'twitter_cards_gallery_image0',
+    'twitter_cards_gallery_image1',
+    'twitter_cards_gallery_image2',
+    'twitter_cards_gallery_image3',
+    'twitter_cards_image_height',
+    'twitter_cards_image_width',
+    'twitter_cards_label1',
+    'twitter_cards_label2',
+    'twitter_cards_page_url',
+  ];
+
   // This whole top section only needs to be done the first time.
   if (!isset($sandbox['records_processed'])) {
     $sandbox['records_processed'] = 0;
@@ -387,18 +411,13 @@ function metatag_post_update_v2_remove_entity_values(array &$sandbox) {
         $query->addField($field_table, 'langcode');
         $query->addField($field_table, $field_value_field);
         $query->condition('bundle', $bundle, '=');
-        $db_or = $query->orConditionGroup();
+
         // Only look for Metatag field records that have the meta tags that are
         // being removed.
-        // For #3065441.
-        $db_or->condition($field_value_field, '%"google_plus_author"%', 'LIKE');
-        $db_or->condition($field_value_field, '%"google_plus_description"%', 'LIKE');
-        $db_or->condition($field_value_field, '%"google_plus_image"%', 'LIKE');
-        $db_or->condition($field_value_field, '%"google_plus_name"%', 'LIKE');
-        $db_or->condition($field_value_field, '%"google_plus_publisher"%', 'LIKE');
-        // For #2973351.
-        $db_or->condition($field_value_field, '%"news_keywords"%', 'LIKE');
-        $db_or->condition($field_value_field, '%"standout"%', 'LIKE');
+        $db_or = $query->orConditionGroup();
+        foreach ($metatags_to_remove as $tag_name) {
+          $db_or->condition($field_value_field, '%"' . $tag_name . '"%', 'LIKE');
+        }
         $query->condition($db_or);
         $result = $query->execute();
         $records = $result->fetchAll();
@@ -435,19 +454,6 @@ function metatag_post_update_v2_remove_entity_values(array &$sandbox) {
 
     $field_table = $sandbox['fields'][$current_field]['field_table'];
     $field_value_field = $sandbox['fields'][$current_field]['field_value_field'];
-
-    $metatags_to_remove = [
-      // For #3065441.
-      'google_plus_author',
-      'google_plus_description',
-      'google_plus_image',
-      'google_plus_name',
-      'google_plus_publisher',
-
-      // For #2973351.
-      'news_keywords',
-      'standout',
-    ];
 
     // Loop through the field(s) and remove the two meta tags.
     while ($counter <= $max_per_batch && isset($current_field_records[$current_record])) {
@@ -513,22 +519,34 @@ function metatag_post_update_v2_remove_entity_values(array &$sandbox) {
  * Remove meta tags from default configurations that were removed in v2.
  */
 function metatag_post_update_v2_remove_config_values() {
-  $defaults = \Drupal::entityTypeManager()
-    ->getStorage('metatag_defaults')
-    ->loadMultiple();
-
   $metatags_to_remove = [
     // For #3065441.
-    'google_plus_author',
-    'google_plus_description',
-    'google_plus_image',
     'google_plus_name',
     'google_plus_publisher',
 
     // For #2973351.
     'news_keywords',
     'standout',
+
+    // For #3132065.
+    'twitter_cards_data1',
+    'twitter_cards_data2',
+    'twitter_cards_dnt',
+    'twitter_cards_gallery_image0',
+    'twitter_cards_gallery_image1',
+    'twitter_cards_gallery_image2',
+    'twitter_cards_gallery_image3',
+    'twitter_cards_image_height',
+    'twitter_cards_image_width',
+    'twitter_cards_label1',
+    'twitter_cards_label2',
+    'twitter_cards_page_url',
   ];
+
+  $defaults = \Drupal::entityTypeManager()
+    ->getStorage('metatag_defaults')
+    ->loadMultiple();
+
   foreach ($defaults as $defaults_name => $default) {
     $changed = FALSE;
     foreach ($metatags_to_remove as $metatag) {
