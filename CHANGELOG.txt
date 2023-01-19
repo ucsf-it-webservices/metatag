@@ -24,6 +24,7 @@ Metatag 8.x-1.x-dev, 2022-xx-xx
   Issues.
 #3334601 by DamienMcKenna: Backport fixture file from 2.0.x.
 #2973351 by DamienMcKenna: Updated fixtures file.
+#3132065 by DamienMcKenna: Updated fixtures with Twitter Cards data.
 
 
 Metatag 8.x-1.22, 2022-09-29
