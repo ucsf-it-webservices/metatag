@@ -80,6 +80,8 @@ class TestV2Updates extends UpdatePathTestBase {
       'twitter_cards_label1' => 'Label1 tag test for #3132065.',
       'twitter_cards_label2' => 'Label2 tag test for #3132065.',
       'twitter_cards_page_url' => 'Page URL tag test for #3132065.',
+      // For #3217263.
+      'content_language' => 'Content Language tag test for #3217263.',
     ];
     $global_tags = [
       // For #3065441.
@@ -101,6 +103,8 @@ class TestV2Updates extends UpdatePathTestBase {
       'twitter_cards_label1' => 'Global Label1 tag test for #3132065.',
       'twitter_cards_label2' => 'Global Label2 tag test for #3132065.',
       'twitter_cards_page_url' => 'Global Page URL tag test for #3132065.',
+      // For #3217263.
+      'content_language' => 'Global Content Language tag test for #3217263.',
     ];
 
     // Confirm the data started as a serialized array.

@@ -98,7 +98,6 @@ class NodewordsEntities extends ProcessPluginBase {
       'abstract' => 'abstract',
       'cache-control' => 'cache_control',
       'canonical' => 'canonical_url',
-      'content-language' => 'content_language',
       'description' => 'description',
       'expires' => 'expires',
       'generator' => 'generator',

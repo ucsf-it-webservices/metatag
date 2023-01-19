@@ -22,6 +22,8 @@ Metatag 2.0.x-dev, 2022-xx-xx
 #3132065 by DamienMcKenna: Remove deprecated Twitter Card plugins.
 #3334901 by DamienMcKenna: Rename v2 post-update scripts to control execution
   order.
+#3217263 by DamienMcKenna, peduardo, thejimbirch, dtfabio, Liam Morland,
+  murilohp: Remove deprecated obsolete meta http-equiv="content-language".
 
 
 Metatag 8.x-1.x-dev, 2022-xx-xx

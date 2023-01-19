@@ -362,6 +362,9 @@ function metatag_post_update_v2_02_remove_entity_values(array &$sandbox) {
     'twitter_cards_label1',
     'twitter_cards_label2',
     'twitter_cards_page_url',
+
+    // For #3217263.
+    'content_language',
   ];
 
   // This whole top section only needs to be done the first time.
@@ -541,6 +544,9 @@ function metatag_post_update_v2_03_remove_config_values() {
     'twitter_cards_label1',
     'twitter_cards_label2',
     'twitter_cards_page_url',
+
+    // For #3217263.
+    'content_language',
   ];
 
   $defaults = \Drupal::entityTypeManager()

@@ -52,7 +52,6 @@ class PermissionsTest extends BrowserTestBase {
     'advanced' => [
       'cache_control' => 'Cache control',
       'canonical_url' => 'Canonical URL',
-      'content_language' => 'Content Language',
       'expires' => 'Expires',
       'generator' => 'Generator',
       'geo_placename' => 'Geographical place name',
