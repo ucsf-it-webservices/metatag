@@ -388,10 +388,17 @@ function metatag_post_update_v2_remove_entity_values(array &$sandbox) {
         $query->addField($field_table, $field_value_field);
         $query->condition('bundle', $bundle, '=');
         $db_or = $query->orConditionGroup();
-        // Only look for Metatag field records that have the Publisher or Name
-        // meta tags as those are the only ones that need to be removed.
-        $db_or->condition($field_value_field, '%"publisher"%', 'LIKE');
-        $db_or->condition($field_value_field, '%"name"%', 'LIKE');
+        // Only look for Metatag field records that have the meta tags that are
+        // being removed.
+        // For #3065441.
+        $db_or->condition($field_value_field, '%"google_plus_author"%', 'LIKE');
+        $db_or->condition($field_value_field, '%"google_plus_description"%', 'LIKE');
+        $db_or->condition($field_value_field, '%"google_plus_image"%', 'LIKE');
+        $db_or->condition($field_value_field, '%"google_plus_name"%', 'LIKE');
+        $db_or->condition($field_value_field, '%"google_plus_publisher"%', 'LIKE');
+        // For #2973351.
+        $db_or->condition($field_value_field, '%"news_keywords"%', 'LIKE');
+        $db_or->condition($field_value_field, '%"standout"%', 'LIKE');
         $query->condition($db_or);
         $result = $query->execute();
         $records = $result->fetchAll();
@@ -429,6 +436,19 @@ function metatag_post_update_v2_remove_entity_values(array &$sandbox) {
     $field_table = $sandbox['fields'][$current_field]['field_table'];
     $field_value_field = $sandbox['fields'][$current_field]['field_value_field'];
 
+    $metatags_to_remove = [
+      // For #3065441.
+      'google_plus_author',
+      'google_plus_description',
+      'google_plus_image',
+      'google_plus_name',
+      'google_plus_publisher',
+
+      // For #2973351.
+      'news_keywords',
+      'standout',
+    ];
+
     // Loop through the field(s) and remove the two meta tags.
     while ($counter <= $max_per_batch && isset($current_field_records[$current_record])) {
       $record = $current_field_records[$current_record];
@@ -436,13 +456,11 @@ function metatag_post_update_v2_remove_entity_values(array &$sandbox) {
       // Remove the Publisher and Name meta tags.
       $tags = metatag_data_decode($record->$field_value_field);
       $changed = FALSE;
-      if (isset($tags['name'])) {
-        unset($tags['name']);
-        $changed = TRUE;
-      }
-      if (isset($tags['publisher'])) {
-        unset($tags['publisher']);
-        $changed = TRUE;
+      foreach ($metatags_to_remove as $metatag) {
+        if (isset($tags[$metatag])) {
+          unset($tags[$metatag]);
+          $changed = TRUE;
+        }
       }
       if ($changed) {
         $tags_string = Json::encode($tags);
@@ -499,20 +517,30 @@ function metatag_post_update_v2_remove_config_values() {
     ->getStorage('metatag_defaults')
     ->loadMultiple();
 
+  $metatags_to_remove = [
+    // For #3065441.
+    'google_plus_author',
+    'google_plus_description',
+    'google_plus_image',
+    'google_plus_name',
+    'google_plus_publisher',
+
+    // For #2973351.
+    'news_keywords',
+    'standout',
+  ];
   foreach ($defaults as $defaults_name => $default) {
     $changed = FALSE;
-    if (isset($default->tags['name'])) {
-      unset($default->tags['name']);
-      $changed = TRUE;
-    }
-    if (isset($default->tags['publisher'])) {
-      unset($default->tags['publisher']);
-      $changed = TRUE;
+    foreach ($metatags_to_remove as $metatag) {
+      if (isset($default->tags[$metatag])) {
+        unset($default->tags[$metatag]);
+        $changed = TRUE;
+      }
     }
     if ($changed) {
       $defaults->save();
       \Drupal::logger('metatag')
-        ->notice(t('Removed the Publisher, Name tags from the @config Metatag configuration.', [
+        ->notice(t('Removed meta tags from the @config Metatag configuration.', [
           '@config' => $defaults_name,
         ]));
     }

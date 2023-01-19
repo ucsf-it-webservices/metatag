@@ -18,6 +18,8 @@ Metatag 2.0.x-dev, 2022-xx-xx
   Metatag: Google Plus.
 #3065441 by DamienMcKenna: Follow-up to make post-update scripts names generic
 #2973351 by DamienMcKenna: Updated fixtures file.
+#2973351 by DamienMcKenna: Test coverage for removal of News Keywords, Standout
+  meta tags.
 
 
 Metatag 8.x-1.x-dev, 2022-xx-xx

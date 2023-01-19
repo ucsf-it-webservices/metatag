@@ -246,14 +246,6 @@ class NodewordsEntities extends ProcessPluginBase {
       'google_rating' => 'google_rating',
       'thumbnail' => 'thumbnail',
 
-      // From metatag_google_plus.metatag.inc; not doing these, Google+ closed.
-      'itemtype' => '',
-      'itemprop:name' => '',
-      'itemprop:description' => '',
-      'itemprop:image' => '',
-      'author' => '',
-      'publisher' => '',
-
       // From metatag_hreflang.metatag.inc:
       'hreflang_xdefault' => 'hreflang_xdefault',
       // @todo https://www.drupal.org/project/metatag/issues/3077778

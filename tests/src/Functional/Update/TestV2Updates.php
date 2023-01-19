@@ -73,25 +73,41 @@ class TestV2Updates extends UpdatePathTestBase {
     $this->assertTrue($data['description'] === $expected_value);
 
     // For metatag_post_update_v2_remove_entity_values().
-    $this->assertTrue(isset($data['publisher']));
-    $this->assertEquals($data['publisher'], 'Publisher tag test for #3065441');
-    $this->assertTrue(isset($data['name']));
-    $this->assertEquals($data['name'], 'Name tag test for #3065441');
+    // For #3065441.
+    $this->assertTrue(isset($data['google_plus_publisher']));
+    $this->assertEquals($data['google_plus_publisher'], 'Publisher tag test for #3065441');
+    $this->assertTrue(isset($data['google_plus_name']));
+    $this->assertEquals($data['google_plus_name'], 'Name tag test for #3065441');
+    // For #2973351.
+    $this->assertTrue(isset($data['news_keywords']));
+    $this->assertEquals($data['news_keywords'], 'News Keywords tag test for #2973351.');
+    $this->assertTrue(isset($data['standout']));
+    $this->assertEquals($data['standout'], 'Standout tag test for #2973351.');
 
     // For metatag_post_update_v2_remove_config_values().
     $config = $this->config('metatag.metatag_defaults.global');
     $tags = $config->get('tags');
     // Set some specific values to test with.
-    $tags['publisher'] = "Global Publisher test value for #3065441.";
-    $tags['name'] = "Global Name test value for #3065441.";
+    // For #3065441.
+    $tags['google_plus_publisher'] = "Global Publisher test value for #3065441.";
+    $tags['google_plus_name'] = "Global Name test value for #3065441.";
+    // For #2973351.
+    $tags['news_keywords'] = "Global News Keywords test value for #2973351.";
+    $tags['standout'] = "Global Standout test value for #2973351.";
     $config->set('tags', $tags);
 
     $config = $this->config('metatag.metatag_defaults.global');
     $tags = $config->get('tags');
-    $this->assertTrue(isset($tags['publisher']));
-    $this->assertEquals($tags['publisher'], 'Global Publisher test value for #3065441.');
-    $this->assertTrue(isset($tags['name']));
-    $this->assertEquals($tags['name'], 'Global Name test value for #3065441.');
+    // For #3065441.
+    $this->assertTrue(isset($tags['google_plus_publisher']));
+    $this->assertEquals($tags['google_plus_publisher'], 'Global Publisher test value for #3065441.');
+    $this->assertTrue(isset($tags['google_plus_name']));
+    $this->assertEquals($tags['google_plus_name'], 'Global Name test value for #3065441.');
+    // For #2973351.
+    $this->assertTrue(isset($tags['news_keywords']));
+    $this->assertEquals($tags['news_keywords'], 'Global News Keywords test value for #2973351.');
+    $this->assertTrue(isset($tags['standout']));
+    $this->assertEquals($tags['standout'], 'Global Standout test value for #2973351.');
 
     $this->runUpdates();
 
@@ -109,14 +125,22 @@ class TestV2Updates extends UpdatePathTestBase {
     $this->assertTrue($data['description'] === $expected_value);
 
     // For metatag_post_update_v2_remove_entity_values().
-    $this->assertTrue(!isset($data['publisher']));
-    $this->assertTrue(!isset($data['name']));
+    // For #3065441.
+    $this->assertTrue(!isset($data['google_plus_publisher']));
+    $this->assertTrue(!isset($data['google_plus_name']));
+    // For #2973351.
+    $this->assertTrue(!isset($data['news_keywords']));
+    $this->assertTrue(!isset($data['standout']));
 
     // For metatag_post_update_v2_remove_config_values().
     $config = $this->config('metatag.metatag_defaults.global');
     $tags = $config->get('tags');
-    $this->assertTrue(!isset($tags['publisher']));
-    $this->assertTrue(!isset($tags['name']));
+    // For #3065441.
+    $this->assertTrue(!isset($tags['google_plus_publisher']));
+    $this->assertTrue(!isset($tags['google_plus_name']));
+    // For #2973351.
+    $this->assertTrue(!isset($tags['news_keywords']));
+    $this->assertTrue(!isset($tags['standout']));
   }
 
 }
