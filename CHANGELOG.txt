@@ -26,6 +26,7 @@ Metatag 8.x-1.x-dev, 2022-xx-xx
 #2973351 by DamienMcKenna: Updated fixtures file.
 #3132065 by DamienMcKenna: Updated fixtures with Twitter Cards data.
 #3217263 by DamienMcKenna: Updated fixtures file for content-language tag.
+#3065441 by DamienMcKenna: Updated fixtures file with more Google Plus values.
 
 
 Metatag 8.x-1.22, 2022-09-29
