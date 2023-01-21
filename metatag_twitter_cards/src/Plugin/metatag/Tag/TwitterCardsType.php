@@ -27,7 +27,7 @@ class TwitterCardsType extends MetaNameBase {
   /**
    * {@inheritdoc}
    */
-  public function form(array $element = []) {
+  public function form(array $element = []): array {
     $form = [
       '#type' => 'select',
       '#title' => $this->label(),
@@ -49,7 +49,7 @@ class TwitterCardsType extends MetaNameBase {
    * @return array
    *   A list of values available for this select tag.
    */
-  protected function formValues() {
+  protected function formValues(): array {
     return [
       'summary' => $this->t('Summary Card'),
       'summary_large_image' => $this->t('Summary Card with large image'),

@@ -12,7 +12,7 @@ abstract class LinkSizesBase extends LinkRelBase {
   /**
    * {@inheritdoc}
    */
-  public function output() {
+  public function output(): array {
     $element = parent::output();
 
     if ($element) {
@@ -32,7 +32,7 @@ abstract class LinkSizesBase extends LinkRelBase {
    * @return string
    *   A string in the format "XxY" for a given width and height.
    */
-  protected function iconSize() {
+  protected function iconSize(): string {
     return '';
   }
 

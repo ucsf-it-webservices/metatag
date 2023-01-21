@@ -23,7 +23,7 @@ trait MetatagSeparator {
    * @return string
    *   The correct separator.
    */
-  public function getSeparator() {
+  public function getSeparator(): string {
     $separator = '';
 
     // Load the separator saved in configuration.

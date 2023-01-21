@@ -24,7 +24,7 @@ class AndroidAppLinkAlternative extends LinkRelBase {
   /**
    * {@inheritdoc}
    */
-  public function output() {
+  public function output(): array {
     $element = parent::output();
 
     // Add the "android-app://" prefix on the href value.

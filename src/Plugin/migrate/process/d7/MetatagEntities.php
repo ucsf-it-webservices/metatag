@@ -83,7 +83,7 @@ class MetatagEntities extends ProcessPluginBase {
    * @return array
    *   An array of D7 tags to their D8 counterparts.
    */
-  protected function tagsMap() {
+  protected function tagsMap(): array {
     $map = [
       // From the main Metatag module.
       'abstract' => 'abstract',
@@ -452,7 +452,7 @@ class MetatagEntities extends ProcessPluginBase {
    * @return array
    *   A Metatag values array.
    */
-  private function decodeValue($string) {
+  private function decodeValue($string): array {
     $data = array();
 
     // Serialized arrays from Metatag v1.

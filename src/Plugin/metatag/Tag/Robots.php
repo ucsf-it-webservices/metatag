@@ -24,15 +24,9 @@ class Robots extends MetaNameBase {
   use StringTranslationTrait;
 
   /**
-   * Sets the value of this tag.
-   *
-   * @param string|array $value
-   *   The value to set to this tag.
-   *   It can be an array if it comes from a form submission or from field
-   *   defaults, in which case
-   *   we transform it to a comma-separated string.
+   * {@inheritdoc}
    */
-  public function setValue($value) {
+  public function setValue($value): void {
     if (is_array($value)) {
       $value = array_filter($value);
       $value = implode($this->getSeparator() . ' ', array_keys($value));
@@ -43,7 +37,7 @@ class Robots extends MetaNameBase {
   /**
    * {@inheritdoc}
    */
-  public function form(array $element = []) {
+  public function form(array $element = []): array {
     // Prepare the default value as it is stored as a string.
     $default_value = [];
     if (!empty($this->value)) {
@@ -105,7 +99,7 @@ class Robots extends MetaNameBase {
    * @return array
    *   A list of values available for this select tag.
    */
-  protected function formValues() {
+  protected function formValues(): array {
     return [
       'index' => $this->t('index - Allow search engines to index this page (assumed).'),
       'follow' => $this->t('follow - Allow search engines to follow links on this page (assumed).'),

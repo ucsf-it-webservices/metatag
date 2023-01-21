@@ -24,7 +24,7 @@ class IosAppLinkAlternative extends LinkRelBase {
   /**
    * {@inheritdoc}
    */
-  public function output() {
+  public function output(): array {
     $element = parent::output();
 
     // Add the "ios-app://" prefix on the href value.

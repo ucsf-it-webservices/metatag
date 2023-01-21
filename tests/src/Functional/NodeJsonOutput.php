@@ -91,7 +91,7 @@ class NodeJsonOutput extends BrowserTestBase {
    *   The allowed authentication providers for this resource; defaults to
    *   ['basic_auth'].
    */
-  protected function provisionResource($entity_type = 'node', array $formats = [], array $authentication = []) {
+  protected function provisionResource($entity_type = 'node', array $formats = [], array $authentication = []): void {
     /** @var \Drupal\Core\Entity\EntityStorageInterface */
     $esource_config_storage = $this->container
       ->get('entity_type.manager')

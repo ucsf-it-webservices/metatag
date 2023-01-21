@@ -92,7 +92,7 @@ class NodewordsEntities extends ProcessPluginBase {
    * @return array
    *   An array of D6 tags to their D8 counterparts.
    */
-  public function tagsMap() {
+  public function tagsMap(): array {
     $map = [
       // From the main Metatag module.
       'abstract' => 'abstract',

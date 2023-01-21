@@ -25,7 +25,7 @@ class MaskIcon extends LinkRelBase {
   /**
    * {@inheritdoc}
    */
-  public function form(array $element = []) {
+  public function form(array $element = []): array {
     $form['#container'] = TRUE;
     $form['#tree'] = TRUE;
 
@@ -64,7 +64,7 @@ class MaskIcon extends LinkRelBase {
   /**
    * {@inheritdoc}
    */
-  public function output() {
+  public function output(): array {
     $values = $this->value;
 
     // Make sure the value is an array, if it is not then assume it was assigned
@@ -96,13 +96,13 @@ class MaskIcon extends LinkRelBase {
       }
     }
 
-    return '';
+    return [];
   }
 
   /**
    * {@inheritdoc}
    */
-  public function setValue($value) {
+  public function setValue($value): void {
     // Do not store array with empty values.
     if (is_array($value) && empty(array_filter($value))) {
       $this->value = [];

@@ -22,7 +22,7 @@ class HreflangXDefault extends HreflangBase {
   /**
    * {@inheritdoc}
    */
-  public function name() {
+  public function name(): string {
     return 'x-default';
   }
 

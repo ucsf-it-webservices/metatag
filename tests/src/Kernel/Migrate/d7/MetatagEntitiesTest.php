@@ -54,7 +54,7 @@ class MetatagEntitiesTest extends MigrateDrupal7TestBase {
    * Copied from FileMigrationSetupTrait from 8.4 so that this doesn't have to
    * then also extend getFileMigrationInfo().
    */
-  protected function fileMigrationSetup() {
+  protected function fileMigrationSetup(): void {
     $this->installSchema('file', ['file_usage']);
     $this->installEntitySchema('file');
     $this->container->get('stream_wrapper_manager')

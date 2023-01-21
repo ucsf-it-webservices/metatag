@@ -22,7 +22,7 @@ class AlternateHandheld extends LinkMediaBase {
   /**
    * {@inheritdoc}
    */
-  protected function media() {
+  protected function media(): string {
     return 'handheld';
   }
 

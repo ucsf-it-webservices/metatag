@@ -24,7 +24,7 @@ class PinterestNosearch extends MetaNameBase {
   /**
    * {@inheritdoc}
    */
-  public function form(array $element = []) {
+  public function form(array $element = []): array {
     $form = [
       '#type' => 'checkbox',
       '#title' => $this->label(),

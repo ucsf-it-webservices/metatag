@@ -26,7 +26,7 @@ class Referrer extends MetaNameBase {
   /**
    * {@inheritdoc}
    */
-  public function form(array $element = []) {
+  public function form(array $element = []): array {
     $form = [
       '#type' => 'select',
       '#title' => $this->label(),
@@ -48,7 +48,7 @@ class Referrer extends MetaNameBase {
    * @return array
    *   A list of values available for this select tag.
    */
-  protected function formValues() {
+  protected function formValues(): array {
     return [
       'no-referrer' => $this->t('No Referrer'),
       'no-referrer-when-downgrade' => $this->t('No Referrer When Downgrade'),

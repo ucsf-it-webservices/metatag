@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Drupal\metatag\Plugin\metatag\Tag;
 
 use Drupal\Component\Plugin\PluginBase;
@@ -7,8 +9,8 @@ use Drupal\Component\Render\PlainTextOutput;
 use Drupal\Component\Utility\Random;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Form\FormStateInterface;
-// use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\metatag\MetatagSeparator;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -109,9 +111,9 @@ abstract class MetaNameBase extends PluginBase {//implements ContainerFactoryPlu
   protected $request;
 
   /**
-   * The value of the metatag in this instance.
+   * The value of the meta tag in this instance.
    *
-   * @var mixed
+   * @var string|array
    */
   protected $value;
 
@@ -174,6 +176,9 @@ abstract class MetaNameBase extends PluginBase {//implements ContainerFactoryPlu
 
     // @todo Is there a DI-friendly way of doing this?
     $this->configFactory = \Drupal::service('config.factory');
+
+    // Set an initial value.
+    $this->value = '';
   }
 
   /**
@@ -205,27 +210,27 @@ abstract class MetaNameBase extends PluginBase {//implements ContainerFactoryPlu
    * @return string
    *   This meta tag's internal ID.
    */
-  public function id() {
+  public function id(): string {
     return $this->id;
   }
 
   /**
    * This meta tag's label.
    *
-   * @return string
+   * @return \Drupal\Core\StringTranslation\TranslatableMarkup
    *   The label.
    */
-  public function label() {
+  public function label(): TranslatableMarkup|string {
     return $this->label;
   }
 
   /**
    * The meta tag's description.
    *
-   * @return string
+   * @return \Drupal\Core\StringTranslation\TranslatableMarkup
    *   This meta tag's description.
    */
-  public function description() {
+  public function description(): TranslatableMarkup|string {
     return $this->description;
   }
 
@@ -235,7 +240,7 @@ abstract class MetaNameBase extends PluginBase {//implements ContainerFactoryPlu
    * @return string
    *   This meta tag's machine name.
    */
-  public function name() {
+  public function name(): string {
     return $this->name;
   }
 
@@ -245,7 +250,7 @@ abstract class MetaNameBase extends PluginBase {//implements ContainerFactoryPlu
    * @return string
    *   The meta tag's group name.
    */
-  public function group() {
+  public function group(): string {
     return $this->group;
   }
 
@@ -255,7 +260,7 @@ abstract class MetaNameBase extends PluginBase {//implements ContainerFactoryPlu
    * @return int|float
    *   The form API weight for this. May be any number supported by Form API.
    */
-  public function weight() {
+  public function weight(): mixed {
     return $this->weight;
   }
 
@@ -265,7 +270,7 @@ abstract class MetaNameBase extends PluginBase {//implements ContainerFactoryPlu
    * @return string
    *   This meta tag's type.
    */
-  public function type() {
+  public function type(): string {
     return $this->type;
   }
 
@@ -285,7 +290,7 @@ abstract class MetaNameBase extends PluginBase {//implements ContainerFactoryPlu
    * @return bool
    *   Whether or not this meta tag must output secure (HTTPS) URLs.
    */
-  public function secure() {
+  public function secure(): bool {
     return $this->secure;
   }
 
@@ -305,7 +310,7 @@ abstract class MetaNameBase extends PluginBase {//implements ContainerFactoryPlu
    * @return bool
    *   Whether or not this meta tag supports multiple values.
    */
-  public function multiple() {
+  public function multiple(): bool {
     return $this->multiple;
   }
 
@@ -325,7 +330,7 @@ abstract class MetaNameBase extends PluginBase {//implements ContainerFactoryPlu
    * @return bool
    *   Whether or not this meta tag should use a text area.
    */
-  public function isLong() {
+  public function isLong(): bool {
     return $this->long;
   }
 
@@ -357,7 +362,7 @@ abstract class MetaNameBase extends PluginBase {//implements ContainerFactoryPlu
    * @return string
    *   The HTML attribute used to store this meta tag's value.
    */
-  public function getHtmlValueAttribute() {
+  public function getHtmlValueAttribute(): string {
     return $this->htmlValueAttribute;
   }
 
@@ -367,7 +372,7 @@ abstract class MetaNameBase extends PluginBase {//implements ContainerFactoryPlu
    * @return bool
    *   Whether or not this meta tag must output required absolute URLs.
    */
-  public function requiresAbsoluteUrl() {
+  public function requiresAbsoluteUrl(): bool {
     return $this->absoluteUrl;
   }
 
@@ -377,7 +382,7 @@ abstract class MetaNameBase extends PluginBase {//implements ContainerFactoryPlu
    * @return bool
    *   Whether this meta tag has been enabled.
    */
-  public function isActive() {
+  public function isActive(): bool {
     return TRUE;
   }
 
@@ -390,7 +395,7 @@ abstract class MetaNameBase extends PluginBase {//implements ContainerFactoryPlu
    * @return array
    *   The completed form element.
    */
-  public function form(array $element = []) {
+  public function form(array $element = []): array {
     $form = [
       '#type' => $this->isLong() ? 'textarea' : 'textfield',
       '#title' => $this->label(),
@@ -427,21 +432,28 @@ abstract class MetaNameBase extends PluginBase {//implements ContainerFactoryPlu
   /**
    * Obtain the current meta tag's raw value.
    *
-   * @return string
+   * @return string|array
    *   The current raw meta tag value.
    */
-  public function value() {
+  public function value(): string|array {
     return $this->value;
   }
 
   /**
    * Assign the current meta tag a value.
    *
-   * @param string $value
+   * @param mixed $value
    *   The value to assign this meta tag.
    */
-  public function setValue($value) {
-    $this->value = $value;
+  public function setValue($value): void {
+    // If the argument is an array then store it as-is. If the argument is
+    // anything else, convert it to a string.
+    if (is_array($value)) {
+      $this->value = $value;
+    }
+    else {
+      $this->value = (string) $value;
+    }
   }
 
   /**
@@ -457,7 +469,7 @@ abstract class MetaNameBase extends PluginBase {//implements ContainerFactoryPlu
    * @return string
    *   The meta tag value after processing.
    */
-  protected function tidy($value) {
+  protected function tidy($value): string {
     $value = str_replace(["\r\n", "\n", "\r", "\t"], ' ', $value);
     $value = preg_replace('/\s+/', ' ', $value);
     return trim($value);
@@ -466,13 +478,13 @@ abstract class MetaNameBase extends PluginBase {//implements ContainerFactoryPlu
   /**
    * Generate the HTML tag output for a meta tag.
    *
-   * @return array|string
-   *   A render array or an empty string.
+   * @return array
+   *   A render array.
    */
-  public function output() {
+  public function output(): array {
     if (empty($this->value)) {
       // If there is no value, we don't want a tag output.
-      return $this->multiple() ? [] : '';
+      return [];
     }
 
     // Get configuration.
@@ -528,7 +540,7 @@ abstract class MetaNameBase extends PluginBase {//implements ContainerFactoryPlu
    * @param \Drupal\Core\Form\FormStateInterface $form_state
    *   The form state.
    */
-  public static function validateTag(array &$element, FormStateInterface $form_state) {
+  public static function validateTag(array &$element, FormStateInterface $form_state): void {
     // @todo If there is some common validation, put it here. Otherwise, make
     // it abstract?
   }
@@ -540,7 +552,7 @@ abstract class MetaNameBase extends PluginBase {//implements ContainerFactoryPlu
    *   A comma separated list of any image URLs found in the meta tag's value,
    *   or the original string if no images were identified.
    */
-  protected function parseImageUrl($value) {
+  protected function parseImageUrl($value): string {
     global $base_root;
 
     // If image tag src is relative (starts with /), convert to an absolute
@@ -597,7 +609,7 @@ abstract class MetaNameBase extends PluginBase {//implements ContainerFactoryPlu
    * @return string
    *   The trimmed string value.
    */
-  protected function trimValue($value) {
+  protected function trimValue($value): string {
     if (TRUE === $this->trimmable) {
       $settings = \Drupal::config('metatag.settings');
       $trimMethod = $settings->get('tag_trim_method');
