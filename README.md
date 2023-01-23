@@ -65,6 +65,9 @@ The primary features include:
 This version requires Drupal 9.4 or newer and is compatible with Drupal 10. That
 said, it is always recommended to keep Drupal core installations up to date.
 
+The module requires PHP 8.0 or newer, as of Metatag v2.0.0 it will not work with
+PHP 7.
+
 This module requires the following modules:
 
 - [Token](https://www.drupal.org/project/token): Provides a popup browser to

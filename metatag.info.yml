@@ -3,6 +3,7 @@ type: module
 description: Manage meta tags for all entities.
 core_version_requirement: '^9.4 || ^10'
 package: SEO
+php: 8.0
 configure: entity.metatag_defaults.collection
 dependencies:
   - drupal:field

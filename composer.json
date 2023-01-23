@@ -23,7 +23,8 @@
   },
   "require": {
     "drupal/core": "^9.4 || ^10",
-    "drupal/token": "^1.0"
+    "drupal/token": "^1.0",
+    "php": ">=8.0"
   },
   "require-dev": {
     "drupal/devel": "^4.0 || ^5.0",
