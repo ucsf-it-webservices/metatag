@@ -28,6 +28,7 @@ Metatag 2.0.x-dev, 2022-xx-xx
 #3065441 by DamienMcKenna: Remove all four GooglePlus meta tags.
 #3305753 by DamienMcKenna: Add return types on all custom class methods.
 #3335741 by DamienMcKenna: Indicate the module now requires PHP 8.0.
+#3336234 by DamienMcKenna: V2 config update scripts don't work as intended.
 
 
 Metatag 8.x-1.x-dev, 2022-xx-xx

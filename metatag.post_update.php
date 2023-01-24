@@ -14,15 +14,15 @@ use Drupal\metatag\Entity\MetatagDefaults;
  * Convert mask-icon to array values.
  */
 function metatag_post_update_convert_mask_icon_to_array_values(&$sandbox) {
-  $config_entity_updater = \Drupal::classResolver(ConfigEntityUpdater::class);
-  $config_entity_updater->update($sandbox, 'metatag_defaults', function (MetatagDefaults $metatag_defaults) {
-    if ($metatag_defaults->hasTag('mask-icon')) {
-      $tags = $metatag_defaults->get('tags');
+  $updater = \Drupal::classResolver(ConfigEntityUpdater::class);
+  $updater->update($sandbox, 'metatag_defaults', function (MetatagDefaults $default) {
+    if ($default->hasTag('mask-icon')) {
+      $tags = $default->get('tags');
       $tags['mask_icon'] = [
-        'href' => $metatag_defaults->getTag('mask-icon'),
+        'href' => $default->getTag('mask-icon'),
       ];
       unset($tags['mask-icon']);
-      $metatag_defaults->set('tags', $tags);
+      $default->set('tags', $tags);
       return TRUE;
     }
     return FALSE;
@@ -33,13 +33,13 @@ function metatag_post_update_convert_mask_icon_to_array_values(&$sandbox) {
  * The author meta tag was moved into the main module: configuration.
  */
 function metatag_post_update_convert_author_config(&$sandbox) {
-  $config_entity_updater = \Drupal::classResolver(ConfigEntityUpdater::class);
-  $config_entity_updater->update($sandbox, 'metatag_defaults', function (MetatagDefaults $metatag_defaults) {
-    if ($metatag_defaults->hasTag('google_plus_author')) {
-      $tags = $metatag_defaults->get('tags');
-      $tags['author'] = $metatag_defaults->getTag('google_plus_author');
+  $updater = \Drupal::classResolver(ConfigEntityUpdater::class);
+  $updater->update($sandbox, 'metatag_defaults', function (MetatagDefaults $default) {
+    if ($default->hasTag('google_plus_author')) {
+      $tags = $default->get('tags');
+      $tags['author'] = $default->getTag('google_plus_author');
       unset($tags['google_plus_author']);
-      $metatag_defaults->set('tags', $tags);
+      $default->set('tags', $tags);
       return TRUE;
     }
     return FALSE;
@@ -423,6 +423,7 @@ function metatag_post_update_v2_02_remove_entity_values(array &$sandbox) {
         foreach ($metatags_to_remove as $tag_name) {
           $db_or->condition($field_value_field, '%"' . $tag_name . '"%', 'LIKE');
         }
+
         $query->condition($db_or);
         $result = $query->execute();
         $records = $result->fetchAll();
@@ -463,16 +464,17 @@ function metatag_post_update_v2_02_remove_entity_values(array &$sandbox) {
     // Loop through the field(s) and remove the two meta tags.
     while ($counter <= $max_per_batch && isset($current_field_records[$current_record])) {
       $record = $current_field_records[$current_record];
-
-      // Remove the Publisher and Name meta tags.
       $tags = metatag_data_decode($record->$field_value_field);
       $changed = FALSE;
+
+      // Remove some of the meta tags.
       foreach ($metatags_to_remove as $metatag) {
         if (isset($tags[$metatag])) {
           unset($tags[$metatag]);
           $changed = TRUE;
         }
       }
+
       if ($changed) {
         $tags_string = Json::encode($tags);
         \Drupal::database()->update($field_table)
@@ -523,56 +525,55 @@ function metatag_post_update_v2_02_remove_entity_values(array &$sandbox) {
 /**
  * Remove meta tags from default configurations that were removed in v2.
  */
-function metatag_post_update_v2_03_remove_config_values() {
-  $metatags_to_remove = [
-    // For #3065441.
-    'google_plus_author',
-    'google_plus_description',
-    'google_plus_name',
-    'google_plus_publisher',
+function metatag_post_update_v2_03_remove_config_values(&$sandbox) {
+  $updater = \Drupal::classResolver(ConfigEntityUpdater::class);
+  $updater->update($sandbox, 'metatag_defaults', function (MetatagDefaults $default) {
+    $metatags_to_remove = [
+      // For #3065441.
+      'google_plus_author',
+      'google_plus_description',
+      'google_plus_name',
+      'google_plus_publisher',
 
-    // For #2973351.
-    'news_keywords',
-    'standout',
+      // For #2973351.
+      'news_keywords',
+      'standout',
 
-    // For #3132065.
-    'twitter_cards_data1',
-    'twitter_cards_data2',
-    'twitter_cards_dnt',
-    'twitter_cards_gallery_image0',
-    'twitter_cards_gallery_image1',
-    'twitter_cards_gallery_image2',
-    'twitter_cards_gallery_image3',
-    'twitter_cards_image_height',
-    'twitter_cards_image_width',
-    'twitter_cards_label1',
-    'twitter_cards_label2',
-    'twitter_cards_page_url',
+      // For #3132065.
+      'twitter_cards_data1',
+      'twitter_cards_data2',
+      'twitter_cards_dnt',
+      'twitter_cards_gallery_image0',
+      'twitter_cards_gallery_image1',
+      'twitter_cards_gallery_image2',
+      'twitter_cards_gallery_image3',
+      'twitter_cards_image_height',
+      'twitter_cards_image_width',
+      'twitter_cards_label1',
+      'twitter_cards_label2',
+      'twitter_cards_page_url',
 
-    // For #3217263.
-    'content_language',
-  ];
-
-  $defaults = \Drupal::entityTypeManager()
-    ->getStorage('metatag_defaults')
-    ->loadMultiple();
-
-  foreach ($defaults as $defaults_name => $default) {
+      // For #3217263.
+      'content_language',
+    ];
     $changed = FALSE;
+    $tags = $default->get('tags');
     foreach ($metatags_to_remove as $metatag) {
-      if (isset($default->tags[$metatag])) {
-        unset($default->tags[$metatag]);
+      if (isset($tags[$metatag])) {
+        unset($tags[$metatag]);
         $changed = TRUE;
       }
     }
+
     if ($changed) {
-      $defaults->save();
+      $default->set('tags', $tags);
       \Drupal::logger('metatag')
         ->notice(t('Removed meta tags from the @config Metatag configuration.', [
-          '@config' => $defaults_name,
+          '@config' => $default->id(),
         ]));
     }
-  }
+    return $changed;
+  });
 }
 
 /**

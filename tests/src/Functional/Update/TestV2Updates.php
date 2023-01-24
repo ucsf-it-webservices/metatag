@@ -57,7 +57,8 @@ class TestV2Updates extends UpdatePathTestBase {
    * Tests whether the post-update scripts works correctly.
    */
   public function testPostUpdates() {
-    $expected_value = 'This is a Metatag v1 meta tag.';
+    $node_description = 'This is a Metatag v1 meta tag.';
+    $global_description = 'This is an example description.';
 
     // The meta tags to test.
     $entity_tags = [
@@ -84,6 +85,7 @@ class TestV2Updates extends UpdatePathTestBase {
       'twitter_cards_label1' => 'Label1 tag test for #3132065.',
       'twitter_cards_label2' => 'Label2 tag test for #3132065.',
       'twitter_cards_page_url' => 'Page URL tag test for #3132065.',
+
       // For #3217263.
       'content_language' => 'Content Language tag test for #3217263.',
     ];
@@ -111,6 +113,7 @@ class TestV2Updates extends UpdatePathTestBase {
       'twitter_cards_label1' => 'Global Label1 tag test for #3132065.',
       'twitter_cards_label2' => 'Global Label2 tag test for #3132065.',
       'twitter_cards_page_url' => 'Global Page URL tag test for #3132065.',
+
       // For #3217263.
       'content_language' => 'Global Content Language tag test for #3217263.',
     ];
@@ -120,32 +123,44 @@ class TestV2Updates extends UpdatePathTestBase {
     $query->addField('node__field_meta_tags', 'field_meta_tags_value');
     $result = $query->execute();
     $records = $result->fetchAll();
+
+    // Verify the data loads correctly and is the old format.
+    // @see metatag_post_update_v2_01_change_fields_to_json()
     $this->assertTrue(count($records) === 1);
     $this->assertTrue(strpos($records[0]->field_meta_tags_value, 'a:') === 0);
     $data = unserialize($records[0]->field_meta_tags_value, ['allowed_classes' => FALSE]);
-
-    // For metatag_post_update_v2_01_change_fields_to_json().
     $this->assertTrue(isset($data['description']));
-    $this->assertTrue($data['description'] === $expected_value);
+    $this->assertTrue($data['description'] === $node_description);
 
-    // For metatag_post_update_v2_02_remove_entity_values().
+    // Verify each of the expected meta tags is present and has the expected
+    // value.
+    // @see metatag_post_update_v2_02_remove_entity_values()
     foreach ($entity_tags as $tag_name => $tag_value) {
       $this->assertTrue(isset($data[$tag_name]));
       $this->assertEquals($data[$tag_name], $tag_value);
     }
 
-    // For metatag_post_update_v2_03_remove_config_values().
+    // Set up examples of each meta tag that is being removed in a default
+    // configuration so that it can be confirmed later on to have been removed.
+    // @see metatag_post_update_v2_03_remove_config_values()
     $config = $this->config('metatag.metatag_defaults.global');
     $tags = $config->get('tags');
-
-    // Set the global configuration.
     foreach ($global_tags as $tag_name => $tag_value) {
       $tags[$tag_name] = $tag_value;
     }
-    $config->set('tags', $tags);
 
+    // Also add some example tags that aren't being removed, to make sure that
+    // the configuration works correctly.
+    $tags['description'] = $global_description;
+    $config->set('tags', $tags);
+    $config->save();
     $config = $this->config('metatag.metatag_defaults.global');
     $tags = $config->get('tags');
+    dump($tags);
+
+    // Make sure the example description tag is still present.
+    $this->assertTrue(isset($tags['description']));
+    $this->assertEquals($tags['description'], $global_description);
 
     // Verify each of the global tags is present.
     foreach ($global_tags as $tag_name => $tag_value) {
@@ -155,7 +170,9 @@ class TestV2Updates extends UpdatePathTestBase {
 
     $this->runUpdates();
 
-    // Confirm the data was converted to JSON format.
+    // Make sure that the data still loads correctly, i.e. that the data was
+    // successfully converted to the new structure.
+    // @see metatag_post_update_v2_01_change_fields_to_json()
     $query = \Drupal::database()->select('node__field_meta_tags');
     $query->addField('node__field_meta_tags', 'field_meta_tags_value');
     $result = $query->execute();
@@ -163,19 +180,23 @@ class TestV2Updates extends UpdatePathTestBase {
     $this->assertTrue(count($records) === 1);
     $this->assertTrue(strpos($records[0]->field_meta_tags_value, '{"') === 0);
     $data = Json::decode($records[0]->field_meta_tags_value);
-
-    // For metatag_post_update_v2_01_change_fields_to_json().
     $this->assertTrue(isset($data['description']));
-    $this->assertTrue($data['description'] === $expected_value);
+    $this->assertTrue($data['description'] === $node_description);
 
-    // For metatag_post_update_v2_02_remove_entity_values().
+    // Make sure the meta tag was removed.
+    // @see metatag_post_update_v2_02_remove_entity_values()
     foreach ($entity_tags as $tag_name => $tag_value) {
       $this->assertTrue(!isset($data[$tag_name]));
     }
 
-    // For metatag_post_update_v2_03_remove_config_values().
+    // @see metatag_post_update_v2_03_remove_config_values()
     $config = $this->config('metatag.metatag_defaults.global');
     $tags = $config->get('tags');
+    dump($tags);
+
+    // Make sure the example description tag is still present.
+    $this->assertTrue(isset($tags['description']));
+    $this->assertEquals($tags['description'], $global_description);
 
     // Verify each of the global tags is no longer present.
     foreach ($global_tags as $tag_name => $tag_value) {
