@@ -368,6 +368,12 @@ function metatag_post_update_v2_02_remove_entity_values(array &$sandbox) {
     // For #3217263.
     'content_language',
   ];
+  // Twitter Card Type values that need to be changed for #3132062.
+  $twitter_type_changes = [
+    'photo' => 'summary_large_image',
+    'gallery' => 'summary_large_image',
+    'product' => 'summary',
+  ];
 
   // This whole top section only needs to be done the first time.
   if (!isset($sandbox['records_processed'])) {
@@ -424,6 +430,9 @@ function metatag_post_update_v2_02_remove_entity_values(array &$sandbox) {
           $db_or->condition($field_value_field, '%"' . $tag_name . '"%', 'LIKE');
         }
 
+        // Look for Twitter Card "type" values, those might need to be changed.
+        $db_or->condition($field_value_field, '%"twitter_cards_type"%', 'LIKE');
+
         $query->condition($db_or);
         $result = $query->execute();
         $records = $result->fetchAll();
@@ -472,6 +481,17 @@ function metatag_post_update_v2_02_remove_entity_values(array &$sandbox) {
         if (isset($tags[$metatag])) {
           unset($tags[$metatag]);
           $changed = TRUE;
+        }
+      }
+
+      // Look for Twitter Card "type" values, those might need to be changed.
+      if (isset($tags['twitter_cards_type'])) {
+        foreach ($twitter_type_changes as $type_from => $type_to) {
+          if ($tags['twitter_cards_type'] == $type_from) {
+            $tags['twitter_cards_type'] = $type_to;
+            $changed = TRUE;
+            break;
+          }
         }
       }
 
@@ -591,4 +611,38 @@ function metatag_post_update_v2_04_uninstall_modules() {
   $moduleInstaller->uninstall(['metatag_google_plus']);
 
   return (string) t("Metatag: Google Plus has been uninstalled.");
+}
+
+/**
+ * Replace deprecated/removed Twitter Card "type" values.
+ */
+function metatag_post_update_v2_05_twitter_type_changes(&$sandbox) {
+  $updater = \Drupal::classResolver(ConfigEntityUpdater::class);
+  $updater->update($sandbox, 'metatag_defaults', function (MetatagDefaults $default) {
+    // Twitter Card "type" values that need to be changed for #3132062.
+    $twitter_type_changes = [
+      'photo' => 'summary_large_image',
+      'gallery' => 'summary_large_image',
+      'product' => 'summary',
+    ];
+    $changed = FALSE;
+    if ($default->hasTag('twitter_cards_type')) {
+      $tags = $default->get('tags');
+      foreach ($twitter_type_changes as $type_from => $type_to) {
+        if ($tags['twitter_cards_type'] == $type_from) {
+          $tags['twitter_cards_type'] = $type_to;
+          $changed = TRUE;
+          break;
+        }
+      }
+      if ($changed) {
+        $default->set('tags', $tags);
+        \Drupal::logger('metatag')
+          ->notice(t('Corrected the Twitter Card "type" value in the @config Metatag configuration.', [
+            '@config' => $default->id(),
+          ]));
+      }
+    }
+    return $changed;
+  });
 }

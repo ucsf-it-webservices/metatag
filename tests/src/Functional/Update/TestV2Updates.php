@@ -12,6 +12,26 @@ use Drupal\FunctionalTests\Update\UpdatePathTestBase;
  * field changes from serialized arrays to JSON encoded arrays, and deletion of
  * various meta tag plugins and submodule(s).
  *
+ * How this works:
+ * - The appropriate core fixture file is loaded.
+ * - The Metatag v1 fixture file is loaded.
+ * - testPostUpdates() runs.
+ * - The list of meta tag values is defined; the global list is the same as the
+ *   entity list only with the prefix "Global".
+ * - The node field value is loaded and compared against the expected values.
+ * - Global values are added to the default config and then verified.
+ * - The update scripts are executed.
+ * - The node meta tags are tested to confirm they were removed or updated as
+ *   expected.
+ * - The default configuration is tested to confirm they were removed or updated
+ *   as expected.
+ *
+ * @todo Finish documenting this file.
+ * @todo Expand to handle multiple languages.
+ * @todo Expand to handle revisions.
+ * @todo Expand to have Metatag fields on multiple entity types.
+ * @todo Expand to have multiple Metatag fields, with different field names.
+ *
  * @group metatag
  */
 class TestV2Updates extends UpdatePathTestBase {
@@ -89,34 +109,13 @@ class TestV2Updates extends UpdatePathTestBase {
       // For #3217263.
       'content_language' => 'Content Language tag test for #3217263.',
     ];
-    $global_tags = [
-      // For #3065441.
-      'google_plus_author' => 'Global GooglePlus Author tag test value for #3065441.',
-      'google_plus_description' => 'Global GooglePlus Author tag test value for #3065441.',
-      'google_plus_name' => 'Global GooglePlus Name test value for #3065441.',
-      'google_plus_publisher' => 'Global GooglePlus Publisher test value for #3065441.',
 
-      // For #2973351.
-      'news_keywords' => 'Global News Keywords test value for #2973351.',
-      'standout' => 'Global Standout test value for #2973351.',
-
-      // For #3132065.
-      'twitter_cards_data1' => 'Global Data1 tag test for #3132065.',
-      'twitter_cards_data2' => 'Global Data2 tag test for #3132065.',
-      'twitter_cards_dnt' => 'Global Do Not Track tag test for #3132065.',
-      'twitter_cards_gallery_image0' => 'Global Gallery Image0 tag test for #3132065.',
-      'twitter_cards_gallery_image1' => 'Global Gallery Image1 tag test for #3132065.',
-      'twitter_cards_gallery_image2' => 'Global Gallery Image2 tag test for #3132065.',
-      'twitter_cards_gallery_image3' => 'Global Gallery Image3 tag test for #3132065.',
-      'twitter_cards_image_height' => 'Global Image Height tag test for #3132065.',
-      'twitter_cards_image_width' => 'Global Image Width tag test for #3132065.',
-      'twitter_cards_label1' => 'Global Label1 tag test for #3132065.',
-      'twitter_cards_label2' => 'Global Label2 tag test for #3132065.',
-      'twitter_cards_page_url' => 'Global Page URL tag test for #3132065.',
-
-      // For #3217263.
-      'content_language' => 'Global Content Language tag test for #3217263.',
-    ];
+    // Global tags test values are the same as the entity tags only they have
+    // the word "Global" at the start.
+    $global_tags = [];
+    foreach ($entity_tags as $tag => $value) {
+      $global_tags[$tag] = 'Global ' . $value;
+    }
 
     // Confirm the data started as a serialized array.
     $query = \Drupal::database()->select('node__field_meta_tags');
@@ -140,6 +139,11 @@ class TestV2Updates extends UpdatePathTestBase {
       $this->assertEquals($data[$tag_name], $tag_value);
     }
 
+    // Verify the Twitter Card "type" value is present and has the expected
+    // value.
+    $this->assertTrue(isset($data['twitter_cards_type']));
+    $this->assertEquals($data['twitter_cards_type'], 'gallery');
+
     // Set up examples of each meta tag that is being removed in a default
     // configuration so that it can be confirmed later on to have been removed.
     // @see metatag_post_update_v2_03_remove_config_values()
@@ -149,6 +153,9 @@ class TestV2Updates extends UpdatePathTestBase {
       $tags[$tag_name] = $tag_value;
     }
 
+    // Add a deprecated Twitter Card Type for #3132062.
+    $tags['twitter_cards_type'] = 'photo';
+
     // Also add some example tags that aren't being removed, to make sure that
     // the configuration works correctly.
     $tags['description'] = $global_description;
@@ -156,7 +163,6 @@ class TestV2Updates extends UpdatePathTestBase {
     $config->save();
     $config = $this->config('metatag.metatag_defaults.global');
     $tags = $config->get('tags');
-    dump($tags);
 
     // Make sure the example description tag is still present.
     $this->assertTrue(isset($tags['description']));
@@ -167,6 +173,10 @@ class TestV2Updates extends UpdatePathTestBase {
       $this->assertTrue(isset($tags[$tag_name]));
       $this->assertEquals($tags[$tag_name], $tag_value);
     }
+
+    // Verify the Twitter Card "type" tag is present and has the correct value.
+    $this->assertTrue(isset($tags['twitter_cards_type']));
+    $this->assertEquals($tags['twitter_cards_type'], 'photo');
 
     $this->runUpdates();
 
@@ -189,10 +199,13 @@ class TestV2Updates extends UpdatePathTestBase {
       $this->assertTrue(!isset($data[$tag_name]));
     }
 
+    // Verify the Twitter Card "type" value has been changed.
+    $this->assertTrue(isset($data['twitter_cards_type']));
+    $this->assertEquals($data['twitter_cards_type'], 'summary_large_image');
+
     // @see metatag_post_update_v2_03_remove_config_values()
     $config = $this->config('metatag.metatag_defaults.global');
     $tags = $config->get('tags');
-    dump($tags);
 
     // Make sure the example description tag is still present.
     $this->assertTrue(isset($tags['description']));
@@ -202,6 +215,11 @@ class TestV2Updates extends UpdatePathTestBase {
     foreach ($global_tags as $tag_name => $tag_value) {
       $this->assertTrue(!isset($tags[$tag_name]));
     }
+
+    // Make sure the Twitter Card Type value has been changed.
+    // @see metatag_post_update_v2_05_twitter_type_changes()
+    $this->assertTrue(isset($tags['twitter_cards_type']));
+    $this->assertEquals($tags['twitter_cards_type'], 'summary_large_image');
   }
 
 }
