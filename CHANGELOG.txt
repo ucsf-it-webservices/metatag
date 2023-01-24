@@ -31,6 +31,7 @@ Metatag 8.x-1.x-dev, 2022-xx-xx
 #3336234 by DamienMcKenna: Add UUID values to fixture config items.
 #3335688 by idebr, DamienMcKenna: Document meta name="referrer" relationship
   with Referrer-policy HTTP header.
+#3132062 by DamienMcKenna: Updated fixtures with some documentation and todo's.
 
 
 Metatag 8.x-1.22, 2022-09-29
