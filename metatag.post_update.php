@@ -629,11 +629,12 @@ function metatag_post_update_v2_05_twitter_type_changes(&$sandbox) {
     if ($default->hasTag('twitter_cards_type')) {
       $tags = $default->get('tags');
       foreach ($twitter_type_changes as $type_from => $type_to) {
-        if ($tags['twitter_cards_type'] == $type_from) {
-          $tags['twitter_cards_type'] = $type_to;
-          $changed = TRUE;
-          break;
+        if ($tags['twitter_cards_type'] != $type_from) {
+          continue;
         }
+        $tags['twitter_cards_type'] = $type_to;
+        $changed = TRUE;
+        break;
       }
       if ($changed) {
         $default->set('tags', $tags);
