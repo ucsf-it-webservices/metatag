@@ -252,23 +252,6 @@ function metatag_metatag_info() {
     ),
   );
 
-  $info['tags']['news_keywords'] = array(
-    'label' => t('Google News Keywords'),
-    'description' => t('A comma-separated list of keywords about the page. This meta tag is used as an indicator in <a href="@google_news">Google News</a>.', array('@google_news' => 'https://support.google.com/news/publisher/bin/answer.py?hl=en&answer=68297')),
-    'maxlength' => 0,
-    'class' => 'DrupalTextMetaTag',
-    'group' => 'advanced',
-    'weight' => ++$weight,
-  );
-
-  $info['tags']['standout'] = array(
-    'label' => t('Google Standout'),
-    'description' => t("Highlight standout journalism on the web, especially for breaking news; used as an indicator in <a href=\"@google_news\">Google News</a>. Warning: Don't abuse it, to be used a maximum of 7 times per calendar week!", array('@google_news' => 'https://support.google.com/news/publisher/answer/191283?hl=en&ref_topic=2484650')),
-    'class' => 'DrupalTextMetaTag',
-    'group' => 'advanced',
-    'weight' => ++$weight,
-  );
-
   $info['tags']['rating'] = array(
     'label' => t('Content rating'),
     'description' => t('Used to indicate the intended audience for the content.'),

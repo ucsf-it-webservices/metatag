@@ -511,7 +511,6 @@ function metatag_uninstall() {
   variable_del('metatag_maxlength_description');
   variable_del('metatag_maxlength_abstract');
   variable_del('metatag_maxlength_keywords');
-  variable_del('metatag_maxlength_news_keywords');
 
   // Whether regular text fields can have summary tokens too.
   variable_del('metatag_summary_text_field');
@@ -2775,6 +2774,9 @@ function metatag_update_7203() {
     'itemprop:name',
     'itemtype',
     'publisher',
+    // For #3299230.
+    'news_keywords',
+    'standout',
   ];
 
   // Find all {metatag_config} records that contained an entry for the meta tag.
@@ -2854,6 +2856,9 @@ function metatag_update_7204(array &$sandbox) {
     'itemprop:name',
     'itemtype',
     'publisher',
+    // For #3299230.
+    'news_keywords',
+    'standout',
   ];
 
   if (!isset($sandbox['progress'])) {

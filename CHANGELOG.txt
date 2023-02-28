@@ -5,6 +5,8 @@ Metatag 7.x-2.x-dev, 2023-xx-xx
   functionality.
 #3132066 by DamienMcKenna: Remove deprecated Twitter Card tags.
 #3181901 by DamienMcKenna: Remove Metatag: Google Plus.
+#3299230 by immaculatexavier, DamienMcKenna, nironan: Remove news_keywords,
+  standout meta tags.
 
 
 Metatag 7.x-1.x-dev, 2023-xx-xx

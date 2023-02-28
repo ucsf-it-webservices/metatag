@@ -240,14 +240,9 @@ abstract class MetatagTestBase extends DrupalWebTestCase {
       // Advanced meta tags.
       // @code
       // 'robots' => array('value' => ''),
-      // 'news_keywords' => array('value' => ''),
-      // 'standout' => array('value' => ''),
-      // 'robots' => array('value' => ''),
-      // 'standout' => array('value' => ''),
       // @endcode
       'generator' => array('value' => 'Drupal 7 (https://www.drupal.org)'),
       // @code
-      // 'standout' => array('value' => ''),
       // 'image_src' => array('value' => ''),
       // @endcode
       'canonical' => array('value' => '[current-page:url:absolute]'),

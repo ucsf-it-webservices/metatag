@@ -47,6 +47,9 @@ class MetatagV2Updates extends MetatagTestBase {
     'itemprop:name',
     'itemtype',
     'publisher',
+    // For #3299230.
+    'news_keywords',
+    'standout',
   ];
 
   /**

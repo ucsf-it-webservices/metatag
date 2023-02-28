@@ -41,7 +41,6 @@ class MetatagTagsTest extends MetatagTagsTestBase {
     'icbm',
     'image_src',
     'keywords',
-    'news_keywords',
     'next',
     'original-source',
     'pragma',
@@ -54,7 +53,6 @@ class MetatagTagsTest extends MetatagTagsTestBase {
     'robots',
     // 'set_cookie',
     'shortlink',
-    'standout',
     'title',
   );
 

@@ -86,12 +86,6 @@ function metatag_views_tests_views_default_views() {
           'notranslate' => 0,
         ),
       ),
-      'news_keywords' => array(
-        'value' => '',
-      ),
-      'standout' => array(
-        'value' => '',
-      ),
       'rating' => array(
         'value' => '',
       ),
