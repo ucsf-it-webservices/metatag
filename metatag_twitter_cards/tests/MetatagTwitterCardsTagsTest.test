@@ -41,10 +41,6 @@ class MetatagTwitterCardsTagsTest extends MetatagTagsTestBase {
     'twitter:creator:id',
     'twitter:description',
     'twitter:image',
-    'twitter:image0',
-    'twitter:image1',
-    'twitter:image2',
-    'twitter:image3',
     'twitter:image:alt',
     'twitter:player',
     'twitter:player:height',
@@ -102,34 +98,6 @@ class MetatagTwitterCardsTagsTest extends MetatagTagsTestBase {
    * Implements {meta_tag_name}_test_value() for 'twitter:image'.
    */
   public function twitter_image_test_value() {
-    return $this->randomImageUrl();
-  }
-
-  /**
-   * Implements {meta_tag_name}_test_value() for 'twitter:image0'.
-   */
-  public function twitter_image0_test_value() {
-    return $this->randomImageUrl();
-  }
-
-  /**
-   * Implements {meta_tag_name}_test_value() for 'twitter:image1'.
-   */
-  public function twitter_image1_test_value() {
-    return $this->randomImageUrl();
-  }
-
-  /**
-   * Implements {meta_tag_name}_test_value() for 'twitter:image2'.
-   */
-  public function twitter_image2_test_value() {
-    return $this->randomImageUrl();
-  }
-
-  /**
-   * Implements {meta_tag_name}_test_value() for 'twitter:image3'.
-   */
-  public function twitter_image3_test_value() {
     return $this->randomImageUrl();
   }
 
