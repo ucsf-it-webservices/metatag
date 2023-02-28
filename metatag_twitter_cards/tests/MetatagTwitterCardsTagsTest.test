@@ -39,20 +39,13 @@ class MetatagTwitterCardsTagsTest extends MetatagTagsTestBase {
     'twitter:card',
     'twitter:creator',
     'twitter:creator:id',
-    'twitter:data1',
-    'twitter:data2',
     'twitter:description',
-    'twitter:dnt',
     'twitter:image',
     'twitter:image0',
     'twitter:image1',
     'twitter:image2',
     'twitter:image3',
     'twitter:image:alt',
-    'twitter:image:height',
-    'twitter:image:width',
-    'twitter:label1',
-    'twitter:label2',
     'twitter:player',
     'twitter:player:height',
     'twitter:player:stream',
@@ -61,7 +54,6 @@ class MetatagTwitterCardsTagsTest extends MetatagTagsTestBase {
     'twitter:site',
     'twitter:site:id',
     'twitter:title',
-    'twitter:url',
   );
 
   /**

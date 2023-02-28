@@ -3,6 +3,7 @@ Metatag 7.x-2.x-dev, 2023-xx-xx
 #3273408 by DamienMcKenna: Convert to JSON data storage.
 #3270185 by DamienMcKenna, brunodbo, peter3bweb: Port custom delimiter
   functionality.
+#3132066 by DamienMcKenna: Remove deprecated Twitter Card tags.
 
 
 Metatag 7.x-1.x-dev, 2023-xx-xx

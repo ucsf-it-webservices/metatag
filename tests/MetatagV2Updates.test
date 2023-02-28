@@ -23,6 +23,27 @@ class MetatagV2Updates extends MetatagTestBase {
   }
 
   /**
+   * The list of meta tags that were removed in Metatag v2.
+   *
+   * @var array
+   */
+  protected $removedTags = [
+    // For #3132066.
+    'twitter:data1',
+    'twitter:data2',
+    'twitter:dnt',
+    'twitter:gallery:image0',
+    'twitter:gallery:image1',
+    'twitter:gallery:image2',
+    'twitter:gallery:image3',
+    'twitter:image:height',
+    'twitter:image:width',
+    'twitter:label1',
+    'twitter:label2',
+    'twitter:url',
+  ];
+
+  /**
    * {@inheritdoc}
    */
   public function setUp(array $modules = array()) {
@@ -49,7 +70,7 @@ class MetatagV2Updates extends MetatagTestBase {
   }
 
   /**
-   * Test update 7201.
+   * Test update 7200.
    */
   public function testUpdate7200() {
     // Load the install file, so that the update script is available.
@@ -119,7 +140,7 @@ class MetatagV2Updates extends MetatagTestBase {
   }
 
   /**
-   * Test update 7201.
+   * Test update 7202.
    */
   public function testUpdate7202() {
     // Load the install file, so that the update script is available.
@@ -157,6 +178,115 @@ class MetatagV2Updates extends MetatagTestBase {
     $this->verbose($data, "Should be a JSON-encoded array.");
     $this->assertFalse(substr($data, 0, 2) === 'a:', 'The data is not in the old format.');
     $this->assertTrue(substr($data, 0, 2) === '{"', 'The data is in the new format.');
+  }
+
+  /**
+   * Test update 7203.
+   */
+  public function testUpdate7203() {
+    // Load the install file, so that the update script is available.
+    module_load_include('install', 'metatag');
+    $this->assertEqual(function_exists('metatag_update_7203'), TRUE, 'Update 7203 exists.');
+
+    // Load a global configuration.
+    ctools_include('export');
+    $configs = ctools_export_crud_load_all('metatag_config');
+    $config = $configs['global'];
+    $this->verbose($config, "Should be an object where 'config' is an array.");
+    foreach ($this->removedTags as $removed) {
+      $config->config[$removed]['value'] = 'Testing update 7203.';
+    }
+
+    // Save the configuration.
+    metatag_config_save($config);
+
+    // Execute the update function.
+    $results = metatag_update_7203();
+    $this->verbose($results);
+
+    // Verify the raw data is in the new format.
+    $data = $this->getRawConfig('global');
+    $this->verbose($data);
+    foreach ($this->removedTags as $removed) {
+      $this->assertTrue(!isset($data['config'][$removed]), "The $removed tag was removed.");
+    }
+  }
+
+  /**
+   * Test update 7204.
+   */
+  public function testUpdate7204() {
+    $test_string = "Testing update 7204.";
+
+    // Load the install file, so that the update script is available.
+    module_load_include('install', 'metatag');
+    $this->assertEqual(function_exists('metatag_update_7204'), TRUE, 'Update 7204 exists.');
+
+    $this->drupalGet('node/add/page');
+    $this->assertResponse(200);
+    $this->assertText('Create Basic page');
+    $edit = array(
+      'title' => 'Test Metatag v2 upgrade',
+      'metatags[und][description][value]' => $test_string,
+    );
+    $this->drupalPost(NULL, $edit, 'Save');
+    $this->assertResponse(200);
+    // Make sure the form submitted.
+    $this->assertNoText('Create Basic page', 'The node form was submitted successfully.');
+
+    // Load the node.
+    $node = node_load(1, NULL, TRUE);
+
+    // Update the field so has the test values.
+    $data = $this->getRawEntityData('node', $node->nid, $node->vid, $node->language);
+    $this->verbose($data);
+    $data = json_decode($data, TRUE);
+    $this->verbose($data);
+    foreach ($this->removedTags as $tag_name) {
+      $data[$tag_name]['value'] = $test_string;
+    }
+    db_merge('metatag')
+      ->key(array(
+        'entity_type' => 'node',
+        'entity_id' => $node->nid,
+        'language' => $node->language,
+        'revision_id' => $node->vid,
+      ))
+      ->fields(array(
+        'data' => json_encode($data),
+      ))
+      ->execute();
+
+    // Verify the data was updated.
+    $data = $this->getRawEntityData('node', $node->nid, $node->vid, $node->language);
+    $this->verbose($data);
+    $data = json_decode($data, TRUE);
+    $this->verbose($data);
+    foreach ($this->removedTags as $removed) {
+      $this->assertTrue(isset($data[$removed]), "The $removed tag is present prior to the update script running.");
+    }
+
+    // Execute the update function; pass in an empty sandbox variable so that
+    // the function can think it's processing multiple records.
+    $sandbox = array();
+    $results = metatag_update_7204($sandbox);
+    $this->verbose($sandbox);
+    $this->assertTrue($results);
+    $this->verbose($results);
+
+    // Verify the raw data is in the new format.
+    $data = $this->getRawEntityData('node', $node->nid, $node->vid, $node->language);
+    $this->verbose($data);
+    $data = json_decode($data, TRUE);
+    $this->verbose($data);
+    foreach ($this->removedTags as $removed) {
+      $this->assertTrue(!isset($data[$removed]), "The $removed tag was removed.");
+    }
+    $this->assertEqual($data['description']['value'], $test_string);
+
+    // Load the node again, confirm the data is now valid.
+    $this->drupalGet('node/' . $node->nid);
+    $this->assertRaw('Testing update 7204.');
   }
 
 }

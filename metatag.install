@@ -2750,3 +2750,185 @@ function metatag_update_7202() {
     return t("%count configuration record(s) were updated.", array("%count" => $count));
   }
 }
+
+/**
+ * Delete removed meta tags from stored configuration.
+ */
+function metatag_update_7203() {
+  $to_remove = [
+    // For #3132066.
+    'twitter:data1',
+    'twitter:data2',
+    'twitter:dnt',
+    'twitter:image:height',
+    'twitter:image:width',
+    'twitter:label1',
+    'twitter:label2',
+    'twitter:url',
+  ];
+
+  // Find all {metatag_config} records that contained an entry for the meta tag.
+  $query = db_select('metatag_config', 'm');
+  $query->fields('m', array('cid', 'config'));
+  $or = db_or();
+  foreach ($to_remove as $tag_name) {
+    $or->condition('m.config', '%' . db_like('"' . $tag_name . '"') . '%', 'LIKE');
+  }
+  $query->condition($or);
+  $records = $query->execute();
+
+  // This message will be returned if nothing needed to be updated.
+  $none_message = t('No Metatag configuration records needed to be updated for the meta tags that were removed in v2.');
+
+  // Loop over the values and correct them.
+  if ($records->rowCount() == 0) {
+    drupal_set_message($none_message);
+  }
+  else {
+    // Loop over the values and correct them.
+    $counter = 0;
+    foreach ($records as $record) {
+      $record->config = json_decode($record->config, TRUE);
+      $changed = FALSE;
+      foreach ($to_remove as $removed) {
+        if (isset($record->config[$removed])) {
+          unset($record->config[$removed]);
+          $changed = TRUE;
+        }
+      }
+      if ($changed) {
+        $record->config = json_encode($record->config);
+        drupal_write_record('metatag_config', $record, array('cid'));
+      }
+      $counter++;
+    }
+    if ($counter == 0) {
+      drupal_set_message($none_message);
+    }
+    else {
+      drupal_set_message(t('Removed meta tags from @count configurations.', array('@count' => $counter)));
+    }
+  }
+
+  // Clear all Metatag caches.
+  cache_clear_all('*', 'cache_metatag', TRUE);
+  drupal_static_reset('metatag_config_load_with_defaults');
+  drupal_static_reset('metatag_entity_supports_metatags');
+  drupal_static_reset('metatag_config_instance_info');
+  drupal_static_reset('metatag_get_info');
+  ctools_include('export');
+  ctools_export_load_object_reset('metatag_config');
+}
+
+/**
+ * Delete removed meta tags from per-entity values.
+ */
+function metatag_update_7204(array &$sandbox) {
+  $to_remove = [
+    // For #3132066.
+    'twitter:data1',
+    'twitter:data2',
+    'twitter:dnt',
+    'twitter:gallery:image0',
+    'twitter:gallery:image1',
+    'twitter:gallery:image2',
+    'twitter:gallery:image3',
+    'twitter:image:height',
+    'twitter:image:width',
+    'twitter:label1',
+    'twitter:label2',
+    'twitter:url',
+  ];
+
+  if (!isset($sandbox['progress'])) {
+    // Count of all {metatag} records that contained an entry for the removed
+    // meta tags.
+    $query = db_select('metatag', 'm');
+    $query->fields('m', array());
+    $or = db_or();
+    foreach ($to_remove as $tag_name) {
+      // Values are stored in a format like this:
+      // @code
+      // {"description":{"value":"Testing update 7204."}}
+      // @endcode
+      // $or->condition('m.data', '%"' . db_like($tag_name) . '":{%', 'LIKE');
+      // $or->condition('m.data', '%' . db_like('"' . $tag_name . '":{') . '%', 'LIKE');
+      $or->condition('m.data', '%"' . $tag_name . '":{%', 'LIKE');
+    }
+    $query->condition($or);
+    $query->countQuery();
+    $records_count = $query->execute()->fetchField();
+
+    if (empty($records_count)) {
+      return t('No Metatag entity records needed to be updated.');
+    }
+
+    $sandbox['max'] = $records_count;
+    $sandbox['progress'] = 0;
+  }
+
+  // Count of rows that will be processed per iteration.
+  $limit = 100;
+
+  // Fetches a part of records.
+  $query = db_select('metatag', 'm');
+  $query->fields('m', array());
+  $or = db_or();
+  foreach ($to_remove as $tag_name) {
+    // Values are stored in a format like this:
+    // @code
+    // {"description":{"value":"Testing update 7204."}}
+    // @endcode
+    // $or->condition('m.data', '%' . db_like('"' . $tag_name . '":{') . '%', 'LIKE');
+    $or->condition('m.data', '%"' . db_like($tag_name) . '":{%', 'LIKE');
+  }
+  $query->condition($or);
+  $query->range(0, $limit);
+  $records = $query->execute();
+
+  $count = 0;
+  $keys = array('entity_type', 'entity_id', 'revision_id', 'language');
+
+  // Loop over the values and correct them.
+  foreach ($records as $record) {
+    $record->data = json_decode($record->data, TRUE);
+
+    $changed = FALSE;
+    foreach ($to_remove as $removed) {
+      if (isset($record->data[$removed])) {
+        unset($record->data[$removed]);
+        $changed = TRUE;
+      }
+    }
+    if ($changed) {
+      $record->data = json_encode($record->data);
+      drupal_write_record('metatag', $record, $keys);
+
+      // Clear the cache for the entity this belongs to.
+      entity_get_controller($record->entity_type)->resetCache(array($record->entity_id));
+    }
+
+    $count++;
+  }
+
+  if (!empty($count)) {
+    $sandbox['progress'] += $count;
+    // In some cases the query yields results that cannot be fixed and we would
+    // run into an infinite loop. Stop immediately if we processed all records.
+    if ($sandbox['progress'] >= $sandbox['max']) {
+      $sandbox['#finished'] = TRUE;
+      return t('Removed meta tags for @count entity records.', array(
+        '@count' => $sandbox['progress'],
+      ));
+    }
+    else {
+      $sandbox['#finished'] = $sandbox['progress'] / $sandbox['max'];
+    }
+  }
+  else {
+    $sandbox['#finished'] = TRUE;
+    return t('Removed meta tags for @count entity records.', array(
+      '@count' => $sandbox['progress'],
+    ));
+  }
+}

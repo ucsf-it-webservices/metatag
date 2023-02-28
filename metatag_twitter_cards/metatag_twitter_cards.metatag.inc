@@ -140,14 +140,6 @@ function metatag_twitter_cards_metatag_info() {
       'type' => 'integer',
     ),
   ) + $defaults;
-  $info['tags']['twitter:url'] = array(
-    'label' => t('Page URL'),
-    'description' => t('The permalink / canonical URL of the current page.'),
-    'weight' => ++$weight,
-    'devel_generate' => array(
-      'type' => 'canonical',
-    ),
-  ) + $defaults;
   $info['tags']['twitter:title'] = array(
     'label' => t('Title'),
     'description' => t('The page\'s title, which should be concise; it will be truncated at 70 characters by Twitter. This field is required unless this the \'type\' field is set to "photo".'),
@@ -160,11 +152,6 @@ function metatag_twitter_cards_metatag_info() {
     'maxlength' => 200,
     'weight' => ++$weight,
   ) + $defaults;
-  $info['tags']['twitter:dnt'] = array(
-    'label' => t('Do Not Track'),
-    'description' => t('By default Twitter tracks visitors when a tweet is embedded on a page using the official APIs. Setting this to "on" will <a href="@url">stop Twitter from tracking visitors</a>.', array('@url' => 'https://dev.twitter.com/web/overview/privacy#what-privacy-options-do-website-publishers-have')),
-    'weight' => ++$weight,
-  ) + $defaults;
   $info['tags']['twitter:image'] = array(
     'label' => t('Image URL'),
     'description' => t('The URL to a unique image representing the content of the page. Do not use a generic image such as your website logo, author photo, or other image that spans multiple pages. Images larger than 120x120px will be resized and cropped square based on longest dimension. Images smaller than 60x60px will not be shown. If the \'type\' is set to <em>Photo</em> then the image must be at least 280x150px.'),
@@ -175,38 +162,6 @@ function metatag_twitter_cards_metatag_info() {
     ),
     'devel_generate' => array(
       'type' => 'image',
-    ),
-  ) + $defaults;
-  $info['tags']['twitter:image:width'] = array(
-    'label' => t('Image width'),
-    'description' => t('The width of the image being linked to, in pixels.'),
-    'weight' => ++$weight,
-    'dependencies' => array(
-      array(
-        'dependency' => 'twitter:image',
-        'attribute' => 'value',
-        'condition' => 'filled',
-        'value' => TRUE,
-      ),
-    ),
-    'devel_generate' => array(
-      'type' => 'integer',
-    ),
-  ) + $defaults;
-  $info['tags']['twitter:image:height'] = array(
-    'label' => t('Image height'),
-    'description' => t('The height of the image being linked to, in pixels.'),
-    'weight' => ++$weight,
-    'dependencies' => array(
-      array(
-        'dependency' => 'twitter:image',
-        'attribute' => 'value',
-        'condition' => 'filled',
-        'value' => TRUE,
-      ),
-    ),
-    'devel_generate' => array(
-      'type' => 'integer',
     ),
   ) + $defaults;
   $info['tags']['twitter:image:alt'] = array(
@@ -389,50 +344,6 @@ function metatag_twitter_cards_metatag_info() {
       '#theme' => 'metatag_twitter_cards',
     ),
   ) + $defaults;
-
-  // 'product' cards.
-  $product_defaults = array(
-    'dependencies' => array(
-      array(
-        'dependency' => 'twitter:card',
-        'attribute' => 'value',
-        'condition' => 'value',
-        'value' => 'product',
-      ),
-    ),
-  ) + $defaults;
-  $info['tags']['twitter:label1'] = array(
-    'label' => t('Label 1'),
-    'description' => t('This field expects a string, and you can specify values for labels such as price, items in stock, sizes, etc.'),
-    'weight' => ++$weight,
-    'element' => array(
-      '#theme' => 'metatag_twitter_cards',
-    ),
-  ) + $product_defaults;
-  $info['tags']['twitter:data1'] = array(
-    'label' => t('Data 1'),
-    'description' => t('This field expects a string, and allows you to specify the types of data you want to offer (price, country, etc.).'),
-    'weight' => ++$weight,
-    'element' => array(
-      '#theme' => 'metatag_twitter_cards',
-    ),
-  ) + $product_defaults;
-  $info['tags']['twitter:label2'] = array(
-    'label' => t('Label 2'),
-    'description' => t('This field expects a string, and you can specify values for labels such as price, items in stock, sizes, etc.'),
-    'weight' => ++$weight,
-    'element' => array(
-      '#theme' => 'metatag_twitter_cards',
-    ),
-  ) + $product_defaults;
-  $info['tags']['twitter:data2'] = array(
-    'label' => t('Data 2'),
-    'description' => t('This field expects a string, and allows you to specify the types of data you want to offer (price, country, etc.).'),
-    'weight' => ++$weight,
-    'element' => array(
-      '#theme' => 'metatag_twitter_cards',
-    ),
-  ) + $product_defaults;
 
   return $info;
 }
