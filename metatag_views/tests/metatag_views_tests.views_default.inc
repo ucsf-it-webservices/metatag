@@ -112,9 +112,6 @@ function metatag_views_tests_views_default_views() {
         'value' => '[current-page:url:unaliased]',
         'default' => '[current-page:url:unaliased]',
       ),
-      'publisher' => array(
-        'value' => '',
-      ),
       'author' => array(
         'value' => '',
       ),
@@ -147,19 +144,6 @@ function metatag_views_tests_views_default_views() {
         'value' => '',
       ),
       'refresh' => array(
-        'value' => '',
-      ),
-      'itemtype' => array(
-        'value' => '',
-      ),
-      'itemprop:name' => array(
-        'value' => '[current-page:title]',
-        'default' => '[current-page:title]',
-      ),
-      'itemprop:description' => array(
-        'value' => '',
-      ),
-      'itemprop:image' => array(
         'value' => '',
       ),
       'theme-color' => array(

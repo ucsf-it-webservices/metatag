@@ -2769,6 +2769,12 @@ function metatag_update_7203() {
     'twitter:label1',
     'twitter:label2',
     'twitter:url',
+    // For #3181901.
+    'itemprop:description',
+    'itemprop:image',
+    'itemprop:name',
+    'itemtype',
+    'publisher',
   ];
 
   // Find all {metatag_config} records that contained an entry for the meta tag.
@@ -2842,6 +2848,12 @@ function metatag_update_7204(array &$sandbox) {
     'twitter:label1',
     'twitter:label2',
     'twitter:url',
+    // For #3181901.
+    'itemprop:description',
+    'itemprop:image',
+    'itemprop:name',
+    'itemtype',
+    'publisher',
   ];
 
   if (!isset($sandbox['progress'])) {
@@ -2935,4 +2947,12 @@ function metatag_update_7204(array &$sandbox) {
       '@count' => $sandbox['progress'],
     ));
   }
+}
+
+/**
+ * Uninstall the GooglePlus submodule.
+ */
+function metatag_update_7205() {
+  module_disable(array('metatag_google_plus'));
+  drupal_uninstall_modules(array('metatag_google_plus'));
 }

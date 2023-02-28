@@ -1,11 +1,4 @@
 name = Metatag: Google+
-description = "Provides support for Google+ 'itemscope' and 'publisher' meta tags."
-package = SEO
+description = "Removed in Metatag v2 as Google+ was shot down years ago. These files will be removed later."
 core = 7.x
-
-dependencies[] = metatag:metatag
-
-files[] = metatag_google_plus.inc
-
-; Tests.
-files[] = tests/MetatagGooglePlusTagsTest.test
+hidden = true
