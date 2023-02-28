@@ -20,6 +20,8 @@ Metatag 7.x-1.xx, 2022-xx-xx
 #3337784 by DamienMcKenna, alex.skrypnyk: Undefined array key "description" on
   Feeds integration; API improvement to log meta tags, groups that are missing
   default values.
+#3249349 by beatrizrodrigues, DamienMcKenna, wamwam: Error: Call to a member
+  function tokenize_value() on null in function metatag_views_page_alter.
 
 
 Metatag 7.x-1.30, 2022-07-27
