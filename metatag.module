@@ -1635,7 +1635,7 @@ function metatag_metatags_form(array &$form, $instance, array $metatags = array(
         $form['metatags'][$langcode][$group_key] = $group['form'] + array(
           '#type' => 'fieldset',
           '#title' => $group['label'],
-          '#description' => !empty($group['description']) ? $group['description'] : '',
+          '#description' => $group['description'],
           '#collapsible' => TRUE,
           '#collapsed' => TRUE,
         );
@@ -2239,6 +2239,45 @@ function metatag_get_info($type = NULL, $name = NULL) {
       // Let other modules alter the entity info using
       // hook_metatag_info_alter().
       drupal_alter('metatag_info', $info);
+
+      // Verify that the expected meta tag pieces are present, if one is
+      // missing then set it to the default value listed here.
+      $required_values = array(
+        'label' => 'Unknown meta tag',
+        'description' => '',
+        'class' => 'DrupalTextMetaTag',
+        'weight' => 0,
+        'group' => 'basic',
+      );
+      foreach ($info['tags'] as $tag_name => &$tag) {
+        foreach ($required_values as $required => $default_value) {
+          if (!isset($tag[$required])) {
+            watchdog('metatag', 'The %tag tag is missing a value for the %element element.', array(
+              '%tag' => $tag_name,
+              '%element' => $required,
+            ));
+            $tag[$required] = $default_value;
+          }
+        }
+      }
+
+      // Verify that the expected tag group pieces are present, if one is
+      // missing then set it to a blank string.
+      $required_values = array(
+        'label',
+        'description',
+      );
+      foreach ($info['groups'] as $group_name => &$group) {
+        foreach ($required_values as $required) {
+          if (!isset($group[$required])) {
+            watchdog('metatag', 'The %group tag group is missing a value for the %element element.', array(
+              '%group' => $group_name,
+              '%element' => $required,
+            ));
+            $group[$required] = '';
+          }
+        }
+      }
 
       metatag_cache_set($cid, $info);
     }
