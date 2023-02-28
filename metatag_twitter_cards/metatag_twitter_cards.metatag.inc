@@ -178,39 +178,6 @@ function metatag_twitter_cards_metatag_info() {
     ),
   ) + $defaults;
 
-  // 'gallery' cards.
-  $gallery_defaults = array(
-    'image' => TRUE,
-    'dependencies' => array(
-      array(
-        'dependency' => 'twitter:card',
-        'attribute' => 'value',
-        'condition' => 'value',
-        'value' => 'gallery',
-      ),
-    ),
-  ) + $defaults;
-  $info['tags']['twitter:image0'] = array(
-    'label' => t('1st Gallery Image'),
-    'description' => t('A URL to the image representing the first photo in your gallery.'),
-    'weight' => ++$weight,
-  ) + $gallery_defaults;
-  $info['tags']['twitter:image1'] = array(
-    'label' => t('2nd Gallery Image'),
-    'description' => t('A URL to the image representing the second photo in your gallery.'),
-    'weight' => ++$weight,
-  ) + $gallery_defaults;
-  $info['tags']['twitter:image2'] = array(
-    'label' => t('3rd Gallery Image'),
-    'description' => t('A URL to the image representing the third photo in your gallery.'),
-    'weight' => ++$weight,
-  ) + $gallery_defaults;
-  $info['tags']['twitter:image3'] = array(
-    'label' => t('4th Gallery Image'),
-    'description' => t('A URL to the image representing the fourth photo in your gallery.'),
-    'weight' => ++$weight,
-  ) + $gallery_defaults;
-
   // 'player' cards.
   $player_defaults = array(
     'dependencies' => array(
