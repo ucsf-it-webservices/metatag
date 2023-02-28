@@ -17,6 +17,9 @@ Metatag 7.x-1.xx, 2022-xx-xx
   update tests to use them.
 #3210889 by immaculatexavier, Pracheth, DamienMcKenna, dineshreddymathuku:
   Convert the README.txt to a markdown file.
+#3337784 by DamienMcKenna, alex.skrypnyk: Undefined array key "description" on
+  Feeds integration; API improvement to log meta tags, groups that are missing
+  default values.
 
 
 Metatag 7.x-1.30, 2022-07-27

@@ -454,7 +454,7 @@ class DrupalTextMetaTag extends DrupalDefaultMetaTag {
     $form['value'] += array(
       '#type' => 'textfield',
       '#title' => $this->info['label'],
-      '#description' => !empty($this->info['description']) ? $this->info['description'] : '',
+      '#description' => $this->info['description'],
       '#default_value' => isset($this->data['value']) ? $this->data['value'] : '',
       '#element_validate' => array('token_element_validate'),
       '#token_types' => $options['token types'],
