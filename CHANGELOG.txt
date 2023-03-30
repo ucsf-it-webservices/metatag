@@ -68,6 +68,8 @@ Metatag 8.x-1.x-dev, 2022-xx-xx
   with Referrer-policy HTTP header.
 #3132062 by DamienMcKenna: Updated fixtures with some documentation and todo's.
 #3350298 by DamienMcKenna: Backport metatag_data_decode() from v2.
+#3351181 by godotislate, DamienMcKenna: Missing access checks on entity queries
+  in metatag_open_graph update hooks.
 
 
 Metatag 8.x-1.22, 2022-09-29
