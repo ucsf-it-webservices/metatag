@@ -43,6 +43,8 @@ Metatag 8.x-1.x-dev, 2022-xx-xx
   placed on same page.
 #3335302 by DamienMcKenna, bsnodgrass, Anna D: Deprecated function:
   str_replace() line 432 MetaNameBase.php.
+#3308774 by achap, DamienMcKenna: Allow modules to alter views before building
+  meta tags.
 
 
 Metatag 8.x-1.22, 2022-09-29

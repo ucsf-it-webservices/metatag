@@ -39,6 +39,7 @@ function metatag_views_get_view_tags($view, $display_id = NULL, $args = []) {
   }
   $view->setDisplay($display_id);
   $view->setArguments($args);
+  $view->preExecute();
   $view->buildTitle();
 
   // And get the list of extenders for this display.
