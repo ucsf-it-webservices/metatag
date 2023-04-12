@@ -74,6 +74,8 @@ Metatag 8.x-1.x-dev, 2022-xx-xx
   compatibility.
 #3353594 by mukesh88, rckstr_rohan, DamienMcKenna: Spellung misteaks.
 #3353826 by DamienMcKenna: Add default settings file.
+#3325035 by Panchuk: View page meta tags can be overridden by view block that
+  placed on same page.
 
 
 Metatag 8.x-1.22, 2022-09-29
