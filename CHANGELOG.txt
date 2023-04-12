@@ -72,6 +72,7 @@ Metatag 8.x-1.x-dev, 2022-xx-xx
   in metatag_open_graph update hooks.
 #3352508 by DamienMcKenna, klimp: Resolve access check errors for D10
   compatibility.
+#3353594 by mukesh88, rckstr_rohan, DamienMcKenna: Spellung misteaks.
 
 
 Metatag 8.x-1.22, 2022-09-29
