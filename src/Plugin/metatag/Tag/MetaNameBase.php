@@ -429,6 +429,10 @@ abstract class MetaNameBase extends PluginBase {
    *   The meta tag value after processing.
    */
   protected function tidy($value) {
+    if (is_null($value) || $value == '') {
+      return '';
+    }
+
     $value = str_replace(["\r\n", "\n", "\r", "\t"], ' ', $value);
     $value = preg_replace('/\s+/', ' ', $value);
     return trim($value);
@@ -441,8 +445,8 @@ abstract class MetaNameBase extends PluginBase {
    *   A render array or an empty string.
    */
   public function output() {
-    if (empty($this->value)) {
-      // If there is no value, we don't want a tag output.
+    // If there is no value, just return either an empty array or empty string.
+    if (is_null($this->value) || $this->value == '') {
       return $this->multiple() ? [] : '';
     }
 
@@ -458,7 +462,7 @@ abstract class MetaNameBase extends PluginBase {
     $elements = [];
     foreach ($values as $value) {
       $value = $this->tidy($value);
-      if ($this->requiresAbsoluteUrl()) {
+      if ($value != '' && $this->requiresAbsoluteUrl()) {
         // Relative URL.
         if (parse_url($value, PHP_URL_HOST) == NULL) {
           $value = $this->request->getSchemeAndHttpHost() . $value;
@@ -510,6 +514,13 @@ abstract class MetaNameBase extends PluginBase {
    */
   protected function parseImageUrl($value) {
     global $base_root;
+
+    // Skip all logic if the string is empty. Unlike other scenarios, the logic
+    // in this method is predicated on the value being a legitimate string, so
+    // it's ok to skip all possible "empty" values, including the number 0, etc.
+    if (empty($value)) {
+      return '';
+    }
 
     // If image tag src is relative (starts with /), convert to an absolute
     // link; ignore protocol-relative URLs.

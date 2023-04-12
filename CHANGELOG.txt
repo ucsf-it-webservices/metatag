@@ -41,6 +41,8 @@ Metatag 8.x-1.x-dev, 2022-xx-xx
 #3353826 by DamienMcKenna: Add default settings file.
 #3325035 by Panchuk: View page meta tags can be overridden by view block that
   placed on same page.
+#3335302 by DamienMcKenna, bsnodgrass, Anna D: Deprecated function:
+  str_replace() line 432 MetaNameBase.php.
 
 
 Metatag 8.x-1.22, 2022-09-29
