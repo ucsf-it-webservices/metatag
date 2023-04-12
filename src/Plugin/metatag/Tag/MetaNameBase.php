@@ -488,7 +488,7 @@ abstract class MetaNameBase extends PluginBase {//implements ContainerFactoryPlu
   public function output(): array {
     // If there is no value, just return either an empty array or empty string.
     if (is_null($this->value) || $this->value == '') {
-      return $this->multiple() ? [] : '';
+      return [];
     }
 
     // Get configuration.
