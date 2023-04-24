@@ -45,6 +45,8 @@ Metatag 8.x-1.x-dev, 2022-xx-xx
   str_replace() line 432 MetaNameBase.php.
 #3308774 by achap, DamienMcKenna: Allow modules to alter views before building
   meta tags.
+#3336301 by RenatoG, DamienMcKenna: Unnecessary else in
+  metatag_post_update_convert_author_data().
 
 
 Metatag 8.x-1.22, 2022-09-29
