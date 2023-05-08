@@ -83,6 +83,8 @@ Metatag 8.x-1.x-dev, 2022-xx-xx
   meta tags.
 #3336301 by RenatoG, DamienMcKenna: Unnecessary else in
   metatag_post_update_convert_author_data().
+#3358948 by DamienMcKenna: Add a function for abstracting the field data
+  encoding method.
 
 
 Metatag 8.x-1.22, 2022-09-29

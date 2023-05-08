@@ -1004,3 +1004,19 @@ function metatag_data_decode($string): array {
 
   return $data;
 }
+
+/**
+ * Encode the data for storing in a Metatag field.
+ *
+ * By abstracting to this function each version of Metatag can use the method
+ * that is appropriate for it.
+ *
+ * @param array $data
+ *   A Metatag values array.
+ *
+ * @return string
+ *   The meta tag data encoded as a JSON string.
+ */
+function metatag_data_encode(array $data = []): string {
+  return serialize($data);
+}
