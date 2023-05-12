@@ -36,6 +36,8 @@ Metatag 7.x-1.x-dev, 2023-xx-xx
   function tokenize_value() on null in function metatag_views_page_alter.
 #1918738 by DamienMcKenna, JeroenT, gowrann, Dave Reid: Character count on
   fields via Maxlength integration.
+#3344475 by DamienMcKenna, circuscowboy: Must be of type string, array given in
+  strpos().
 
 
 Metatag 7.x-1.30, 2022-07-27
