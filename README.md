@@ -144,6 +144,10 @@ The primary features include:
 * If the Language Hierarchy module is installed, it will be used to identify
   which language will be used when loading meta tags for a given entity.
 
+* If the Maxlength module is installed, meta tags that have a maximum length
+  defined in the settings will have that maximum length enforced; this may be
+  disabled in the settings if it proves to be problematic.
+
 
 ## Configuration
 

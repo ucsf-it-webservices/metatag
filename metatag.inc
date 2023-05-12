@@ -466,10 +466,17 @@ class DrupalTextMetaTag extends DrupalDefaultMetaTag {
       $form['value']['#description'] .= ' ' . t('Multiple values may be used, separated by a comma. Note: Tokens that return multiple values will be handled automatically.');
     }
 
-    // Optionally limit the field to a certain length.
-    $maxlength = $this->maxlength();
-    if (!empty($maxlength)) {
-      $form['value']['#description'] .= ' ' . t('This will be truncated to a maximum of %max characters.', array('%max' => $maxlength));
+    // Optionally limit the field to a certain length, and support the Maxlength
+    // module if it is available.
+    $maxlength = (int) $this->maxlength();
+    if (!empty($maxlength) && $maxlength > 0) {
+      $form['value']['#description'] .= ' ' . t('This will be truncated to a maximum of %max characters after any tokens are processsed.', array('%max' => $maxlength));
+
+      // Optional support for the Maxlength module.
+      if (variable_get('metatag_use_maxlength', TRUE)) {
+        $form['value']['#maxlength_js'] = TRUE;
+        $form['value']['#maxlength'] = $maxlength;
+      }
     }
 
     // Optional handling for images.
