@@ -519,6 +519,12 @@ class DrupalTextMetaTag extends DrupalDefaultMetaTag {
    * {@inheritdoc}
    */
   public function getValue(array $options = array()) {
+    // If the value wasn't set there's no point in proceeding. Also, this type
+    // of tag should not have arrays passed to it.
+    if (!isset($this->data['value']) || !is_string($this->data['value'])) {
+      return '';
+    }
+
     $options += array(
       'instance' => '',
       'token data' => array(),
@@ -527,11 +533,6 @@ class DrupalTextMetaTag extends DrupalDefaultMetaTag {
       'sanitize' => variable_get('metatag_token_sanitize', FALSE),
       'raw' => FALSE,
     );
-
-    // If the value wasn't set there's no point in proceeding.
-    if (!isset($this->data['value'])) {
-      return '';
-    }
 
     // If entity_translation_hierarchy is being used then ensure tokens and
     // strings are generated using the current language rather than the
