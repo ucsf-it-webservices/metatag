@@ -140,6 +140,18 @@ class MetatagSettingsForm extends ConfigFormBase {
       '#description' => $this->t("Many Meta-Tags can be trimmed on a specific length for search engine optimization.<br/>If the value is set to '0' or left empty, the whole Metatag will be untrimmed."),
     ];
 
+    // Optional support for the Maxlenth module.
+    $form['tag_trim']['use_maxlength'] = array(
+      '#type' => 'checkbox',
+      '#title' => $this->t('Use Maxlength module to force these limits?'),
+      '#default_value' => $this->config('metatag.settings')->get('use_maxlength') ?? TRUE,
+      '#description' => $this->t('Because of how tokens are processed in meta tags, use of the Maxlength module may not provide an accurate representation of the actual current length of each meta tag, so it may cause more problem than it is worth. '),
+    );
+    if (!\Drupal::moduleHandler()->moduleExists('maxlength')) {
+      $form['tag_trim']['use_maxlength']['#disabled'] = TRUE;
+      $form['tag_trim']['use_maxlength']['#description'] = $this->t('Install the Maxlength module to enable this option.');
+    }
+
     $form['tag_trim']['maxlength'] = [
       '#title' => $this->t('Tags'),
       '#type' => 'fieldset',
@@ -213,6 +225,8 @@ class MetatagSettingsForm extends ConfigFormBase {
     $settings->set('separator', trim($form_state->getValue('separator')));
 
     // tag_trim handling:
+    $use_maxlength = $form_state->getValue(['tag_trim', 'use_maxlength']);
+    $settings->set('use_maxlength', $use_maxlength);
     $trimmingMethod = $form_state->getValue(['tag_trim', 'tag_trim_method']);
     $settings->set('tag_trim_method', $trimmingMethod);
     $trimmingValues = $form_state->getValue(['tag_trim', 'maxlength']);
