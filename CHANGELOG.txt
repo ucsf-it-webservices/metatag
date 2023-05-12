@@ -26,6 +26,7 @@ Metatag 7.x-1.31, 2023-05-12
   fields via Maxlength integration.
 #3344475 by DamienMcKenna, circuscowboy: Must be of type string, array given in
   strpos().
+#3359952 by DamienMcKenna: Rename logo file to just "logo.png".
 
 
 Metatag 7.x-1.30, 2022-07-27
