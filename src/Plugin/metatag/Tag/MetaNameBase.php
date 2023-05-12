@@ -392,6 +392,25 @@ abstract class MetaNameBase extends PluginBase {
       $form['#description'] .= ' ' . $this->t('Any URLs which start with "http://" will be converted to "https://".');
     }
 
+    $settings = \Drupal::config('metatag.settings');
+    $trimlengths = $settings->get('tag_trim_maxlength') ?? [];
+    if (!empty($trimlengths['metatag_maxlength_' . $this->id])) {
+      $maxlength = intval($trimlengths['metatag_maxlength_' . $this->id]);
+      if (is_numeric($maxlength) && $maxlength > 0) {
+        $form['#description'] .= ' ' . $this->t('This will be truncated to a maximum of %max characters after any tokens are processsed.', array('%max' => $maxlength));
+
+        // Optional support for the Maxlength module.
+        if (\Drupal::moduleHandler()->moduleExists('maxlength')) {
+          if ($settings->get('use_maxlength') ?? TRUE) {
+            $form['#attributes']['class'][] = 'maxlength';
+            $form['#attached']['library'][] = 'maxlength/maxlength';
+            $form['#maxlength_js'] = TRUE;
+            $form['#attributes']['data-maxlength'] = $maxlength;
+          }
+        }
+      }
+    }
+
     return $form;
   }
 

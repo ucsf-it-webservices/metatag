@@ -91,6 +91,10 @@ functionality:
   Adds support for the Cxense meta tags used by their DMP and Insight services.
 - [Metatag Google Scholar](https://www.drupal.org/project/metatag_google_scholar):
   Adds support for a number of meta tags used with the Google Scholar system.
+- [Maxlength](https://www.drupal.org/project/maxlength):
+  If this module is installed, meta tags that have a maximum length defined in
+  the settings will have that maximum length enforced; this may be disabled in
+  the settings if it proves to be problematic.
 
 
 ## Installation
