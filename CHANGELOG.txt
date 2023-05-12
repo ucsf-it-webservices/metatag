@@ -38,6 +38,10 @@ Metatag 2.0.x-dev, 2022-xx-xx
 
 Metatag 8.x-1.x-dev, 2022-xx-xx
 -------------------------------
+
+
+Metatag 8.x-1.23, 2023-05-12
+----------------------------
 #3312950 by DamienMcKenna, nkraft: Warning: Undefined array key "href" in
   Drupal\metatag_favicons\Plugin\metatag\Tag\MaskIcon->output().
 #3313273 by DamienMcKenna, jenger1965, wells, JesperN, othermachines,
