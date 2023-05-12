@@ -490,11 +490,14 @@ function metatag_uninstall() {
   // Optionally load meta tags on admin pages.
   variable_del('metatag_load_all_pages');
 
+  // Optionally change the multiple item delimiter.
+  variable_del('metatag_separator');
+
   // Sanitize token replacement output.
   variable_del('metatag_token_sanitize');
 
-  // Optionally change the multiple item delimiter.
-  variable_del('metatag_separator');
+  // Optional support for the Maxlength module.
+  variable_del('metatag_use_maxlength');
 
   // Remove all possible 'enable' variables.
   foreach (entity_get_info() as $entity_type => $entity_info) {

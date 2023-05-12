@@ -34,6 +34,8 @@ Metatag 7.x-1.x-dev, 2023-xx-xx
   default values.
 #3249349 by beatrizrodrigues, DamienMcKenna, wamwam: Error: Call to a member
   function tokenize_value() on null in function metatag_views_page_alter.
+#1918738 by DamienMcKenna, JeroenT, gowrann, Dave Reid: Character count on
+  fields via Maxlength integration.
 
 
 Metatag 7.x-1.30, 2022-07-27
