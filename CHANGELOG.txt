@@ -50,6 +50,8 @@ Metatag 8.x-1.x-dev, 2022-xx-xx
 #3358948 by DamienMcKenna: Add a function for abstracting the field data
   encoding method.
 #3359952 by DamienMcKenna: Rename logo file to just "logo.png".
+#3351558 by parisek, DamienMcKenna: Translation of meta tags is limited to 128
+  characters.
 
 
 Metatag 8.x-1.22, 2022-09-29
