@@ -2240,10 +2240,6 @@ function metatag_get_info($type = NULL, $name = NULL) {
       foreach ($info['tags'] as $tag_name => &$tag) {
         foreach ($required_values as $required => $default_value) {
           if (!isset($tag[$required])) {
-            watchdog('metatag', 'The %tag tag is missing a value for the %element element.', array(
-              '%tag' => $tag_name,
-              '%element' => $required,
-            ));
             $tag[$required] = $default_value;
           }
         }
@@ -2258,10 +2254,6 @@ function metatag_get_info($type = NULL, $name = NULL) {
       foreach ($info['groups'] as $group_name => &$group) {
         foreach ($required_values as $required) {
           if (!isset($group[$required])) {
-            watchdog('metatag', 'The %group tag group is missing a value for the %element element.', array(
-              '%group' => $group_name,
-              '%element' => $required,
-            ));
             $group[$required] = '';
           }
         }
