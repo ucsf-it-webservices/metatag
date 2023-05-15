@@ -10,6 +10,10 @@ Metatag 7.x-2.x-dev, 2023-xx-xx
 #3132066 by DamienMcKenna: Follow-up to clean tests.
 
 
+Metatag 7.x-1.x-dev, 2023-xx-xx
+-------------------------------
+
+
 Metatag 7.x-1.31, 2023-05-12
 ----------------------------
 #2217549 by DamienMcKenna, Alan D., Kuldeep K, Antares89: Integration with the
