@@ -178,6 +178,10 @@ class Robots extends MetaNameBase {
       'robots[index]' => TRUE,
       'robots[noydir]' => TRUE,
       // 'robots[follow]',
+      'robots-keyed[max-snippet]' => 10,
+      'robots-keyed[max-video-preview]' => 20,
+      'robots-keyed[max-image-preview]' => 'none',
+      'robots-keyed[unavailable_after]' => '2022-12-31',
     ];
   }
 
@@ -185,6 +189,8 @@ class Robots extends MetaNameBase {
    * {@inheritdoc}
    */
   public function getTestOutputValuesXpath(array $values): array {
+    // @todo From the 8.x-1.x branch.
+    // return 'index, max-snippet:10, max-video-preview:20, max-image-preview:none, unavailable_after:2022-12-31';
     // This tag outputs its multiple possible values as a comma-separated string
     // so just use the standard test output once the values are joined together
     // as a single string.
@@ -193,15 +199,22 @@ class Robots extends MetaNameBase {
       // The strings are stored as e.g. "robots[index]", "robots[noydir]", etc.
       // So in order to get the value names we need to remove the first part
       // and the wrapping brackets.
-      $new_values[] = substr($form_field_name, 7, -1);
+      if (strpos($form_field_name, 'robots[') !== FALSE) {
+        $new_values[] = substr($form_field_name, 7, -1);
+      }
+      // Newer strings are stored with the form name "robots-keyed[something]",
+      // so those need the substring to be extracted and then
+      elseif (strpos($form_field_name, 'robots-keyed[') !== FALSE) {
+        $new_values[] = substr($form_field_name, 13, -1) . ':' . $value;
+      }
     }
-    return parent::getTestOutputValuesXpath([implode(', ', $new_values)]);
+    return parent::getTestOutputValuesXpath([implode($this->getSeparator() . ' ', $new_values)]);
   }
 
   /**
    * {@inheritdoc}
    */
-  public static function validateTag(array &$element, FormStateInterface $form_state) {
+  public static function validateTag(array &$element, FormStateInterface $form_state): void {
     $robots_combined_value = $form_state->getValue($element['#parents']);
     $robots_root_parents = array_slice($element['#parents'], 0, -1);
     $robots_keyed = $form_state->getValue(array_merge($robots_root_parents, ['robots-keyed']));
