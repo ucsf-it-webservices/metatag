@@ -183,3 +183,164 @@ function metatag_post_update_convert_author_data(&$sandbox) {
 
   return (string) t('There were no overridden Metatag records.');
 }
+
+/**
+ * Remove 'noydir' option from meta tag entity fields.
+ */
+function metatag_post_update_remove_robots_noydir(&$sandbox) {
+  $entity_type_manager = \Drupal::entityTypeManager();
+  $database = \Drupal::database();
+
+  // This whole top section only needs to be done the first time.
+  if (!isset($sandbox['total_records'])) {
+    $sandbox['records_processed'] = 0;
+    $sandbox['total_records'] = 0;
+    $sandbox['current_field'] = 0;
+    $sandbox['current_record'] = 0;
+
+    // Counter to enumerate the fields
+    // so we can access them in the array
+    // by number rather than name.
+    $field_counter = 0;
+    $field_storage_configs = $entity_type_manager
+      ->getStorage('field_storage_config')
+      ->loadByProperties(['type' => 'metatag']);
+
+    foreach ($field_storage_configs as $field_storage) {
+      $field_name = $field_storage->getName();
+
+      // Get the individual fields (field instances) associated with bundles.
+      $fields = $entity_type_manager->getStorage('field_config')
+        ->loadByProperties(['field_name' => $field_name]);
+
+      foreach ($fields as $field) {
+        // Get the bundle this field is attached to.
+        $bundle = $field->getTargetBundle();
+        $entity_type_id = $field->getTargetEntityTypeId();
+        $entity_type = $entity_type_manager->getDefinition($entity_type_id);
+
+        // Determine the table and "value" field names.
+        $table_mapping = $entity_type_manager->getStorage($entity_type_id)
+          ->getTableMapping();
+        $field_table = $table_mapping->getFieldTableName($field_name);
+        $field_value_field = $table_mapping->getFieldColumnName($field_storage, 'value');
+
+        $tables = [];
+        $tables[] = $field_table;
+        if ($entity_type->isRevisionable() && $field_storage->isRevisionable()) {
+          if ($table_mapping->requiresDedicatedTableStorage($field_storage)) {
+            $revision_table = $table_mapping->getDedicatedRevisionTableName($field_storage);
+            $tables[] = $revision_table;
+          }
+          elseif ($table_mapping->allowsSharedTableStorage($field_storage)) {
+            $revision_table = $entity_type->getRevisionDataTable() ?: $entity_type->getRevisionTable();
+            $tables[] = $revision_table;
+          }
+        }
+        if ($tables) {
+          $tables = array_unique($tables);
+          foreach ($tables as $table) {
+            $query = $database->select($table);
+            $query->addField($table, 'entity_id');
+            $query->addField($table, 'revision_id');
+            $query->addField($table, 'langcode');
+            $query->addField($table, $field_value_field);
+            $query->condition('bundle', $bundle, '=');
+            $query->condition($field_value_field, '%noydir%', 'LIKE');
+            $result = $query->execute();
+            $records = $result->fetchAll();
+
+            if (empty($records)) {
+              continue;
+            }
+
+            // Fill in all the sandbox information
+            // so we can batch the individual
+            // record comparing and updating.
+            $sandbox['fields'][$field_counter]['field_table'] = $table;
+            $sandbox['fields'][$field_counter]['field_value_field'] = $field_value_field;
+            $sandbox['fields'][$field_counter]['records'] = $records;
+
+            $sandbox['total_records'] += count($records);
+            $field_counter++;
+          }
+        }
+      }
+    }
+  }
+
+  if ($sandbox['total_records'] == 0) {
+    // No partially overridden fields so we can skip the whole batch process.
+    $sandbox['#finished'] = 1;
+  }
+  else {
+    // Begin the batch processing of individual field records.
+    $max_per_batch = 10;
+    $counter = 1;
+
+    $current_field = $sandbox['current_field'];
+    $current_field_records = $sandbox['fields'][$current_field]['records'];
+    $current_record = $sandbox['current_record'];
+
+    $field_table = $sandbox['fields'][$current_field]['field_table'];
+    $field_value_field = $sandbox['fields'][$current_field]['field_value_field'];
+
+    // Loop through the field(s) and remove 'noydir'
+    // from value where applicable.
+    while ($counter <= $max_per_batch && isset($current_field_records[$current_record])) {
+      $record = $current_field_records[$current_record];
+
+      // Strip any empty tags or ones matching the field's defaults and leave
+      // only the overridden tags in $new_tags.
+      $tags = metatag_data_decode($record->$field_value_field);
+      if (!empty($tags['robots'])) {
+        $robots_array = explode(', ', $tags['robots']);
+        $robots_array = array_diff($robots_array, ['noydir']);
+        $tags['robots'] = implode(', ', $robots_array);
+
+        $tags_string = serialize($tags);
+        $database->update($field_table)
+          ->fields([
+            $field_value_field => $tags_string,
+          ])
+          ->condition('entity_id', $record->entity_id)
+          ->condition('revision_id', $record->revision_id)
+          ->condition('langcode', $record->langcode)
+          ->execute();
+      }
+      $counter++;
+      $current_record++;
+    }
+
+    // We ran out of records for the field
+    // so start the next batch out with the
+    // next field.
+    if (!isset($current_field_records[$current_record])) {
+      $current_field++;
+      $current_record = 0;
+    }
+
+    // We have finished all the fields. All done.
+    if (!isset($sandbox['fields'][$current_field])) {
+      $sandbox['records_processed'] += $counter - 1;
+      $sandbox['#finished'] = 1;
+    }
+    // Update the sandbox values to prepare for the next round.
+    else {
+      $sandbox['current_field'] = $current_field;
+      $sandbox['current_record'] = $current_record;
+      $sandbox['records_processed'] += $counter - 1;
+      $sandbox['#finished'] = $sandbox['records_processed'] / $sandbox['total_records'];
+    }
+  }
+
+  if ($sandbox['total_records'] > 0) {
+    return (string) t('Processed @processed of @total overridden Metatag records.', [
+      '@processed' => $sandbox['records_processed'],
+      '@total' => $sandbox['total_records'],
+    ]);
+  }
+  else {
+    return (string) t("There were no overridden Metatag records.");
+  }
+}
