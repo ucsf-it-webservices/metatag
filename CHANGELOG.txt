@@ -41,6 +41,7 @@ Metatag 8.x-1.x-dev, 2022-xx-xx
 -------------------------------
 #3083743 by Eugene Bocharov, DamienMcKenna, bserem, gkannan25, osopolar,
   timohuisman, akalam, zcht, druhu, maticb, vuil: Add Google's new robots tags.
+#3360836 by DamienMcKenna: Nodewords migration triggers wrong API.
 
 
 Metatag 8.x-1.23, 2023-05-12
