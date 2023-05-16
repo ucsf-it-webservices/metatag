@@ -222,8 +222,6 @@ function metatag_metatag_info() {
         'nofollow' => t('nofollow - Prevents search engines from following links on this page.'),
         'noarchive' => t('noarchive - Prevents cached copies of this page from appearing in search results.'),
         'nosnippet' => t('nosnippet - Prevents descriptions from appearing in search results, and prevents page caching.'),
-        'noodp' => t('noodp - Blocks the <a href="!opendirectory">Open Directory Project</a> description from appearing in search results.', array('!opendirectory' => 'https://www.dmoz.org/')),
-        'noydir' => t('noydir - Prevents Yahoo! from listing this page in the <a href="@ydir">Yahoo! Directory</a>.', array('@ydir' => 'https://dir.yahoo.com/')),
         'noimageindex' => t('noimageindex - Prevent search engines from indexing images on this page.'),
         'notranslate' => t('notranslate - Prevent search engines from offering to translate this page in search results.'),
       ),
