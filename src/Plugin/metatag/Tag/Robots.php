@@ -157,7 +157,6 @@ class Robots extends MetaNameBase {
       'nofollow' => $this->t('nofollow - Prevents search engines from following links on this page.'),
       'noarchive' => $this->t('noarchive - Prevents cached copies of this page from appearing in search results.'),
       'nosnippet' => $this->t('nosnippet - Prevents descriptions from appearing in search results, and prevents page caching.'),
-      'noodp' => $this->t('noodp - Blocks the <a href=":opendirectory">Open Directory Project</a> description from appearing in search results.', [':opendirectory' => 'http://www.dmoz.org/']),
       'noimageindex' => $this->t('noimageindex - Prevent search engines from indexing images on this page.'),
       'notranslate' => $this->t('notranslate - Prevent search engines from offering to translate this page in search results.'),
     ];

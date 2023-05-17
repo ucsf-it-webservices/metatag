@@ -185,9 +185,9 @@ function metatag_post_update_convert_author_data(&$sandbox) {
 }
 
 /**
- * Remove 'noydir' option from meta tag entity fields.
+ * Remove 'noydir', 'noodp' ROBOTS options from meta tag entity fields.
  */
-function metatag_post_update_remove_robots_noydir(&$sandbox) {
+function metatag_post_update_remove_robots_noydir_noodp(&$sandbox) {
   $entity_type_manager = \Drupal::entityTypeManager();
   $database = \Drupal::database();
 
@@ -246,7 +246,10 @@ function metatag_post_update_remove_robots_noydir(&$sandbox) {
             $query->addField($table, 'langcode');
             $query->addField($table, $field_value_field);
             $query->condition('bundle', $bundle, '=');
-            $query->condition($field_value_field, '%noydir%', 'LIKE');
+            $db_or = $query->orConditionGroup();
+            $db_or->condition($field_value_field, '%noodp%', 'LIKE');
+            $db_or->condition($field_value_field, '%noydir%', 'LIKE');
+            $query->condition($db_or);
             $result = $query->execute();
             $records = $result->fetchAll();
 
@@ -294,19 +297,22 @@ function metatag_post_update_remove_robots_noydir(&$sandbox) {
       // only the overridden tags in $new_tags.
       $tags = metatag_data_decode($record->$field_value_field);
       if (!empty($tags['robots'])) {
-        $robots_array = explode(', ', $tags['robots']);
-        $robots_array = array_diff($robots_array, ['noydir']);
-        $tags['robots'] = implode(', ', $robots_array);
+        $new_robots = $old_robots = explode(', ', $tags['robots']);
+        $new_robots = array_diff($new_robots, ['noodp']);
+        $new_robots = array_diff($new_robots, ['noydir']);
+        if ($old_robots != $new_robots) {
+          $tags['robots'] = implode(', ', $new_robots);
 
-        $tags_string = serialize($tags);
-        $database->update($field_table)
-          ->fields([
-            $field_value_field => $tags_string,
-          ])
-          ->condition('entity_id', $record->entity_id)
-          ->condition('revision_id', $record->revision_id)
-          ->condition('langcode', $record->langcode)
-          ->execute();
+          $tags_string = serialize($tags);
+          $database->update($field_table)
+            ->fields([
+              $field_value_field => $tags_string,
+            ])
+            ->condition('entity_id', $record->entity_id)
+            ->condition('revision_id', $record->revision_id)
+            ->condition('langcode', $record->langcode)
+            ->execute();
+        }
       }
       $counter++;
       $current_record++;

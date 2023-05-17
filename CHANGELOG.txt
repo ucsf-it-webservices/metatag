@@ -5,6 +5,7 @@ Metatag 8.x-1.x-dev, 2023-xx-xx
 #3360836 by DamienMcKenna: Nodewords migration triggers wrong API.
 #3106383 by DamienMcKenna, fathima.asmat: Remove the NOYDIR option on ROBOTS
   tag.
+#3106384 by DamienMcKenna: Remove the NOODP option on ROBOTS tag.
 
 
 Metatag 8.x-1.23, 2023-05-12
