@@ -174,7 +174,7 @@ class Robots extends MetaNameBase {
     return [
       // @todo Expand this?
       'robots[index]' => TRUE,
-      'robots[noydir]' => TRUE,
+      'robots[nofollow]' => TRUE,
       // 'robots[follow]',
       'robots-keyed[max-snippet]' => 10,
       'robots-keyed[max-video-preview]' => 20,
@@ -187,16 +187,14 @@ class Robots extends MetaNameBase {
    * {@inheritdoc}
    */
   public function getTestOutputValuesXpath(array $values): array {
-    // @todo From the 8.x-1.x branch.
-    // return 'index, max-snippet:10, max-video-preview:20, max-image-preview:none, unavailable_after:2022-12-31';
     // This tag outputs its multiple possible values as a comma-separated string
     // so just use the standard test output once the values are joined together
     // as a single string.
     $new_values = [];
     foreach ($values as $form_field_name => $value) {
-      // The strings are stored as e.g. "robots[index]", "robots[noydir]", etc.
-      // So in order to get the value names we need to remove the first part
-      // and the wrapping brackets.
+      // The strings are stored as e.g. "robots[index]", "robots[nofollow]",
+      // etc. So in order to get the value names we need to remove the first
+      // part and the wrapping brackets.
       if (strpos($form_field_name, 'robots[') !== FALSE) {
         $new_values[] = substr($form_field_name, 7, -1);
       }

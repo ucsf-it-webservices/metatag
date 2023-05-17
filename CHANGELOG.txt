@@ -35,6 +35,7 @@ Metatag 2.0.x-dev, 2022-xx-xx
 #3358950 by DamienMcKenna: Update metatag_data_encode() to the v2 storage
   method.
 #3083743 by DamienMcKenna: Follow-up to fix tests for new Robots tags.
+#3106383 by DamienMcKenna: Follow-up to fix tests for removed Robots options.
 
 
 Metatag 8.x-1.x-dev, 2022-xx-xx
