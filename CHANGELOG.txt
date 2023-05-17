@@ -8,6 +8,7 @@ Metatag 7.x-2.x-dev, 2023-xx-xx
 #3299230 by immaculatexavier, DamienMcKenna, nironan: Remove news_keywords,
   standout meta tags.
 #3132066 by DamienMcKenna: Follow-up to clean tests.
+#3359961 by DamienMcKenna: testUpdate7204 fails on PHP 8.1.
 
 
 Metatag 7.x-1.x-dev, 2023-xx-xx

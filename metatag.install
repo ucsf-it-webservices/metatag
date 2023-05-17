@@ -553,7 +553,7 @@ function metatag_update_replace_entity_tag(array &$sandbox, $old_tag, $new_tag) 
       return t('No Metatag entity records needed to have the "@tag" meta tag renamed.', array('@tag' => $old_tag));
     }
 
-    $sandbox['max'] = $records_count;
+    $sandbox['max'] = (int) $records_count;
     $sandbox['progress'] = 0;
   }
 
@@ -637,7 +637,7 @@ function metatag_update_replace_entity_value(array &$sandbox, $tag_name, $old_va
       return t('No Metatag entity records needed to have the "@tag" meta tag "@old_value" value replaced.', array('@tag' => $tag_name, '@old_value' => $old_value));
     }
 
-    $sandbox['max'] = $records_count;
+    $sandbox['max'] = (int) $records_count;
     $sandbox['progress'] = 0;
 
     // Keep track of the number of replaced values separately.
@@ -2180,7 +2180,7 @@ function metatag_update_7040(array &$sandbox) {
     }
 
     // Total records that must be visited.
-    $sandbox['max'] = $records;
+    $sandbox['max'] = (int) $records;
 
     // A place to store messages during the run.
     $sandbox['messages'] = array();
@@ -2701,7 +2701,7 @@ function metatag_update_7200(array &$sandbox) {
       return t('No Metatag entity records are in the old format.');
     }
 
-    $sandbox['max'] = $records_count;
+    $sandbox['max'] = (int) $records_count;
     $sandbox['progress'] = 0;
   }
 
@@ -2923,7 +2923,7 @@ function metatag_update_7204(array &$sandbox) {
       return t('No Metatag entity records needed to be updated.');
     }
 
-    $sandbox['max'] = $records_count;
+    $sandbox['max'] = (int) $records_count;
     $sandbox['progress'] = 0;
   }
 
