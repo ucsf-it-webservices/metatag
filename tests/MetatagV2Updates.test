@@ -52,6 +52,8 @@ class MetatagV2Updates extends MetatagTestBase {
     'standout',
     // For 3088316.
     'amphtml',
+    // For #3361818.
+    'google_rating',
   ];
 
   /**

@@ -2897,6 +2897,8 @@ function metatag_update_7203() {
     'standout',
     // For 3088316.
     'amphtml',
+    // For #3361818.
+    'google_rating',
   ];
 
   // Find all {metatag_config} records that contained an entry for the meta tag.
@@ -2981,6 +2983,8 @@ function metatag_update_7204(array &$sandbox) {
     'standout',
     // For 3088316.
     'amphtml',
+    // For #3361818.
+    'google_rating',
   ];
 
   if (!isset($sandbox['progress'])) {

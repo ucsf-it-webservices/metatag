@@ -34,10 +34,6 @@ function metatag_google_cse_theme() {
 function theme_metatag_google_cse($variables) {
   $element = &$variables['element'];
 
-  if ($element['#name'] === 'google_rating') {
-    $element['#name'] = 'rating';
-  }
-
   $args = array(
     '#name'  => 'name',
     '#value' => 'content',

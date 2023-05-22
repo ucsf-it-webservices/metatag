@@ -29,7 +29,6 @@ class MetatagGoogleCseTagsTest extends MetatagTagsTestBase {
     'audience',
     'department',
     'doc_status',
-    'google_rating',
     'thumbnail',
   );
 
@@ -39,13 +38,6 @@ class MetatagGoogleCseTagsTest extends MetatagTagsTestBase {
   public function setUp(array $modules = array()) {
     $modules[] = 'metatag_google_cse';
     parent::setUp($modules);
-  }
-
-  /**
-   * Implements {meta_tag_name}_test_tag_name() for 'google_rating'.
-   */
-  public function google_rating_test_tag_name() {
-    return 'rating';
   }
 
   /**
