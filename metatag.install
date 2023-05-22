@@ -2895,6 +2895,8 @@ function metatag_update_7203() {
     // For #3299230.
     'news_keywords',
     'standout',
+    // For 3088316.
+    'amphtml',
   ];
 
   // Find all {metatag_config} records that contained an entry for the meta tag.
@@ -2977,6 +2979,8 @@ function metatag_update_7204(array &$sandbox) {
     // For #3299230.
     'news_keywords',
     'standout',
+    // For 3088316.
+    'amphtml',
   ];
 
   if (!isset($sandbox['progress'])) {
@@ -3078,18 +3082,4 @@ function metatag_update_7204(array &$sandbox) {
 function metatag_update_7205() {
   module_disable(array('metatag_google_plus'));
   drupal_uninstall_modules(array('metatag_google_plus'));
-}
-
-/**
- * Remove the amphtml meta tag from configurations.
- */
-function metatag_update_7206() {
-  metatag_update_remove_tag_config('amphtml');
-}
-
-/**
- * Remove the amphtml meta tag from entity values.
- */
-function metatag_update_7207(array &$sandbox) {
-  metatag_update_remove_tag_entities($sandbox, 'amphtml');
 }

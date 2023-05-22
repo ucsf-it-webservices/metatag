@@ -10,6 +10,7 @@ Metatag 7.x-2.x-dev, 2023-xx-xx
 #3132066 by DamienMcKenna: Follow-up to clean tests.
 #3359961 by DamienMcKenna: testUpdate7204 fails on PHP 8.1.
 #3088316 by DamienMcKenna: Remove the amphtml tag.
+#3088316 by DamienMcKenna: Follow-up to correct the update scripts.
 
 
 Metatag 7.x-1.x-dev, 2023-xx-xx

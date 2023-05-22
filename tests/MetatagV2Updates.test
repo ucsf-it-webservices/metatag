@@ -50,6 +50,8 @@ class MetatagV2Updates extends MetatagTestBase {
     // For #3299230.
     'news_keywords',
     'standout',
+    // For 3088316.
+    'amphtml',
   ];
 
   /**
