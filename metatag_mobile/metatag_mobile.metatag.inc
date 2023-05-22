@@ -82,13 +82,6 @@ function metatag_mobile_metatag_info() {
     ),
   ) + $defaults;
 
-  $info['tags']['amphtml'] = array(
-    'label' => t('AMP URL'),
-    'description' => t('Provides an absolute URL to an AMP-formatted version of the current page. See the <a href="@url">official AMP specifications</a> for details on how the page should be formatted.', array('@url' => 'https://www.ampproject.org/')),
-    'class' => 'DrupalLinkMetaTag',
-    'weight' => ++$weight,
-  ) + $defaults;
-
   $info['tags']['alternate_handheld'] = array(
     'label' => t('Handheld URL'),
     'description' => t('Provides an absolute URL to a specially formatted version of the current page designed for "feature phones", mobile phones that do not support modern browser standards. See the <a href="@url">official Google Mobile SEO Guide</a> for details on how the page should be formatted.', array('@url' => 'https://developers.google.com/webmasters/mobile-sites/mobile-seo/other-devices?hl=en#feature_phones')),

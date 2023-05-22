@@ -27,7 +27,6 @@ class MetatagMobileTagsTest extends MetatagTagsTestBase {
    */
   public $tags = array(
     'alternate_handheld',
-    'amphtml',
     'android-app-link-alternative',
     'android-manifest',
     'apple-itunes-app',
@@ -95,20 +94,6 @@ class MetatagMobileTagsTest extends MetatagTagsTestBase {
    * Implements {meta_tag_name}_test_value_attribute() for 'alternate-handheld'.
    */
   public function alternate_handheld_test_value_attribute() {
-    return 'href';
-  }
-
-  /**
-   * Implements {meta_tag_name}_test_output_xpath() for 'amphtml'.
-   */
-  public function amphtml_test_output_xpath() {
-    return "//link[@rel='amphtml']";
-  }
-
-  /**
-   * Implements {meta_tag_name}_test_value_attribute() for 'amphtml'.
-   */
-  public function amphtml_test_value_attribute() {
     return 'href';
   }
 

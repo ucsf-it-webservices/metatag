@@ -14,7 +14,7 @@
  */
 function metatag_verification_update_7100() {
   module_load_include('install', 'metatag');
-  metatag_update_delete_config('alexaVerifyID');
+  metatag_update_remove_tag_config('alexaVerifyID');
 }
 
 /**
@@ -22,5 +22,5 @@ function metatag_verification_update_7100() {
  */
 function metatag_verification_update_7101() {
   module_load_include('install', 'metatag');
-  metatag_update_delete_config('y_key');
+  metatag_update_remove_tag_config('y_key');
 }

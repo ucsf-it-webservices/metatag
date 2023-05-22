@@ -693,6 +693,85 @@ function metatag_update_replace_entity_value(array &$sandbox, $tag_name, $old_va
 }
 
 /**
+ * Remove a meta tag in the entity records.
+ *
+ * @param array $sandbox
+ *   A Batch API sandbox, passed by reference.
+ * @param string $tag_name
+ *   The meta tag that needs its value replaced.
+ */
+function metatag_update_remove_tag_entities(array &$sandbox, $tag_name) {
+  // The condition used for both queries.
+  $db_and = db_and();
+  $db_and->condition('m.data', '%' . db_like('"' . $tag_name . '"') . '%', 'LIKE');
+
+  if (!isset($sandbox['progress'])) {
+    // Count of all {metatag} records that contained an entry for the old meta
+    // tag value.
+    $records_count = db_select('metatag', 'm')
+      ->condition($db_and)
+      ->countQuery()
+      ->execute()
+      ->fetchField();
+
+    if (empty($records_count)) {
+      return t('No Metatag entity records needed to have the "@tag" meta tag remoed.', array('@tag' => $tag_name));
+    }
+
+    $sandbox['max'] = $records_count;
+    $sandbox['progress'] = 0;
+
+    // Keep track of the number of replaced values separately.
+    $sandbox['count'] = 0;
+  }
+
+  // Count of rows that will be processed per iteration.
+  $limit = 100;
+
+  // Fetches a part of records.
+  $records = db_select('metatag', 'm')
+    ->fields('m', array())
+    ->condition($db_and)
+    ->range(0, $limit)
+    ->execute();
+
+  $count = 0;
+  $keys = array('entity_type', 'entity_id', 'revision_id', 'language');
+
+  // Loop over the values and correct them.
+  foreach ($records as $record) {
+    $record->data = unserialize($record->data);
+
+    if (isset($record->data[$tag_name])) {
+      unset($record->data[$tag_name]);
+      drupal_write_record('metatag', $record, $keys);
+
+      // Clear the cache for the entity this belongs to.
+      entity_get_controller($record->entity_type)->resetCache(array($record->entity_id));
+
+      $sandbox['count']++;
+    }
+
+    $sandbox['progress']++;
+  }
+
+  if (!empty($sandbox['progress'])) {
+    // In some cases the query yields results that cannot be fixed and we would
+    // run into an infinite loop. Stop immediately if we processed all records.
+    if ($sandbox['progress'] >= $sandbox['max']) {
+      $sandbox['#finished'] = TRUE;
+    }
+    else {
+      $sandbox['#finished'] = $sandbox['progress'] / $sandbox['max'];
+    }
+  }
+  else {
+    $sandbox['#finished'] = TRUE;
+    return t('Removed the "@meta_tag" meta tag from @count entity records.', array('@meta_tag' => $tag_name, '@count' => $sandbox['count']));
+  }
+}
+
+/**
  * Replace one meta tag with another in the configs.
  *
  * @param string $old_tag
@@ -816,7 +895,7 @@ function metatag_update_replace_config_value($tag_name, $old_value, $new_value) 
  * @param string $tag_name
  *   The meta tag that is to be removed.
  */
-function metatag_update_delete_config($tag_name) {
+function metatag_update_remove_tag_config($tag_name) {
   // Find all {metatag_config} records that contained an entry for the meta tag.
   $records = db_select('metatag_config', 'm')
     ->fields('m', array('cid', 'config'))
@@ -2999,4 +3078,18 @@ function metatag_update_7204(array &$sandbox) {
 function metatag_update_7205() {
   module_disable(array('metatag_google_plus'));
   drupal_uninstall_modules(array('metatag_google_plus'));
+}
+
+/**
+ * Remove the amphtml meta tag from configurations.
+ */
+function metatag_update_7206() {
+  metatag_update_remove_tag_config('amphtml');
+}
+
+/**
+ * Remove the amphtml meta tag from entity values.
+ */
+function metatag_update_7207(array &$sandbox) {
+  metatag_update_remove_tag_entities($sandbox, 'amphtml');
 }
