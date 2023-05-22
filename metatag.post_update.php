@@ -533,6 +533,9 @@ function metatag_post_update_v2_02_remove_entity_values(array &$sandbox) {
 
     // For #3217263.
     'content_language',
+
+    // For #3361816.
+    'google_rating',
   ];
   // Twitter Card Type values that need to be changed for #3132062.
   $twitter_type_changes = [
@@ -741,6 +744,9 @@ function metatag_post_update_v2_03_remove_config_values(&$sandbox) {
 
       // For #3217263.
       'content_language',
+
+      // For #3361816.
+      'google_rating',
     ];
     $changed = FALSE;
     $tags = $default->get('tags');

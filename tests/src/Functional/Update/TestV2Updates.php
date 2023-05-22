@@ -108,6 +108,9 @@ class TestV2Updates extends UpdatePathTestBase {
 
       // For #3217263.
       'content_language' => 'Content Language tag test for #3217263.',
+
+      // For #3361816.
+      'google_rating' => 'Google Rating tag test for #3361816',
     ];
 
     // Global tags test values are the same as the entity tags only they have

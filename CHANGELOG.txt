@@ -36,6 +36,7 @@ Metatag 2.0.x-dev, 2022-xx-xx
   method.
 #3083743 by DamienMcKenna: Follow-up to fix tests for new Robots tags.
 #3106383 by DamienMcKenna: Follow-up to fix tests for removed Robots options.
+#3361816 by DamienMcKenna: Remove deprecated Google Rating tag.
 
 
 Metatag 8.x-1.x-dev, 2022-xx-xx
