@@ -56,6 +56,7 @@ Metatag 8.x-1.x-dev, 2022-xx-xx
 #3106384 by DamienMcKenna: Remove the NOODP option on ROBOTS tag.
 #3298064 by DamienMcKenna: Deprecate Google CSE Ratings tag.
 #3362522 by DamienMcKenna: Fix meta tag output sort order.
+#3362760 by DamienMcKenna: Deprecate normalization plugins.
 
 
 Metatag 8.x-1.23, 2023-05-12
