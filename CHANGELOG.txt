@@ -37,6 +37,13 @@ Metatag 2.0.x-dev, 2022-xx-xx
 #3083743 by DamienMcKenna: Follow-up to fix tests for new Robots tags.
 #3106383 by DamienMcKenna: Follow-up to fix tests for removed Robots options.
 #3361816 by DamienMcKenna: Remove deprecated Google Rating tag.
+#2945817 by DamienMcKenna, mglaman, AndyF, yobottehg, mayurngondhkar, rutel95,
+  mrweiner, GRO, robpowell, Wim Leers, gabesullice, axle_foley00, s_leu,
+  robertom, superbiche, vaibhavjain, garphy, rakesh.gectcr, neclimdul, -enzo-,
+  rollsd, yovince, sime, phenaproxima, faysal.turjo, Mykola Dolynskyi, slucero,
+  wstocker, joshua.boltz, apmsooner, ebeyrent, osman, hitesh.koli, achap,
+  marc.groth, bgrobertson, ainarend, dan2k3k4, sonnykt: Support JSON API, REST,
+  GraphQL and custom normalizations via new computed field.
 
 
 Metatag 8.x-1.x-dev, 2022-xx-xx

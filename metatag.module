@@ -13,6 +13,7 @@ use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
+use Drupal\Core\Field\FieldStorageDefinitionInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Url;
@@ -585,13 +586,14 @@ function metatag_entity_base_field_info(EntityTypeInterface $entity_type) {
   // If the entity type doesn't have a base table, has no link template then
   // there's no point in supporting it.
   if (!empty($base_table) && $canonical_template_exists && !in_array($original_class, $classes_to_skip)) {
-    $fields['metatag'] = BaseFieldDefinition::create('map')
+    $fields['metatag'] = BaseFieldDefinition::create('metatag_computed')
       ->setLabel(t('Metatags (Hidden field for JSON support)'))
-      ->setDescription(t('The meta tags for the entity.'))
-      ->setClass('\Drupal\metatag\Plugin\Field\MetatagEntityFieldItemList')
+      ->setDescription(t('The computed meta tags for the entity.'))
       ->setComputed(TRUE)
       ->setTranslatable(TRUE)
-      ->setTargetEntityTypeId($entity_type->id());
+      ->setReadOnly(TRUE)
+      ->setTargetEntityTypeId($entity_type->id())
+      ->setCardinality(FieldStorageDefinitionInterface::CARDINALITY_UNLIMITED);
   }
 
   return $fields;
