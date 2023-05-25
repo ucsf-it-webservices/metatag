@@ -481,6 +481,7 @@ function metatag_preprocess_html(&$variables) {
  *   Array of meta tags or NULL.
  */
 function metatag_get_tags_from_route($entity = NULL) {
+  /** @var \Drupal\metatag\MetatagManager $metatag_manager */
   $metatag_manager = \Drupal::service('metatag.manager');
 
   // First, get defaults.
