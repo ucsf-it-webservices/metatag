@@ -9,6 +9,7 @@ Metatag 8.x-1.24, 2023-05-26
 #3298064 by DamienMcKenna: Deprecate Google CSE Ratings tag.
 #3362522 by DamienMcKenna: Fix meta tag output sort order.
 #3362760 by DamienMcKenna: Deprecate normalization plugins.
+#3361309 by DamienMcKenna: Update migration status.
 
 
 Metatag 8.x-1.23, 2023-05-12
