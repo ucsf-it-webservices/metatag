@@ -1,4 +1,4 @@
-Metatag 7.x-2.x-dev, 2023-xx-xx
+Metatag 7.x-2.0-rc1, 2023-05-26
 -------------------------------
 #3273408 by DamienMcKenna: Convert to JSON data storage.
 #3270185 by DamienMcKenna, brunodbo, peter3bweb: Port custom delimiter
