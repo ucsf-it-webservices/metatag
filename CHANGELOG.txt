@@ -46,8 +46,8 @@ Metatag 2.0.x-dev, 2022-xx-xx
   GraphQL and custom normalizations via new computed field.
 
 
-Metatag 8.x-1.x-dev, 2022-xx-xx
--------------------------------
+Metatag 8.x-1.24, 2023-05-26
+----------------------------
 #3083743 by Eugene Bocharov, DamienMcKenna, bserem, gkannan25, osopolar,
   timohuisman, akalam, zcht, druhu, maticb, vuil: Add Google's new robots tags.
 #3360836 by DamienMcKenna: Nodewords migration triggers wrong API.
