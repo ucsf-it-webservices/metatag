@@ -53,6 +53,9 @@ Metatag 8.x-1.x-dev, 2023-xx-xx
   revision support.
 g#3363315 by DamienMcKenna: metatag_post_update_convert_author_data() doesn't
   update the revisions tables.
+#3363231 by DamienMcKenna, jan kellermann: remove_robots_noydir_noodp:
+  TypeError: explode(): Argument #2 ($string) must be of type string, array
+  given.
 
 
 Metatag 8.x-1.24, 2023-05-26
