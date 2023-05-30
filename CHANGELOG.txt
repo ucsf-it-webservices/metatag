@@ -46,6 +46,10 @@ Metatag 2.0.0-rc1, 2022-05-26
   GraphQL and custom normalizations via new computed field.
 
 
+Metatag 8.x-1.x-dev, 2023-xx-xx
+-------------------------------
+
+
 Metatag 8.x-1.24, 2023-05-26
 ----------------------------
 #3083743 by Eugene Bocharov, DamienMcKenna, bserem, gkannan25, osopolar,
