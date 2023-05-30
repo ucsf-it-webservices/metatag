@@ -1,3 +1,7 @@
+Metatag 2.0.x, 2023-xx-xx
+-------------------------
+
+
 Metatag 2.0.0-rc2, 2023-05-30
 -----------------------------
 #3363582 by DamienMcKenna: Fix tests in 2.0.x branch.
