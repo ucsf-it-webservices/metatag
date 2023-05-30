@@ -54,7 +54,7 @@ function metatag_post_update_convert_author_data(&$sandbox) {
   $database = \Drupal::database();
 
   // This whole top section only needs to be done the first time.
-  if (!isset($sandbox['records_processed'])) {
+  if (!isset($sandbox['total_records'])) {
     $sandbox['records_processed'] = 0;
     $sandbox['total_records'] = 0;
     $sandbox['current_field'] = 0;
