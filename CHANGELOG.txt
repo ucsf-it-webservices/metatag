@@ -8,6 +8,8 @@ g#3363315 by DamienMcKenna: metatag_post_update_convert_author_data() doesn't
 #3363231 by DamienMcKenna, jan kellermann: remove_robots_noydir_noodp:
   TypeError: explode(): Argument #2 ($string) must be of type string, array
   given.
+#3363366 by marcoscano, DamienMcKenna: metatag_generate_entity_metatags() no
+  longer accepts NULL, causing BC-breaking change.
 
 
 Metatag 8.x-1.24, 2023-05-26
