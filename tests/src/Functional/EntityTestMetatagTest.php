@@ -22,7 +22,7 @@ class EntityTestMetatagTest extends EntityTestResourceTestBase {
   /**
    * {@inheritdoc}
    */
-  public static $modules = ['metatag'];
+  protected static $modules = ['metatag'];
 
   /**
    * {@inheritdoc}
@@ -39,7 +39,7 @@ class EntityTestMetatagTest extends EntityTestResourceTestBase {
   /**
    * {@inheritdoc}
    */
-  public function setUp() {
+  public function setUp(): void {
     parent::setUp();
 
     // Set some global metatags.

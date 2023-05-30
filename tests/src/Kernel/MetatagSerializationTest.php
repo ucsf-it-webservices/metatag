@@ -118,13 +118,13 @@ class MetatagSerializationTest extends EntityKernelTestBase {
     $entity->validate();
     $entity->save();
 
-
     $resource_type = $resource_type_repository->get($entity->getEntityTypeId(), $entity->bundle());
     $resource_object = ResourceObject::createFromEntity($resource_type, $entity);
-    $cacheable_normalization = $serializer->normalize($resource_object, 'api_json', [
+    $normal_args = [
       'resource_type' => $resource_type,
       'account' => User::getAnonymousUser(),
-    ]);
+    ];
+    $cacheable_normalization = $serializer->normalize($resource_object, 'api_json', $normal_args);
     assert($cacheable_normalization instanceof CacheableNormalization);
     $normalization = $cacheable_normalization->getNormalization();
     assert(is_array($normalization));
