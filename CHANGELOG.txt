@@ -10,6 +10,8 @@ g#3363315 by DamienMcKenna: metatag_post_update_convert_author_data() doesn't
   given.
 #3363366 by marcoscano, DamienMcKenna: metatag_generate_entity_metatags() no
   longer accepts NULL, causing BC-breaking change.
+#3362195 by DamienMcKenna, jayvolk: Wording improvements for Twitter Player Card
+  field descriptions.
 
 
 Metatag 8.x-1.24, 2023-05-26
