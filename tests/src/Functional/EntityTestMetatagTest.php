@@ -2,6 +2,7 @@
 
 namespace Drupal\Tests\metatag\Functional;
 
+use Drupal\Component\Serialization\Json;
 use Drupal\Core\Cache\Cache;
 use Drupal\entity_test\Entity\EntityTest;
 use Drupal\field\Entity\FieldConfig;
@@ -106,22 +107,13 @@ class EntityTestMetatagTest extends EntityTestResourceTestBase {
    * {@inheritdoc}
    */
   protected function getExpectedNormalizedEntity() {
-    $metatags = [
-      'description' => 'This is a description for use in Search Engines',
-    ];
-    // When bc_primitives_as_strings is 1 the field of type metatag is
-    // normalized by \Drupal\serialization\Normalizer\TypedDataNormalizer which
-    // just outputs the serialized string. Otherwise it will use
-    // \Drupal\serialization\Normalizer\PrimitiveDataNormalizer which
-    // unserializes the values on normalization.
-    if ($this->config('serialization.settings')->get('bc_primitives_as_strings')) {
-      $metatags = serialize($metatags);
-    }
     $canonical_url = base_path() . 'entity_test/' . $this->entity->id();
     return parent::getExpectedNormalizedEntity() + [
       'field_metatag' => [
         [
-          'value' => $metatags,
+          'value' => Json::encode([
+            'description' => 'This is a description for use in Search Engines',
+          ]),
         ],
       ],
       'metatag' => [
