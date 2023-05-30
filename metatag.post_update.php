@@ -335,7 +335,12 @@ function metatag_post_update_remove_robots_noydir_noodp(&$sandbox) {
       // only the overridden tags in $new_tags.
       $tags = metatag_data_decode($record->$field_value_field);
       if (!empty($tags['robots'])) {
-        $new_robots = $old_robots = explode(', ', $tags['robots']);
+        if (is_array($tags['robots'])) {
+          $new_robots = $old_robots = $tags['robots'];
+        }
+        else {
+          $new_robots = $old_robots = explode(', ', $tags['robots']);
+        }
         $new_robots = array_diff($new_robots, ['noodp']);
         $new_robots = array_diff($new_robots, ['noydir']);
         if ($old_robots != $new_robots) {
