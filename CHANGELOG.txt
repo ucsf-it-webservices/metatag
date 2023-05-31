@@ -1,5 +1,5 @@
-Metatag 8.x-1.x-dev, 2023-xx-xx
--------------------------------
+Metatag 8.x-1.25, 2023-05-31
+----------------------------
 #3363189 by DamienMcKenna, floown, jvizcarrondo, uditrawat:
   metatag_post_update_remove_robots_noydir_noodp() fails on entity types without
   revision support.
