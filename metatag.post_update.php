@@ -399,6 +399,9 @@ function metatag_post_update_remove_robots_noydir_noodp(&$sandbox) {
  * Convert all fields to use JSON storage.
  */
 function metatag_post_update_v2_01_change_fields_to_json(&$sandbox) {
+  $entity_type_manager = \Drupal::entityTypeManager();
+  $database = \Drupal::database();
+
   // This whole top section only needs to be done the first time.
   if (!isset($sandbox['records_processed'])) {
     $sandbox['records_processed'] = 0;
@@ -412,7 +415,7 @@ function metatag_post_update_v2_01_change_fields_to_json(&$sandbox) {
 
     // Get all of the field storage entities of type metatag.
     /** @var \Drupal\field\FieldStorageConfigInterface[] $field_storage_configs */
-    $field_storage_configs = \Drupal::entityTypeManager()
+    $field_storage_configs = $entity_type_manager
       ->getStorage('field_storage_config')
       ->loadByProperties(['type' => 'metatag']);
 
@@ -420,49 +423,64 @@ function metatag_post_update_v2_01_change_fields_to_json(&$sandbox) {
       $field_name = $field_storage->getName();
 
       // Get the individual fields (field instances) associated with bundles.
-      $fields = \Drupal::entityTypeManager()
+      $fields = $entity_type_manager
         ->getStorage('field_config')
         ->loadByProperties([
           'field_name' => $field_name,
           'entity_type' => $field_storage->getTargetEntityTypeId(),
         ]);
 
+      $tables = [];
       foreach ($fields as $field) {
         // Get the bundle this field is attached to.
         $bundle = $field->getTargetBundle();
+        $entity_type_id = $field->getTargetEntityTypeId();
+        $entity_type = $entity_type_manager->getDefinition($entity_type_id);
 
         // Determine the table and "value" field names.
         // @todo The class path to getTableMapping() seems to be invalid?
-        $table_mapping = Drupal::entityTypeManager()
+        $table_mapping = $entity_type_manager
           ->getStorage($field->getTargetEntityTypeId())
           ->getTableMapping();
         $field_table = $table_mapping->getFieldTableName($field_name);
         $field_value_field = $table_mapping->getFieldColumnName($field_storage, 'value');
 
-        // Get all records that were not converted yet.
-        $query = \Drupal::database()->select($field_table);
-        $query->addField($field_table, 'entity_id');
-        $query->addField($field_table, 'revision_id');
-        $query->addField($field_table, 'langcode');
-        $query->addField($field_table, $field_value_field);
-        $query->condition('bundle', $bundle, '=');
-        // Fields with serialized arrays.
-        $query->condition($field_value_field, "a:%", 'LIKE');
-        $result = $query->execute();
-        $records = $result->fetchAll();
-
-        if (empty($records)) {
-          continue;
+        $tables[$field_table] = $field_value_field;
+        if ($entity_type->isRevisionable() && $field_storage->isRevisionable()) {
+          if ($table_mapping->requiresDedicatedTableStorage($field_storage)) {
+            $revision_table = $table_mapping->getDedicatedRevisionTableName($field_storage);
+            if ($database->schema()->tableExists($revision_table)) {
+              $tables[$revision_table] = $field_value_field;
+            }
+          }
+          elseif ($table_mapping->allowsSharedTableStorage($field_storage)) {
+            $revision_table = $entity_type->getRevisionDataTable() ?: $entity_type->getRevisionTable();
+            if ($database->schema()->tableExists($revision_table)) {
+              $tables[$revision_table] = $field_value_field;
+            }
+          }
         }
+      }
 
-        // Fill in all the sandbox information so we can batch the individual
-        // record comparing and updating.
-        $sandbox['fields'][$field_counter]['field_table'] = $field_table;
-        $sandbox['fields'][$field_counter]['field_value_field'] = $field_value_field;
-        $sandbox['fields'][$field_counter]['records'] = $records;
+      if (!empty($tables)) {
+        foreach ($tables as $table => $field_value_field) {
+          // Get all records that were not converted yet.
+          $query = $database->select($table);
+          $query->addField($table, 'revision_id');
+          // Fields with serialized arrays.
+          $query->condition($field_value_field, "a:%", 'LIKE');
+          $result = $query->execute();
+          $records = $result->fetchCol();
 
-        $sandbox['total_records'] += count($sandbox['fields'][$field_counter]['records']);
-        $field_counter++;
+          // Fill in all the sandbox information so we can batch the
+          // individual record comparing and updating.
+          if (!empty($records)) {
+            $sandbox['fields'][$field_counter]['field_table'] = $table;
+            $sandbox['fields'][$field_counter]['field_value_field'] = $field_value_field;
+            $sandbox['total_records'] += (int) count($records);
+            $field_counter++;
+          }
+        }
       }
     }
   }
@@ -473,22 +491,30 @@ function metatag_post_update_v2_01_change_fields_to_json(&$sandbox) {
   }
   else {
     // Begin the batch processing of individual field records.
-    $max_per_batch = 10;
-    $counter = 1;
+    $max_per_batch = 100;
+    $counter = 0;
 
     $current_field = $sandbox['current_field'];
-    $current_field_records = $sandbox['fields'][$current_field]['records'];
-    $current_record = $sandbox['current_record'];
 
     $field_table = $sandbox['fields'][$current_field]['field_table'];
     $field_value_field = $sandbox['fields'][$current_field]['field_value_field'];
 
-    // Loop through the field(s) and update the mask_icon values if necessary.
-    while ($counter <= $max_per_batch && isset($current_field_records[$current_record])) {
-      $record = $current_field_records[$current_record];
+    // Get a segment of the records for this table.
+    $query = $database->select($field_table);
+    $query->addField($field_table, 'entity_id');
+    $query->addField($field_table, 'revision_id');
+    $query->addField($field_table, 'langcode');
+    $query->addField($field_table, $field_value_field);
+    $query->range(0, $max_per_batch);
+    // Fields with serialized arrays.
+    $query->condition($field_value_field, "a:%", 'LIKE');
+    $results = $query->execute();
 
-      // Strip any empty tags or ones matching the field's defaults and leave
-      // only the overridden tags in $new_tags.
+    // Loop through the field(s) and update the serialized values.
+    foreach ($results as $record) {
+      // @todo Delete records that are empty.
+      // @todo Strip empty tags.
+      // @todo Remove tags matching the defaults and leave overridden values.
       if (substr($record->$field_value_field, 0, 2) === 'a:') {
         $tags = @unserialize($record->$field_value_field, ['allowed_classes' => FALSE]);
       }
@@ -496,10 +522,9 @@ function metatag_post_update_v2_01_change_fields_to_json(&$sandbox) {
         throw new UpdateException("It seems like there was a problem with the data. The update script should probably be improved to better handle these scenarios.");
       }
 
-      // @todo Delete records that are empty.
       if (is_array($tags)) {
         $tags_string = Json::encode($tags);
-        \Drupal::database()->update($field_table)
+        $database->update($field_table)
           ->fields([
             $field_value_field => $tags_string,
           ])
@@ -509,26 +534,19 @@ function metatag_post_update_v2_01_change_fields_to_json(&$sandbox) {
           ->execute();
       }
       $counter++;
-      $current_record++;
     }
-
-    // We ran out of records for the field so start the next batch out with the
-    // next field.
-    if (!isset($current_field_records[$current_record])) {
-      $current_field++;
-      $current_record = 0;
+    if (empty($counter)) {
+      $sandbox['current_field']++;
     }
 
     // We have finished all the fields. All done.
-    if (!isset($sandbox['fields'][$current_field])) {
-      $sandbox['records_processed'] += $counter - 1;
+    if ($sandbox['records_processed'] >= $sandbox['total_records']) {
+      $sandbox['records_processed'] += $counter;
       $sandbox['#finished'] = 1;
     }
     // Update the sandbox values to prepare for the next round.
     else {
-      $sandbox['current_field'] = $current_field;
-      $sandbox['current_record'] = $current_record;
-      $sandbox['records_processed'] += $counter - 1;
+      $sandbox['records_processed'] += $counter;
       $sandbox['#finished'] = $sandbox['records_processed'] / $sandbox['total_records'];
     }
   }

@@ -1,5 +1,7 @@
 Metatag 2.0.x, 2023-xx-xx
 -------------------------
+#3364475 by DamienMcKenna: Update scripts to convert JSON data on revision
+  tables.
 
 
 Metatag 2.0.0-rc2, 2023-05-30
