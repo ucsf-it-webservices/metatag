@@ -77,11 +77,17 @@ class TestV2Updates extends UpdatePathTestBase {
    * Tests whether the post-update scripts works correctly.
    */
   public function testPostUpdates() {
-    $node_description = 'This is a Metatag v1 meta tag.';
     $global_description = 'This is an example description.';
 
-    // The meta tags to test.
-    $entity_tags = [
+    // Meta tags that will not be removed.
+    $tags_retained = [
+      'description' => 'This is a Metatag v1 meta tag.',
+      'title' => 'Testing | [site:name]',
+      'robots' => 'index, nofollow, noarchive',
+    ];
+
+    // The meta tags that will be removed.
+    $tags_removed = [
       // For #3065441.
       'google_plus_author' => 'GooglePlus Author tag test value for #3065441.',
       'google_plus_description' => 'GooglePlus Description tag test value for #3065441.',
@@ -116,36 +122,45 @@ class TestV2Updates extends UpdatePathTestBase {
     // Global tags test values are the same as the entity tags only they have
     // the word "Global" at the start.
     $global_tags = [];
-    foreach ($entity_tags as $tag => $value) {
+    foreach ($tags_removed as $tag => $value) {
       $global_tags[$tag] = 'Global ' . $value;
     }
 
-    // Confirm the data started as a serialized array.
-    $query = \Drupal::database()->select('node__field_meta_tags');
-    $query->addField('node__field_meta_tags', 'field_meta_tags_value');
-    $result = $query->execute();
-    $records = $result->fetchAll();
+    // Perform these checks for both the main field and the revision field.
+    foreach (['node__field_meta_tags', 'node_revision__field_meta_tags'] as $table_name) {
+      // Confirm the data started as a serialized array.
+      $query = \Drupal::database()->select($table_name);
+      $query->addField($table_name, 'field_meta_tags_value');
+      $result = $query->execute();
+      $records = $result->fetchAll();
 
-    // Verify the data loads correctly and is the old format.
-    // @see metatag_post_update_v2_01_change_fields_to_json()
-    $this->assertTrue(count($records) === 1);
-    $this->assertTrue(strpos($records[0]->field_meta_tags_value, 'a:') === 0);
-    $data = unserialize($records[0]->field_meta_tags_value, ['allowed_classes' => FALSE]);
-    $this->assertTrue(isset($data['description']));
-    $this->assertTrue($data['description'] === $node_description);
+      // Verify the data loads correctly and is the old format.
+      // @see metatag_post_update_v2_01_change_fields_to_json()
+      $this->assertTrue(count($records) === 1);
+      $this->assertTrue(strpos($records[0]->field_meta_tags_value, 'a:') === 0);
+      $data = unserialize($records[0]->field_meta_tags_value, ['allowed_classes' => FALSE]);
 
-    // Verify each of the expected meta tags is present and has the expected
-    // value.
-    // @see metatag_post_update_v2_02_remove_entity_values()
-    foreach ($entity_tags as $tag_name => $tag_value) {
-      $this->assertTrue(isset($data[$tag_name]));
-      $this->assertEquals($data[$tag_name], $tag_value);
+      // Confirm each of the retained tags exists.
+      foreach ($tags_retained as $tag_name => $tag_value) {
+        $this->assertTrue(isset($data[$tag_name]));
+        if (isset($data[$tag_name])) {
+          $this->assertTrue($data[$tag_name] === $tag_value);
+        }
+      }
+
+      // Verify each of the expected meta tags is present and has the expected
+      // value.
+      // @see metatag_post_update_v2_02_remove_entity_values()
+      foreach ($tags_removed as $tag_name => $tag_value) {
+        $this->assertTrue(isset($data[$tag_name]));
+        $this->assertEquals($data[$tag_name], $tag_value);
+      }
+
+      // Verify the Twitter Card "type" value is present and has the expected
+      // value.
+      $this->assertTrue(isset($data['twitter_cards_type']));
+      $this->assertEquals($data['twitter_cards_type'], 'gallery');
     }
-
-    // Verify the Twitter Card "type" value is present and has the expected
-    // value.
-    $this->assertTrue(isset($data['twitter_cards_type']));
-    $this->assertEquals($data['twitter_cards_type'], 'gallery');
 
     // Set up examples of each meta tag that is being removed in a default
     // configuration so that it can be confirmed later on to have been removed.
@@ -186,25 +201,33 @@ class TestV2Updates extends UpdatePathTestBase {
     // Make sure that the data still loads correctly, i.e. that the data was
     // successfully converted to the new structure.
     // @see metatag_post_update_v2_01_change_fields_to_json()
-    $query = \Drupal::database()->select('node__field_meta_tags');
-    $query->addField('node__field_meta_tags', 'field_meta_tags_value');
-    $result = $query->execute();
-    $records = $result->fetchAll();
-    $this->assertTrue(count($records) === 1);
-    $this->assertTrue(strpos($records[0]->field_meta_tags_value, '{"') === 0);
-    $data = Json::decode($records[0]->field_meta_tags_value);
-    $this->assertTrue(isset($data['description']));
-    $this->assertTrue($data['description'] === $node_description);
+    foreach (['node__field_meta_tags', 'node_revision__field_meta_tags'] as $table_name) {
+      $query = \Drupal::database()->select($table_name);
+      $query->addField($table_name, 'field_meta_tags_value');
+      $result = $query->execute();
+      $records = $result->fetchAll();
+      $this->assertTrue(count($records) === 1);
+      $this->assertTrue(strpos($records[0]->field_meta_tags_value, '{"') === 0);
+      $data = Json::decode($records[0]->field_meta_tags_value);
 
-    // Make sure the meta tag was removed.
-    // @see metatag_post_update_v2_02_remove_entity_values()
-    foreach ($entity_tags as $tag_name => $tag_value) {
-      $this->assertTrue(!isset($data[$tag_name]));
+      // Confirm each of the retained tags still exists.
+      foreach ($tags_retained as $tag_name => $tag_value) {
+        $this->assertTrue(isset($data[$tag_name]));
+        if (isset($data[$tag_name])) {
+          $this->assertTrue($data[$tag_name] === $tag_value);
+        }
+      }
+
+      // Make sure the meta tag was removed.
+      // @see metatag_post_update_v2_02_remove_entity_values()
+      foreach ($tags_removed as $tag_name => $tag_value) {
+        $this->assertTrue(!isset($data[$tag_name]));
+      }
+
+      // Verify the Twitter Card "type" value has been changed.
+      $this->assertTrue(isset($data['twitter_cards_type']));
+      $this->assertEquals($data['twitter_cards_type'], 'summary_large_image');
     }
-
-    // Verify the Twitter Card "type" value has been changed.
-    $this->assertTrue(isset($data['twitter_cards_type']));
-    $this->assertEquals($data['twitter_cards_type'], 'summary_large_image');
 
     // @see metatag_post_update_v2_03_remove_config_values()
     $config = $this->config('metatag.metatag_defaults.global');
