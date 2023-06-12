@@ -66,6 +66,8 @@ Metatag 8.x-1.x-dev, 2023-xx-xx
 #3355945 by Ranjit1032002, Anwoon, DamienMcKenna: Deprecated function:
   html_entity_decode(): Passing null to parameter #1 ($string) of type string is
   deprecated in metatag_preprocess_html().
+#3366264 by DamienMcKenna: Tidy Metatag v1 fixture, replace serialized strings
+  with regular arrays.
 
 
 Metatag 8.x-1.25, 2023-05-31
