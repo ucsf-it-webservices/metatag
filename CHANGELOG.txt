@@ -6,6 +6,8 @@ Metatag 8.x-1.x-dev, 2023-xx-xx
   deprecated in metatag_preprocess_html().
 #3366264 by DamienMcKenna: Tidy Metatag v1 fixture, replace serialized strings
   with regular arrays.
+#3366285 by DamienMcKenna: Work out solution for binary data in Metatag v1
+  fixture file.
 
 
 Metatag 8.x-1.25, 2023-05-31
