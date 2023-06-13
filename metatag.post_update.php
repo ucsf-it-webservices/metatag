@@ -151,7 +151,7 @@ function metatag_post_update_convert_author_data(&$sandbox) {
   }
   else {
     // Begin the batch processing of individual field records.
-    $max_per_batch = 10;
+    $max_per_batch = 100;
     $counter = 1;
 
     $current_field = $sandbox['current_field'];
@@ -318,7 +318,7 @@ function metatag_post_update_remove_robots_noydir_noodp(&$sandbox) {
   }
   else {
     // Begin the batch processing of individual field records.
-    $max_per_batch = 10;
+    $max_per_batch = 100;
     $counter = 1;
 
     $current_field = $sandbox['current_field'];
