@@ -381,74 +381,24 @@ function metatag_post_update_v2_01_change_fields_to_json(&$sandbox) {
     // by number rather than name.
     $field_counter = 0;
 
-    // Get all of the field storage entities of type metatag.
-    /** @var \Drupal\field\FieldStorageConfigInterface[] $field_storage_configs */
-    $field_storage_configs = $entity_type_manager
-      ->getStorage('field_storage_config')
-      ->loadByProperties(['type' => 'metatag']);
+    // Look for the appropriate data in all metatag field tables.
+    foreach (_metatag_list_entity_field_tables() as $table => $field_value_field) {
+      // Get all records that were not converted yet.
+      $query = $database->select($table);
+      $query->addField($table, 'revision_id');
 
-    foreach ($field_storage_configs as $field_storage) {
-      $field_name = $field_storage->getName();
+      // Fields with serialized arrays.
+      $query->condition($field_value_field, "a:%", 'LIKE');
+      $result = $query->execute();
+      $records = $result->fetchCol();
 
-      // Get the individual fields (field instances) associated with bundles.
-      $fields = $entity_type_manager
-        ->getStorage('field_config')
-        ->loadByProperties([
-          'field_name' => $field_name,
-          'entity_type' => $field_storage->getTargetEntityTypeId(),
-        ]);
-
-      $tables = [];
-      foreach ($fields as $field) {
-        // Get the bundle this field is attached to.
-        $bundle = $field->getTargetBundle();
-        $entity_type_id = $field->getTargetEntityTypeId();
-        $entity_type = $entity_type_manager->getDefinition($entity_type_id);
-
-        // Determine the table and "value" field names.
-        // @todo The class path to getTableMapping() seems to be invalid?
-        $table_mapping = $entity_type_manager
-          ->getStorage($field->getTargetEntityTypeId())
-          ->getTableMapping();
-        $field_table = $table_mapping->getFieldTableName($field_name);
-        $field_value_field = $table_mapping->getFieldColumnName($field_storage, 'value');
-
-        $tables[$field_table] = $field_value_field;
-        if ($entity_type->isRevisionable() && $field_storage->isRevisionable()) {
-          if ($table_mapping->requiresDedicatedTableStorage($field_storage)) {
-            $revision_table = $table_mapping->getDedicatedRevisionTableName($field_storage);
-            if ($database->schema()->tableExists($revision_table)) {
-              $tables[$revision_table] = $field_value_field;
-            }
-          }
-          elseif ($table_mapping->allowsSharedTableStorage($field_storage)) {
-            $revision_table = $entity_type->getRevisionDataTable() ?: $entity_type->getRevisionTable();
-            if ($database->schema()->tableExists($revision_table)) {
-              $tables[$revision_table] = $field_value_field;
-            }
-          }
-        }
-      }
-
-      if (!empty($tables)) {
-        foreach ($tables as $table => $field_value_field) {
-          // Get all records that were not converted yet.
-          $query = $database->select($table);
-          $query->addField($table, 'revision_id');
-          // Fields with serialized arrays.
-          $query->condition($field_value_field, "a:%", 'LIKE');
-          $result = $query->execute();
-          $records = $result->fetchCol();
-
-          // Fill in all the sandbox information so we can batch the
-          // individual record comparing and updating.
-          if (!empty($records)) {
-            $sandbox['fields'][$field_counter]['field_table'] = $table;
-            $sandbox['fields'][$field_counter]['field_value_field'] = $field_value_field;
-            $sandbox['total_records'] += (int) count($records);
-            $field_counter++;
-          }
-        }
+      // Fill in all the sandbox information so we can batch the
+      // individual record comparing and updating.
+      if (!empty($records)) {
+        $sandbox['fields'][$field_counter]['field_table'] = $table;
+        $sandbox['fields'][$field_counter]['field_value_field'] = $field_value_field;
+        $sandbox['total_records'] += (int) count($records);
+        $field_counter++;
       }
     }
   }
@@ -585,86 +535,36 @@ function metatag_post_update_v2_02_remove_entity_values(array &$sandbox) {
     // by number rather than name.
     $field_counter = 0;
 
-    // Get all of the field storage entities of type metatag.
-    /** @var \Drupal\field\FieldStorageConfigInterface[] $field_storage_configs */
-    $field_storage_configs = $entity_type_manager
-      ->getStorage('field_storage_config')
-      ->loadByProperties(['type' => 'metatag']);
+    // Look for the appropriate data in all metatag field tables.
+    foreach (_metatag_list_entity_field_tables() as $table => $field_value_field) {
+      // Get all records that were not converted yet.
+      $query = $database->select($table);
+      $query->addField($table, 'revision_id');
 
-    foreach ($field_storage_configs as $field_storage) {
-      $field_name = $field_storage->getName();
-
-      // Get the individual fields (field instances) associated with bundles.
-      $fields = $entity_type_manager
-        ->getStorage('field_config')
-        ->loadByProperties([
-          'field_name' => $field_name,
-          'entity_type' => $field_storage->getTargetEntityTypeId(),
-        ]);
-
-      foreach ($fields as $field) {
-        // Get the bundle this field is attached to.
-        $bundle = $field->getTargetBundle();
-        $entity_type_id = $field->getTargetEntityTypeId();
-        $entity_type = $entity_type_manager->getDefinition($entity_type_id);
-
-        // Determine the table and "value" field names.
-        // @todo The class path to getTableMapping() seems to be invalid?
-        $table_mapping = $entity_type_manager
-          ->getStorage($field->getTargetEntityTypeId())
-          ->getTableMapping();
-        $field_table = $table_mapping->getFieldTableName($field_name);
-        $field_value_field = $table_mapping->getFieldColumnName($field_storage, 'value');
-
-        $tables[$field_table] = $field_value_field;
-        if ($entity_type->isRevisionable() && $field_storage->isRevisionable()) {
-          if ($table_mapping->requiresDedicatedTableStorage($field_storage)) {
-            $revision_table = $table_mapping->getDedicatedRevisionTableName($field_storage);
-            if ($database->schema()->tableExists($revision_table)) {
-              $tables[$revision_table] = $field_value_field;
-            }
-          }
-          elseif ($table_mapping->allowsSharedTableStorage($field_storage)) {
-            $revision_table = $entity_type->getRevisionDataTable() ?: $entity_type->getRevisionTable();
-            if ($database->schema()->tableExists($revision_table)) {
-              $tables[$revision_table] = $field_value_field;
-            }
-          }
-        }
+      // Only look for Metatag field records that have the meta tags that
+      // are being removed.
+      $db_or = $query->orConditionGroup();
+      foreach ($metatags_to_remove as $tag_name) {
+        $db_or->condition($field_value_field, '%"' . $tag_name . '"%', 'LIKE');
       }
 
-      if (!empty($tables)) {
-        foreach ($tables as $table => $field_value_field) {
-          // Get all records that were not converted yet.
-          $query = $database->select($table);
-          $query->addField($table, 'revision_id');
+      // Look for Twitter Card "type" values, those might need to be
+      // changed.
+      foreach ($twitter_type_changes as $type_from => $type_to) {
+        $db_or->condition($field_value_field, '%"twitter_cards_type":"' . $type_from . '"%', 'LIKE');
+      }
 
-          // Only look for Metatag field records that have the meta tags that
-          // are being removed.
-          $db_or = $query->orConditionGroup();
-          foreach ($metatags_to_remove as $tag_name) {
-            $db_or->condition($field_value_field, '%"' . $tag_name . '"%', 'LIKE');
-          }
+      $query->condition($db_or);
+      $result = $query->execute();
+      $records = $result->fetchCol();
 
-          // Look for Twitter Card "type" values, those might need to be
-          // changed.
-          foreach ($twitter_type_changes as $type_from => $type_to) {
-            $db_or->condition($field_value_field, '%"twitter_cards_type":"' . $type_from . '"%', 'LIKE');
-          }
-
-          $query->condition($db_or);
-          $result = $query->execute();
-          $records = $result->fetchCol();
-
-          // Fill in all the sandbox information so we can batch the
-          // individual record comparing and updating.
-          if (!empty($records)) {
-            $sandbox['fields'][$field_counter]['field_table'] = $table;
-            $sandbox['fields'][$field_counter]['field_value_field'] = $field_value_field;
-            $sandbox['total_records'] += (int) count($records);
-            $field_counter++;
-          }
-        }
+      // Fill in all the sandbox information so we can batch the
+      // individual record comparing and updating.
+      if (!empty($records)) {
+        $sandbox['fields'][$field_counter]['field_table'] = $table;
+        $sandbox['fields'][$field_counter]['field_value_field'] = $field_value_field;
+        $sandbox['total_records'] += (int) count($records);
+        $field_counter++;
       }
     }
   }
