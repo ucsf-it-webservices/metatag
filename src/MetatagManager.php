@@ -777,7 +777,7 @@ class MetatagManager implements MetatagManagerInterface {
     // language and a custom delimiter for multiple value fields in tokens.
     $options = [
       'langcode' => $langcode,
-      'join' => $tag->getSeparator(),
+      'join' => ',',
     ];
 
     // Loop over each item in the array.

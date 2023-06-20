@@ -5,6 +5,8 @@ Metatag 2.0.x, 2023-xx-xx
 #3364554 by DamienMcKenna: Fix
   metatag_post_update_v2_02_remove_entity_values() to work on revisions.
 #3367318 by DamienMcKenna: Update post-update scripts per #3367290.
+#3367071 by pvbergen, DamienMcKenna: Custom separator also used for string
+  concatenation.
 
 
 Metatag 2.0.0-rc2, 2023-05-30

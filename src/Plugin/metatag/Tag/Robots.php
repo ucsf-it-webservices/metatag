@@ -30,7 +30,7 @@ class Robots extends MetaNameBase {
   public function setValue($value): void {
     if (is_array($value)) {
       $value = array_filter($value);
-      $value = implode($this->getSeparator() . ' ', array_keys($value));
+      $value = implode(', ', array_keys($value));
     }
     $this->value = $value;
   }
@@ -204,7 +204,7 @@ class Robots extends MetaNameBase {
         $new_values[] = substr($form_field_name, 13, -1) . ':' . $value;
       }
     }
-    return parent::getTestOutputValuesXpath([implode($this->getSeparator() . ' ', $new_values)]);
+    return parent::getTestOutputValuesXpath([implode(', ', $new_values)]);
   }
 
   /**
