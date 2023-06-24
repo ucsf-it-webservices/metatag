@@ -5,6 +5,7 @@
  * Post update functions for Metatag.
  */
 
+use Drupal\Component\Plugin\Exception\PluginNotFoundException;
 use Drupal\Component\Serialization\Json;
 use Drupal\Core\Config\Entity\ConfigEntityUpdater;
 use Drupal\Core\Utility\UpdateException;
@@ -41,12 +42,18 @@ function _metatag_list_entity_field_tables(): array {
       $field_name = $field_storage->getName();
 
       // Get the individual fields (field instances) associated with bundles.
-      $fields = $entity_type_manager
-        ->getStorage('field_config')
-        ->loadByProperties([
-          'field_name' => $field_name,
-          'entity_type' => $field_storage->getTargetEntityTypeId(),
-        ]);
+      // This query can result in an exception
+      try {
+        $fields = $entity_type_manager
+          ->getStorage('field_config')
+          ->loadByProperties([
+            'field_name' => $field_name,
+            'entity_type' => $field_storage->getTargetEntityTypeId(),
+          ]);
+      }
+      catch (PluginNotFoundException $e) {
+        throw new \Exception("There is a problem in the field configuration, see https://www.drupal.org/node/3366933 for discussion on how to resolve it.\nOriginal message: " . $e->getMessage());
+      }
 
       $tables = [];
       foreach ($fields as $field) {
