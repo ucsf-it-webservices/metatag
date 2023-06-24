@@ -40,7 +40,9 @@ function _metatag_list_entity_field_tables(): array {
       $field_name = $field_storage->getName();
 
       // Get the individual fields (field instances) associated with bundles.
-      // This query can result in an exception
+      // This query can result in an exception if a field configuration is
+      // faulty.
+      // @see https://www.drupal.org/project/metatag/issues/3366933
       try {
         $fields = $entity_type_manager
           ->getStorage('field_config')
