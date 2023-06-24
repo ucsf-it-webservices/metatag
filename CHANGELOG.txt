@@ -10,6 +10,9 @@ Metatag 8.x-1.x-dev, 2023-xx-xx
   fixture file.
 By DamienMcKenna: Run updates in batches of 100 records, not 10.
 #3367290 by DamienMcKenna: Streamline the post update scripts.
+#3366933 by DamienMcKenna, Jabastin Arul, dk-massive: Errors in field
+  configuration can lead metatag_post_update_remove_robots_noydir_noodp() to
+  fail.
 
 
 Metatag 8.x-1.25, 2023-05-31
