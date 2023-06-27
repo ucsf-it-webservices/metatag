@@ -7,6 +7,7 @@ Metatag 2.0.x, 2023-xx-xx
 #3367318 by DamienMcKenna: Update post-update scripts per #3367290.
 #3367071 by pvbergen, DamienMcKenna: Custom separator also used for string
   concatenation.
+#3370353 by jwilson3, DamienMcKenna: Fix spelling of "processsed".
 
 
 Metatag 2.0.0-rc2, 2023-05-30
