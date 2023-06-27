@@ -1,4 +1,4 @@
-Metatag 2.0.x, 2023-xx-xx
+Metatag 2.0.0, 2023-06-27
 -------------------------
 #3364475 by DamienMcKenna: Update scripts to convert JSON data on revision
   tables.
