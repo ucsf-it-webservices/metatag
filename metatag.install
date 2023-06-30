@@ -2800,7 +2800,7 @@ function metatag_update_7200(array &$sandbox) {
   // Loop over the values and update the data.
   foreach ($records as $record) {
     // Skip invalid data.
-    $old_data = @unserialize($record->data, array('allowed_classes' => FALSE);
+    $old_data = @unserialize($record->data, array('allowed_classes' => FALSE));
     if (is_array($old_data)) {
       $record->data = json_encode($old_data);
       drupal_write_record('metatag', $record, $keys);
