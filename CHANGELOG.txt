@@ -2,6 +2,7 @@ Metatag 7.x-2.x, 2023-xx-xx
 ---------------------------
 #3370681 by DamienMcKenna: Use second argument on all unserialize() calls.
 #3370681 by DamienMcKenna: Fixed a typo.
+#3371649 by DamienMcKenna: Metatag 7.x-2.x requires PHP 7.0.
 
 
 Metatag 7.x-2.0, 2023-06-27
