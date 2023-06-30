@@ -1,5 +1,6 @@
 Metatag 7.x-2.x, 2023-xx-xx
 ---------------------------
+#3370681 by DamienMcKenna: Use second argument on all unserialize() calls.
 
 
 Metatag 7.x-2.0, 2023-06-27

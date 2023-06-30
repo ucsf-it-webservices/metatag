@@ -572,7 +572,7 @@ function metatag_update_replace_entity_tag(array &$sandbox, $old_tag, $new_tag) 
 
   // Loop over the values and correct them.
   foreach ($records as $record) {
-    $record->data = unserialize($record->data);
+    $record->data = unserialize($record->data, array('allowed_classes' => FALSE));
 
     if (isset($record->data[$old_tag])) {
       $record->data[$new_tag] = $record->data[$old_tag];
@@ -659,7 +659,7 @@ function metatag_update_replace_entity_value(array &$sandbox, $tag_name, $old_va
 
   // Loop over the values and correct them.
   foreach ($records as $record) {
-    $record->data = unserialize($record->data);
+    $record->data = unserialize($record->data, array('allowed_classes' => FALSE));
 
     if (isset($record->data[$tag_name]['value'])) {
       if ($record->data[$tag_name]['value'] == $old_value) {
@@ -740,7 +740,7 @@ function metatag_update_remove_tag_entities(array &$sandbox, $tag_name) {
 
   // Loop over the values and correct them.
   foreach ($records as $record) {
-    $record->data = unserialize($record->data);
+    $record->data = unserialize($record->data, array('allowed_classes' => FALSE);
 
     if (isset($record->data[$tag_name])) {
       unset($record->data[$tag_name]);
@@ -799,7 +799,7 @@ function metatag_update_replace_config_tag($old_tag, $new_tag) {
     // Loop over the values and correct them.
     $counter = 0;
     foreach ($records as $record) {
-      $record->config = unserialize($record->config);
+      $record->config = unserialize($record->config, array('allowed_classes' => FALSE));
       if (isset($record->config[$old_tag])) {
         $record->config[$new_tag] = $record->config[$old_tag];
         unset($record->config[$old_tag]);
@@ -860,7 +860,7 @@ function metatag_update_replace_config_value($tag_name, $old_value, $new_value) 
     // Loop over the values and correct them.
     $counter = 0;
     foreach ($records as $record) {
-      $record->config = unserialize($record->config);
+      $record->config = unserialize($record->config, array('allowed_classes' => FALSE));
       if (isset($record->config[$tag_name]['value'])) {
         if ($record->config[$tag_name]['value'] == $old_value) {
           $record->config[$tag_name]['value'] = $new_value;
@@ -912,7 +912,7 @@ function metatag_update_remove_tag_config($tag_name) {
     // Loop over the values and correct them.
     $counter = 0;
     foreach ($records as $record) {
-      $record->config = unserialize($record->config);
+      $record->config = unserialize($record->config, array('allowed_classes' => FALSE));
       if (isset($record->config[$tag_name])) {
         unset($record->config[$tag_name]);
         drupal_write_record('metatag_config', $record, array('cid'));
@@ -1632,7 +1632,7 @@ function metatag_update_7014() {
     foreach ($records as $record) {
       // Extract the data and get the first element of the array, this should be
       // valid data.
-      $record->data = reset(unserialize($record->data));
+      $record->data = reset(unserialize($record->data, array('allowed_classes' => FALSE)));
 
       // Update the record.
       drupal_write_record('metatag', $record, array('entity_type', 'entity_id', 'language'));
@@ -2289,7 +2289,7 @@ function metatag_update_7040(array &$sandbox) {
   // Set default values.
   foreach ($records as $record) {
     // Extract the record.
-    $record->data = unserialize($record->data);
+    $record->data = unserialize($record->data, array('allowed_classes' => FALSE));
 
     // See if the record needs to be fixed.
     if (!empty($record->data['robots']) && empty($record->data['robots']['value'])) {
@@ -2800,7 +2800,7 @@ function metatag_update_7200(array &$sandbox) {
   // Loop over the values and update the data.
   foreach ($records as $record) {
     // Skip invalid data.
-    $old_data = @unserialize($record->data);
+    $old_data = @unserialize($record->data, array('allowed_classes' => FALSE);
     if (is_array($old_data)) {
       $record->data = json_encode($old_data);
       drupal_write_record('metatag', $record, $keys);
