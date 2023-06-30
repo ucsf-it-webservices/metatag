@@ -137,7 +137,7 @@ function metatag_context_i18n_list_contexts() {
     // Unserialize the config array.
     foreach ($configs as &$config) {
       if (is_string($config->config)) {
-        $config->config = unserialize($config->config, array('allowed_classes' => FALSE));
+        $config->config = unserialize($config->config);
       }
     }
     return $configs;
