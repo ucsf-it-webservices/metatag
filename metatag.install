@@ -740,7 +740,7 @@ function metatag_update_remove_tag_entities(array &$sandbox, $tag_name) {
 
   // Loop over the values and correct them.
   foreach ($records as $record) {
-    $record->data = unserialize($record->data, array('allowed_classes' => FALSE);
+    $record->data = unserialize($record->data, array('allowed_classes' => FALSE));
 
     if (isset($record->data[$tag_name])) {
       unset($record->data[$tag_name]);
