@@ -33,6 +33,12 @@ $keyvalue_fields = ['collection', 'name', 'value'];
 
 $connection = Database::getConnection();
 
+// Classes that are allowed in serialized arrays.
+$allowed_classes = ['allowed_classes' => [
+  'Drupal\Core\Field\BaseFieldDefinition',
+  'Drupal\field\Entity\FieldStorageConfig',
+]];
+
 // Enable Metatag (and Token).
 $extensions = $connection->select('config')
   ->fields('config', ['data'])
@@ -40,7 +46,7 @@ $extensions = $connection->select('config')
   ->condition('name', 'core.extension')
   ->execute()
   ->fetchField();
-$extensions = unserialize($extensions, ['allowed_classes' => []]);
+$extensions = unserialize($extensions, ['allowed_classes' => FALSE]);
 $extensions['module']['metatag'] = 0;
 /**
  * Additional submodules must be added here if their meta tags are being tested.
@@ -76,7 +82,7 @@ $data = $connection->select('key_value')
   ->condition('name', 'existing_updates')
   ->execute()
   ->fetchField();
-$data = unserialize($data, ['allowed_classes' => []]);
+$data = unserialize($data, ['allowed_classes' => FALSE]);
 $data[] = 'metatag_post_update_convert_author_config';
 $data[] = 'metatag_post_update_convert_author_data';
 $data[] = 'metatag_post_update_convert_mask_icon_to_array_values';
@@ -376,7 +382,7 @@ $key_value = $connection->select('key_value')
   ->condition('name', 'node')
   ->execute()
   ->fetchField();
-$key_value = unserialize($key_value, ['allowed_classes' => []]);
+$key_value = unserialize($key_value, ['allowed_classes' => FALSE]);
 $key_value['field_meta_tags'] = [
   'type' => 'metatag',
   'bundles' => [
@@ -399,11 +405,8 @@ $key_value = $connection->select('key_value')
     ->condition('name', 'node.field_storage_definitions')
   ->execute()
   ->fetchField();
-$key_value = unserialize($key_value, ['allowed_classes' => [
-  'Drupal\Core\Field\BaseFieldDefinition',
-  'Drupal\field\Entity\FieldStorageConfig',
-]]);
-$key_value['field_meta_tags'] = unserialize('O:38:"Drupal\field\Entity\FieldStorageConfig":35:{s:5:"' . "\0" . '*' . "\0" . 'id";s:20:"node.field_meta_tags";s:13:"' . "\0" . '*' . "\0" . 'field_name";s:15:"field_meta_tags";s:14:"' . "\0" . '*' . "\0" . 'entity_type";s:4:"node";s:7:"' . "\0" . '*' . "\0" . 'type";s:7:"metatag";s:9:"' . "\0" . '*' . "\0" . 'module";s:7:"metatag";s:11:"' . "\0" . '*' . "\0" . 'settings";a:0:{}s:14:"' . "\0" . '*' . "\0" . 'cardinality";i:1;s:15:"' . "\0" . '*' . "\0" . 'translatable";b:1;s:9:"' . "\0" . '*' . "\0" . 'locked";b:0;s:25:"' . "\0" . '*' . "\0" . 'persist_with_no_fields";b:0;s:14:"custom_storage";b:0;s:10:"' . "\0" . '*' . "\0" . 'indexes";a:0:{}s:10:"' . "\0" . '*' . "\0" . 'deleted";b:0;s:13:"' . "\0" . '*' . "\0" . 'originalId";s:20:"node.field_meta_tags";s:9:"' . "\0" . '*' . "\0" . 'status";b:1;s:7:"' . "\0" . '*' . "\0" . 'uuid";s:36:"6aaab457-3728-4319-afa3-938e753ed342";s:11:"' . "\0" . '*' . "\0" . 'langcode";s:2:"en";s:23:"' . "\0" . '*' . "\0" . 'third_party_settings";a:0:{}s:8:"' . "\0" . '*' . "\0" . '_core";a:0:{}s:14:"' . "\0" . '*' . "\0" . 'trustedData";b:0;s:15:"' . "\0" . '*' . "\0" . 'entityTypeId";s:20:"field_storage_config";s:15:"' . "\0" . '*' . "\0" . 'enforceIsNew";N;s:12:"' . "\0" . '*' . "\0" . 'typedData";N;s:16:"' . "\0" . '*' . "\0" . 'cacheContexts";a:0:{}s:12:"' . "\0" . '*' . "\0" . 'cacheTags";a:0:{}s:14:"' . "\0" . '*' . "\0" . 'cacheMaxAge";i:-1;s:14:"' . "\0" . '*' . "\0" . '_serviceIds";a:0:{}s:18:"' . "\0" . '*' . "\0" . '_entityStorages";a:0:{}s:15:"' . "\0" . '*' . "\0" . 'dependencies";a:1:{s:6:"module";a:2:{i:0;s:7:"metatag";i:1;s:4:"node";}}s:12:"' . "\0" . '*' . "\0" . 'isSyncing";b:0;s:18:"cardinality_number";i:1;s:6:"submit";O:48:"Drupal\Core\StringTranslation\TranslatableMarkup":3:{s:9:"' . "\0" . '*' . "\0" . 'string";s:19:"Save field settings";s:12:"' . "\0" . '*' . "\0" . 'arguments";a:0:{}s:10:"' . "\0" . '*' . "\0" . 'options";a:0:{}}s:13:"form_build_id";s:48:"form-LK9HeARuUzcwIVvCAA4jG2MscwGjLAUJ9GLYxuzSo7o";s:10:"form_token";s:43:"eengi9MkLSqT-YFMEKD18fJ6cOvVyS_XRq1He7qhq4s";s:7:"form_id";s:30:"field_storage_config_edit_form";}}');
+$key_value = unserialize($key_value, $allowed_classes);
+$key_value['field_meta_tags'] = unserialize('O:38:"Drupal\field\Entity\FieldStorageConfig":35:{s:5:"' . "\0" . '*' . "\0" . 'id";s:20:"node.field_meta_tags";s:13:"' . "\0" . '*' . "\0" . 'field_name";s:15:"field_meta_tags";s:14:"' . "\0" . '*' . "\0" . 'entity_type";s:4:"node";s:7:"' . "\0" . '*' . "\0" . 'type";s:7:"metatag";s:9:"' . "\0" . '*' . "\0" . 'module";s:7:"metatag";s:11:"' . "\0" . '*' . "\0" . 'settings";a:0:{}s:14:"' . "\0" . '*' . "\0" . 'cardinality";i:1;s:15:"' . "\0" . '*' . "\0" . 'translatable";b:1;s:9:"' . "\0" . '*' . "\0" . 'locked";b:0;s:25:"' . "\0" . '*' . "\0" . 'persist_with_no_fields";b:0;s:14:"custom_storage";b:0;s:10:"' . "\0" . '*' . "\0" . 'indexes";a:0:{}s:10:"' . "\0" . '*' . "\0" . 'deleted";b:0;s:13:"' . "\0" . '*' . "\0" . 'originalId";s:20:"node.field_meta_tags";s:9:"' . "\0" . '*' . "\0" . 'status";b:1;s:7:"' . "\0" . '*' . "\0" . 'uuid";s:36:"6aaab457-3728-4319-afa3-938e753ed342";s:11:"' . "\0" . '*' . "\0" . 'langcode";s:2:"en";s:23:"' . "\0" . '*' . "\0" . 'third_party_settings";a:0:{}s:8:"' . "\0" . '*' . "\0" . '_core";a:0:{}s:14:"' . "\0" . '*' . "\0" . 'trustedData";b:0;s:15:"' . "\0" . '*' . "\0" . 'entityTypeId";s:20:"field_storage_config";s:15:"' . "\0" . '*' . "\0" . 'enforceIsNew";N;s:12:"' . "\0" . '*' . "\0" . 'typedData";N;s:16:"' . "\0" . '*' . "\0" . 'cacheContexts";a:0:{}s:12:"' . "\0" . '*' . "\0" . 'cacheTags";a:0:{}s:14:"' . "\0" . '*' . "\0" . 'cacheMaxAge";i:-1;s:14:"' . "\0" . '*' . "\0" . '_serviceIds";a:0:{}s:18:"' . "\0" . '*' . "\0" . '_entityStorages";a:0:{}s:15:"' . "\0" . '*' . "\0" . 'dependencies";a:1:{s:6:"module";a:2:{i:0;s:7:"metatag";i:1;s:4:"node";}}s:12:"' . "\0" . '*' . "\0" . 'isSyncing";b:0;s:18:"cardinality_number";i:1;s:6:"submit";O:48:"Drupal\Core\StringTranslation\TranslatableMarkup":3:{s:9:"' . "\0" . '*' . "\0" . 'string";s:19:"Save field settings";s:12:"' . "\0" . '*' . "\0" . 'arguments";a:0:{}s:10:"' . "\0" . '*' . "\0" . 'options";a:0:{}}s:13:"form_build_id";s:48:"form-LK9HeARuUzcwIVvCAA4jG2MscwGjLAUJ9GLYxuzSo7o";s:10:"form_token";s:43:"eengi9MkLSqT-YFMEKD18fJ6cOvVyS_XRq1He7qhq4s";s:7:"form_id";s:30:"field_storage_config_edit_form";}}', $allowed_classes);
 $connection->update('key_value')
   ->fields(['value' => serialize($key_value)])
     ->condition('collection', 'entity.definitions.installed')
