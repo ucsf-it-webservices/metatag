@@ -411,7 +411,7 @@ class MetatagManager implements MetatagManagerInterface {
       // Get serialized value and break it into an array of tags with values.
       $serialized_value = $item->get('value')->getValue();
       if (!empty($serialized_value)) {
-        $new_tags = unserialize($serialized_value);
+        $new_tags = unserialize($serialized_value, ['allowed_classes' => FALSE]);
         if ($new_tags !== FALSE) {
           if (!empty($new_tags)) {
             if (is_array($new_tags)) {

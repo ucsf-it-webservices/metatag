@@ -193,7 +193,7 @@ function metatag_post_update_convert_author_data(&$sandbox) {
 
       // Strip any empty tags or ones matching the field's defaults and leave
       // only the overridden tags in $new_tags.
-      $tags = unserialize($record->$field_value_field);
+      $tags = unserialize($record->$field_value_field, ['allowed_classes' => FALSE]);
       if (isset($tags['google_plus_author'])) {
         $tags['author'] = $tags['google_plus_author'];
         $tags_string = serialize($tags);
