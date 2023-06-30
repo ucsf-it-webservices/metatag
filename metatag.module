@@ -688,7 +688,7 @@ function metatag_metatags_load_multiple($entity_type, array $entity_ids, array $
   // translations keyed by language code.
   $metatags = array();
   while ($record = $result->fetchObject()) {
-    $data = unserialize($record->data);
+    $data = unserialize($record->data, array('allowed_classes' => FALSE));
 
     // "Fix" any records that might be using old values. Ideally these will be
     // permanently fixed by being re-saved or re-exported.

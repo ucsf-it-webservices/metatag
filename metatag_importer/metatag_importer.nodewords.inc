@@ -251,7 +251,7 @@ function _metatag_importer_migrate(array $types = array(), &$context = array()) 
 
     // Process the meta tag value, possibly also rename the meta tag name
     // itself.
-    list($meta_tag, $value) = _metatag_importer_convert_data($result->name, unserialize($result->content));
+    list($meta_tag, $value) = _metatag_importer_convert_data($result->name, unserialize($result->content, array('allowed_classes' => FALSE)));
     // Don't import empty values.
     if (!empty($value)) {
       // Add the value to the stack.

@@ -67,7 +67,7 @@ class metatag_handler_field_serialized extends metatag_handler_field_entity {
   public function get_value($values, $field = NULL) {
     $value = parent::get_value($values);
     if (!is_null($value)) {
-      $value = @unserialize($value);
+      $value = @unserialize($value, array('allowed_classes' => FALSE));
       $value = $this->get_nested_value($value, $this->definition['path']);
     }
     $this->uses_default = FALSE;
