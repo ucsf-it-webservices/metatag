@@ -2,6 +2,7 @@ Metatag 8.x-1.x-dev, 2023-xx-xx
 -------------------------------
 #3370486 by DamienMcKenna, arti_parmar: Use second argument on all unserialize()
   calls.
+#3386862 by DamienMcKenna: Additional entity types to ignore.
 
 
 Metatag 8.x-1.26, 2023-06-27
