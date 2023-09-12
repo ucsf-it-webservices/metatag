@@ -950,6 +950,21 @@ function _metatag_is_migration_plugin_supported(array $definition) {
       'shortcut_set_users',
       'url_alias',
       'user_data',
+      // Various contrib modules.
+      'entity:commerce_order',
+      'entity:commerce_payment',
+      'entity:commerce_payment_method',
+      'entity:commerce_promotion',
+      'entity:commerce_promotion_coupon',
+      'entity:commerce_shipment',
+      'entity:commerce_shipping_method',
+      'entity:commerce_stock_location',
+      'entity:commerce_store',
+      'entity:linkcheckerlink',
+      'entity:path_alias',
+      'entity:redirect',
+      'entity:salesforce_mapped_object',
+      'entity:webform_submission',
     ];
     if (in_array($definition['destination']['plugin'], $destinations_to_ignore)) {
       return FALSE;
