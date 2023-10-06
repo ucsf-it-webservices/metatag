@@ -528,10 +528,7 @@ abstract class MetaNameBase extends PluginBase {//implements ContainerFactoryPlu
     $elements = [];
     foreach ($values as $value) {
       $value = $this->tidy($value);
-      // Validate if the value is empty here, otherwise we get absolute URL.
-      if (empty($value)) {
-        continue;
-      }
+     
       if ($value != '' && $this->requiresAbsoluteUrl()) {
         // Relative URL.
         if (parse_url($value, PHP_URL_HOST) == NULL) {
@@ -549,7 +546,7 @@ abstract class MetaNameBase extends PluginBase {//implements ContainerFactoryPlu
       }
 
       $value = $this->trimValue($value);
-
+      
       $elements[] = [
         '#tag' => $this->htmlTag,
         '#attributes' => [
@@ -559,7 +556,8 @@ abstract class MetaNameBase extends PluginBase {//implements ContainerFactoryPlu
       ];
     }
 
-    return ($this->multiple()) ? $elements : ((reset($elements)) ? $elements : []);
+    // return ($this->multiple()) ? $elements : ((reset($elements)) ? $elements : []);
+    return ($this->multiple()) ? $elements : reset($elements);
   }
 
   /**
