@@ -489,13 +489,15 @@ abstract class MetaNameBase extends PluginBase {//implements ContainerFactoryPlu
    *   The meta tag value after processing.
    */
   protected function tidy($value): string {
+    $value = trim($value);
+    $value = str_replace(["\r\n", "\n", "\r", "\t"], ' ', $value);
+    $value = preg_replace('/\s+/', ' ', $value);
+
     if (is_null($value) || $value == '') {
       return '';
     }
-
-    $value = str_replace(["\r\n", "\n", "\r", "\t"], ' ', $value);
-    $value = preg_replace('/\s+/', ' ', $value);
-    return trim($value);
+   
+    return $value;
   }
 
   /**
@@ -557,7 +559,7 @@ abstract class MetaNameBase extends PluginBase {//implements ContainerFactoryPlu
       ];
     }
 
-    return $this->multiple() ? $elements : reset($elements);
+    return ($this->multiple()) ? $elements : ((reset($elements)) ? $elements : []);
   }
 
   /**
