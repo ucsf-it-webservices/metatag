@@ -16,7 +16,7 @@ use Drupal\metatag\Plugin\metatag\Tag\MetaPropertyBase;
  *   weight = 9,
  *   type = "image",
  *   secure = FALSE,
- *   multiple = TRUE,
+ *   multiple = FALSE,
  *   absolute_url = TRUE
  * )
  */
