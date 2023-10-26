@@ -633,8 +633,8 @@ class MetatagManager implements MetatagManagerInterface {
         $seperator = $tag->getSeparator();
         $processed_values = [];
         if (strpos($processed_value, $seperator) !== false  && in_array($tag_name, $single_tags)) {
-
             $processed_values = explode($tag->getSeparator(), $processed_value);
+            //take the first value that isn't empty as the processed_value
             foreach ($processed_values as $val) {
               if (!empty($val)) {
                 $processed_value = $val;
