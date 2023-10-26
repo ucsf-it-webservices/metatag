@@ -575,7 +575,7 @@ class MetatagManager implements MetatagManagerInterface {
     return $elements;
   }
 
-  /**
+ /**
    * {@inheritdoc}
    */
   public function generateRawElements(array $tags, $entity = NULL, BubbleableMetadata $cache = NULL): array {
@@ -618,6 +618,10 @@ class MetatagManager implements MetatagManagerInterface {
     // Each element of the $values array is a tag with the tag plugin name as
     // the key.
     $rawTags = [];
+    // EPG -process these different then regular multiple tags.
+    $single_tags = [ 'image_src', 'og_title', 'og_description', 'og_image', 'og_image_secure_url', 
+    'twitter_cards_title', 'twitter_cards_description', 'twitter_cards_image', 'twitter_cards_image_alt'];
+
     foreach ($ordered_tags as $tag_name => $value) {
       // Check to ensure there is a matching plugin.
       if (isset($definitions[$tag_name])) {
@@ -626,6 +630,18 @@ class MetatagManager implements MetatagManagerInterface {
 
         // Prepare value.
         $processed_value = $this->processTagValue($tag, $value, $token_replacements, FALSE, $langcode);
+        $seperator = $tag->getSeparator();
+        $processed_values = [];
+        if (strpos($processed_value, $seperator) !== false  && in_array($tag_name, $single_tags)) {
+
+            $processed_values = explode($tag->getSeparator(), $processed_value);
+            foreach ($processed_values as $val) {
+              if (!empty($val)) {
+                $processed_value = $val;
+                break;
+              }
+            }
+        }
 
         // Now store the value with processed tokens back into the plugin.
         $tag->setValue($processed_value);
@@ -642,15 +658,11 @@ class MetatagManager implements MetatagManagerInterface {
           }
 
           foreach ($output as $index => $element) {
-            // Add index to tag name as suffix to avoid having same key.
-            $index_tag_name = $tag->multiple() ? $tag_name . '_' . $index : $tag_name;
-            $rawTags[$index_tag_name] = $element;
-             // UCSFD8-323 - only display the first valid token from left to right order in the Metatag field(s).
-            $single_tags = ['image_src', 'og_title', 'og_description', 'og_image', 'og_image_secure_url', 'twitter_cards_title', 'twitter_cards_description', 'twitter_cards_image'];
-            // String elements might be empty, so we need to skip over those.
+            // UCSFD8-323 - only display the first valid token from left to right order in the Metatag field(s).
             if (in_array($tag_name, $single_tags)) {
-              if ((isset($element['#attributes']['content']) && trim($element['#attributes']['content']) == '')
-                || (isset($element['#attributes']['href']) && trim($element['#attributes']['href']) == '')
+              if (
+                (isset($element['#attributes']['content']) && trim($element['#attributes']['content']) == '') ||
+                (isset($element['#attributes']['href']) && trim($element['#attributes']['href']) == '')
               ) {
                 continue;
               }
@@ -665,6 +677,8 @@ class MetatagManager implements MetatagManagerInterface {
               // Add index to tag name as suffix to avoid having same key.
               $index_tag_name = $tag->multiple() ? $tag_name . '_' . $index : $tag_name;
             }
+          // Add index to tag name as suffix to avoid having same key.
+          $rawTags[$index_tag_name] = $element;
           }
         }
       }
@@ -672,6 +686,7 @@ class MetatagManager implements MetatagManagerInterface {
 
     return $rawTags;
   }
+
 
   /**
    * Generate the actual meta tag values for use as tokens.
