@@ -676,7 +676,7 @@ class MetatagManager implements MetatagManagerInterface {
             else {
               // Add index to tag name as suffix to avoid having same key.
               $index_tag_name = $tag->multiple() ? $tag_name . '_' . $index : $tag_name;
-            }
+          }
           // Add index to tag name as suffix to avoid having same key.
           $rawTags[$index_tag_name] = $element;
           }
